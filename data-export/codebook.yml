@@ -7,7 +7,7 @@ locale: en
 table:
   name: tabulka
   _columns: 35
-  _rows: 1.3692e+04
+  _rows: 14401.0
   _type: tbl_df
   info: Pokud není uvedeno jinak, zdrojem jsou data MF odpovídající Státnímu závěrečnému
     účtu
@@ -89,9 +89,9 @@ columns:
     info: Cenový index vůči roku 2003
     měřítko: 1 = nulová inflace
     zdroj: Odvozeno ze sloupce 'ceny_index'
-  ceny_deflator_2023:
+  ceny_deflator_2024:
     _type: numeric
-    info: Cenový index vůči roku 2023
+    info: Cenový index vůči roku 2024
   prumerna_mzda_cr:
     _type: numeric
     info: Průměrná mzda v národním hospodářství
@@ -110,22 +110,22 @@ columns:
     _type: numeric
   plat_base:
     _type: numeric
-  prumerny_plat_real_od2023:
+  prumerny_plat_real_od2024:
     _type: numeric
     info: Změna průměrného platu od roku 2003 očištěná o inflaci
     měřítko: 0 = žádná změna, > 0 = nárůst
-  prumerny_plat_c2023:
+  prumerny_plat_c2024:
     _type: numeric
-    info: Průměrný plat v cenách roku 2023
-  prumerny_plat_c2023_mezirocne:
+    info: Průměrný plat v cenách roku 2024
+  prumerny_plat_c2024_mezirocne:
     _type: numeric
     info: Meziroční změna platů v reálném vyjádření
-    upřesnění: Podle vyjádření v cenách roku 2023
+    upřesnění: Podle vyjádření v cenách roku 2024
     měřítko: 0 = žádná změna, 0.01 = nárůst o 1 %
   prumerny_plat_2003:
     _type: numeric
     info: Průměrný plat roku 2003 (pro výpočet)
-  prumerny_plat_nomi_od2023:
+  prumerny_plat_nomi_od2024:
     _type: numeric
     info: Změna průměrného platu od roku 2003, neočištěno o inflaci
     měřítko: 0 = žádná změna, 1 = nárůst o 100 %

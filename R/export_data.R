@@ -20,14 +20,14 @@ main_df_update <- readRDS("./data-interim/sections.rds") |>
          ceny_index = hodnota,
          ceny_inflace = inflation,
          ceny_deflator_2003 = base_2003,
-         ceny_deflator_2023 = base_2023,
+         ceny_deflator_2024 = base_2024,
          prumerna_mzda_cr = czsal_all,
          prumerna_mzda_pha = phasal_all,
          prumerny_plat_skut_skut = platy_skut_ke_skut,
-         prumerny_plat_c2023 = wage_in_2023,
-         prumerny_plat_c2023_mezirocne = wage_in_2023_change,
-         prumerny_plat_real_od2023 = cum_pct_wage_change_real,
-         prumerny_plat_nomi_od2023 = cum_pct_wage_change,
+         prumerny_plat_c2024 = wage_in_2024,
+         prumerny_plat_c2024_mezirocne = wage_in_2024_change,
+         prumerny_plat_real_od2024 = cum_pct_wage_change_real,
+         prumerny_plat_nomi_od2024 = cum_pct_wage_change,
          prumerny_plat_2003 = wage_base,
          prumerny_plat_vucinh  = wage_to_general,
          prumerny_plat_vucinh_mezirocne  = mzda_k_nh
@@ -98,8 +98,8 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
                info = "Cenový index vůči roku 2003",
                měřítko = "1 = nulová inflace",
                zdroj = "Odvozeno ze sloupce 'ceny_index'") |>
-  info_columns("ceny_deflator_2023",
-               info = "Cenový index vůči roku 2023") |>
+  info_columns("ceny_deflator_2024",
+               info = "Cenový index vůči roku 2024") |>
   info_columns("prumerna_mzda_cr",
                info = "Průměrná mzda v národním hospodářství",
                upřesnění = "průměrná hrubá měsíční mzda",
@@ -111,18 +111,18 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
   info_columns("prumerny_plat_skut_skut",
                info = "Index změny průměrného platu oproti předchozímu roku",
                měřítko = "1 = žádná změna, > 1 = nárůst") |>
-  info_columns("prumerny_plat_real_od2023",
+  info_columns("prumerny_plat_real_od2024",
                info = "Změna průměrného platu od roku 2003 očištěná o inflaci",
                měřítko = "0 = žádná změna, > 0 = nárůst") |>
-  info_columns("prumerny_plat_c2023",
-               info = "Průměrný plat v cenách roku 2023") |>
-  info_columns("prumerny_plat_c2023_mezirocne",
+  info_columns("prumerny_plat_c2024",
+               info = "Průměrný plat v cenách roku 2024") |>
+  info_columns("prumerny_plat_c2024_mezirocne",
                info = "Meziroční změna platů v reálném vyjádření",
-               upřesnění = "Podle vyjádření v cenách roku 2023",
+               upřesnění = "Podle vyjádření v cenách roku 2024",
                měřítko = "0 = žádná změna, 0.01 = nárůst o 1 %") |>
   info_columns("prumerny_plat_2003",
                info = "Průměrný plat roku 2003 (pro výpočet)") |>
-  info_columns("prumerny_plat_nomi_od2023",
+  info_columns("prumerny_plat_nomi_od2024",
                info = "Změna průměrného platu od roku 2003, neočištěno o inflaci",
                měřítko = "0 = žádná změna, 1 = nárůst o 100 %") |>
   info_columns("prumerny_plat_vucinh",

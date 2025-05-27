@@ -20,6 +20,7 @@ options("scipen" = 100, "digits" = 4)
 # load new data
 input <- read_excel_allsheets("./data-input/data_2023.xlsx")
 input21 <- read_excel_allsheets("./data-input/Data_2022.xls")
+input24 <- read_excel_allsheets("./data-input/Data_2024.xlsx")
 
 # load old data
 chapters_old <- read.csv("./data-input/legacy/chapters_ALL.csv", encoding = "UTF-8")
@@ -79,6 +80,22 @@ for (name in names(input21)) {
   }
 }
 
+
+main_names24 <- vector(mode = "list")
+polozky_names24 <- vector(mode = "list")
+jednotl_names24 <- vector(mode = "list")
+
+for (name in names(input24)) {
+  print(name)
+  if (name %in% main_sheets) {
+    main_names24 <- append(main_names24, input24[name])
+  } else if (name %in% sub_sheets) {
+    polozky_names24 <- append(polozky_names24, input24[name])
+  } else if (name %in% jednotl_sheets) {
+    jednotl_names24 <- append(jednotl_names24, input24[name])
+  }
+}
+
 # load excel data into clean dataframe
 
 main_df21 <- data.frame(matrix(ncol = length(section_names), nrow = 0))
@@ -87,6 +104,14 @@ colnames(main_df21) <- section_names
 for (i in 1:length(main_names21)) {
   res21 <- divide_sections(main_names21[[i]], names(main_names21[i]), section_names)
   main_df21 <- rbind(main_df21, res21)
+}
+
+main_df24 <- data.frame(matrix(ncol = length(section_names), nrow = 0))
+colnames(main_df24) <- section_names
+
+for (i in 1:length(main_names24)) {
+  res24 <- divide_sections(main_names24[[i]], names(main_names21[i]), section_names)
+  main_df24 <- rbind(main_df24, res24)
 }
 
 # sheets with various types of polozky
@@ -116,6 +141,13 @@ for (i in 1:length(jednotl_names21)) {
   jednotl_df21 <- rbind(jednotl_df21, res21)
 }
 
+# jednotl_df24 <- data.frame(matrix(ncol = length(jednotl_section_names), nrow = 0))
+# for (i in 1:length(jednotl_names24)) {
+#   print(names(jednotl_names24[i]))
+#   res24 <- divide_jednotl(jednotl_names24[[i]], names(jednotl_names24[i]), jednotl_section_names)
+#   jednotl_df24 <- rbind(jednotl_df24, res24)
+# }
+
 
 # summary sheet
 summary_names <- c(
@@ -125,10 +157,25 @@ summary_names <- c(
 
 summary <- divide_summary(input[[length(input)]], "Summary", summary_names)
 summary21 <- divide_summary(input[[length(input21)]], "Summary", summary_names)
+summary24 <- divide_summary(input[[length(input24)]], "Summary", summary_names)
 
-main_df <- bind_rows(main_df, main_df21 |> filter(rok == 2021))
-jednotl_df <- bind_rows(jednotl_df, jednotl_df21 |> filter(rok == 2021))
-summary <- bind_rows(summary, summary21 |> filter(rok == 2021))
+main_df <- bind_rows(
+  main_df,
+  main_df21 |> filter(rok == 2021),
+  main_df24 |> filter(rok == 2024)
+  )
+
+jednotl_df <- bind_rows(
+  jednotl_df,
+  jednotl_df21 |> filter(rok == 2021)
+  # jednotl_df24 |> filter(rok == 2024)
+  )
+
+summary <- bind_rows(
+  summary,
+  summary21 |> filter(rok == 2021),
+  summary24 |> filter(rok == 2024)
+  )
 
 # now we will extend the new datasets with data from previous years
 
@@ -311,12 +358,12 @@ df_infl <- czso_get_table("010022", dest_dir = "data-input/czso", force_redownlo
   select(contains("obdobi"),rok, hodnota) %>%
   mutate(inflation=hodnota/100)%>%
   arrange(rok)%>%
-  filter(rok>=2003,rok<=2023)
+  filter(rok>=2003,rok<=2024)
 
 df_infl$base_2003 <- 0
-df_infl$base_2023 <- 0
+df_infl$base_2024 <- 0
 df_infl[1, "base_2003"] <- 1
-df_infl[nrow(df_infl), "base_2023"] <- 1
+df_infl[nrow(df_infl), "base_2024"] <- 1
 
 
 for (i in 2:nrow(df_infl)) {
@@ -325,7 +372,7 @@ for (i in 2:nrow(df_infl)) {
 
 
 for (i in (nrow(df_infl) - 1):1) {
-  df_infl[i, "base_2023"] <- df_infl[i + 1, "base_2023"] * df_infl[i+1, "inflation"]
+  df_infl[i, "base_2024"] <- df_infl[i + 1, "base_2024"] * df_infl[i+1, "inflation"]
 }
 
 main_df_recat <- main_df %>%
@@ -360,10 +407,10 @@ main_df_update <- bind_rows(main_df_recat,
   mutate(mzda_prumer_skut_ke_skut = (prumerny_plat / lag(prumerny_plat) - 1)) %>%
   mutate(plat_base = prostredky_na_platy[1]) %>%
   mutate(cum_pct_wage_change_real = (prostredky_na_platy / base_2003 - plat_base) / plat_base) %>%
-  mutate(wage_in_2023 = prumerny_plat * base_2023) %>%
-  mutate(wage_in_2023_change = wage_in_2023 / lag(wage_in_2023) - 1) %>%
-  mutate(wage_base = wage_in_2023[1]) %>%
-  mutate(cum_pct_wage_change = (wage_in_2023 - wage_base) / wage_base) %>%
+  mutate(wage_in_2024 = prumerny_plat * base_2024) %>%
+  mutate(wage_in_2024_change = wage_in_2024 / lag(wage_in_2024) - 1) %>%
+  mutate(wage_base = wage_in_2024[1]) %>%
+  mutate(cum_pct_wage_change = (wage_in_2024 - wage_base) / wage_base) %>%
   mutate(wage_to_general = (ifelse(kategorie_2014 %in% c("Ministerstva", "Ostatni ustredni"), prumerny_plat / phasal_all, prumerny_plat / czsal_all))) %>%
   mutate(mzda_k_nh = wage_to_general / lag(wage_to_general) - 1) %>%
   ungroup() %>%
@@ -372,11 +419,11 @@ main_df_update <- bind_rows(main_df_recat,
 
 
 
-main_df_update %>% filter( typ_rozpoctu == "SCHV", rok == 2023) %>% select("kategorie_2014") %>% unique()
-main_df %>% filter( typ_rozpoctu == "SCHV", rok == 2023) %>% select(kap_num,name) %>% unique()
+main_df_update %>% filter( typ_rozpoctu == "SCHV", rok == 2024) %>% select("kategorie_2014") %>% unique()
+main_df %>% filter( typ_rozpoctu == "SCHV", rok == 2024) %>% select(kap_num,name) %>% unique()
 # save all dataframes
 saveRDS(main_df_update, file = "./data-interim/sections.rds")
-saveRDS(jednotl_df, file = "./data-interim/jednotlivci.rds")
+# saveRDS(jednotl_df, file = "./data-interim/jednotlivci.rds")
 # saveRDS(polozky, file = "./data-interim/organizace.rds")
 saveRDS(summary, file = "./data-interim/summary.rds")
 
