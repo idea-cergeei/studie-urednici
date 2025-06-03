@@ -4,6 +4,7 @@ library(ggplot2)
 library(lubridate)
 library(forcats)
 library(tidyr)
+library(gplots)
 unloadNamespace("plyr")
 
 source("theme.R")
@@ -196,7 +197,7 @@ marker_opac_map <- c(Ostatní = 0.6, Profesní = 1,
                      `Celá ekonomika` = 1,
                      `ICT` = 1, `Veřejná správa` = 1)
 
-text_size_map <- c(Ostatní = 0, Profesní = hover_size,
+text_size_map <- c(Ostatní = hover_size, Profesní = hover_size,
                    `Celá ekonomika` = hover_size,
                    `ICT` = hover_size, `Veřejná správa` = hover_size)
 
@@ -214,7 +215,9 @@ graf_A15 <- data %>%
                   size=revalue(data$clr,marker_size_map),
                   color = revalue(as.character(data$clr),marker_clr_map)),
     text = ~ paste(
-      " Rok:", tm, "<br>", "Skupina NACE (odvětví):", clr, "<br>", "Hodnota:",
+      " Rok:", tm, "<br>", "Skupina NACE (odvětví):",
+      str_wrap(odvetvi_txt, 30),
+      "<br>", "Hodnota:",
       round(realna_zmena * 100,2), "%"
     ),
     hoverlabel = list(font=list(size=revalue(data$clr,text_size_map),
@@ -244,5 +247,7 @@ graf_A15 <- data %>%
     legend = legend_below_mid, margin = mrg6) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE) %>%
   onRender(js)
+
+graf_A15
 
 htmlwidgets::saveWidget(as_widget(graf_A15), paste0("graphs/","graf_A15",".html"), libdir = "js", selfcontained = FALSE)
