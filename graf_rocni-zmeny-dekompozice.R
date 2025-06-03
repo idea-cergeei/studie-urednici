@@ -170,4 +170,6 @@ graf_A17 <- dta %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE) %>%
   onRender(js)
 
+graf_A17
+
 htmlwidgets::saveWidget(widget = as_widget(graf_A17), paste0("graphs/","graf_A17",".html"), libdir = "js", selfcontained = FALSE)

@@ -16,6 +16,8 @@ system2("netlify", args = c("deploy",
 rmarkdown::render("results.Rmd")
 
 source("graphs.R")
+source("pay-change-nace_plot.R")
+source("graf_rocni-zmeny-dekompozice.R")
 source("graphs_mod.R")
 source("graphs_mod_long.r")
 
