@@ -162,7 +162,8 @@ data <- zm_plt_dt_y |>
   ungroup() |>
   mutate(is_last_period = tm == max(tm),
          needs_label = is_last_period & (is_minmax | clr != "Ostatní"),
-         name_for_label = ifelse(is_minmax, odvetvi_txt, as.character(clr)) |> str_wrap(30))
+         name_for_label = ifelse(is_minmax, odvetvi_txt, as.character(clr)) |> str_wrap(30)) |>
+  replace_na(list(odvetvi_txt = "Celkem"))
 
 new_labels <- c(seq(year(min(data$tm)), year(max(data$tm))), rep(" ", times = add_years))
 print(new_labels)
@@ -203,6 +204,80 @@ text_size_map <- c(Ostatní = hover_size, Profesní = hover_size,
 
 data$tm <- year(data$tm)
 
+# Updated JavaScript for adding/removing hover lines
+js_hover <- "
+function(el, x) {
+  var hoverTraceIndex = null;
+
+  el.on('plotly_hover', function(data) {
+    var point = data.points[0];
+    var hoveredOdvetvi = point.customdata;
+
+    // Remove any existing hover trace
+    if (hoverTraceIndex !== null) {
+      Plotly.deleteTraces(el, hoverTraceIndex);
+      hoverTraceIndex = null;
+    }
+
+    // Collect all points for this odvetvi_txt
+    var matchingPoints = [];
+    var allTraces = el.data;
+
+    for (var i = 0; i < allTraces.length; i++) {
+      var trace = allTraces[i];
+      if (trace.customdata) {
+        for (var j = 0; j < trace.customdata.length; j++) {
+          if (trace.customdata[j] === hoveredOdvetvi) {
+            matchingPoints.push({
+              x: trace.x[j],
+              y: trace.y[j]
+            });
+          }
+        }
+      }
+    }
+
+    // Sort points by x value (time) to ensure proper line connection
+    matchingPoints.sort(function(a, b) { return a.x - b.x; });
+
+    // Extract sorted x and y arrays
+    var xVals = matchingPoints.map(function(p) { return p.x; });
+    var yVals = matchingPoints.map(function(p) { return p.y; });
+
+    // Add new trace for the hover line
+    var hoverTrace = {
+      x: xVals,
+      y: yVals,
+      type: 'scatter',
+      mode: 'lines+markers',
+      line: {
+        color: 'grey30',
+        width: 3
+      },
+      marker: {
+        color: 'grey30',
+        size: 6
+      },
+      showlegend: false,
+      hoverinfo: 'skip'
+    };
+
+    Plotly.addTraces(el, hoverTrace).then(function() {
+      hoverTraceIndex = el.data.length - 1;
+    });
+  });
+
+  el.on('plotly_unhover', function(data) {
+    // Remove hover trace
+    if (hoverTraceIndex !== null) {
+      Plotly.deleteTraces(el, hoverTraceIndex);
+      hoverTraceIndex = null;
+    }
+  });
+}
+"
+
+# Updated main graph code
 graf_A15 <- data %>%
   plot_ly(
     x = ~tm, y = ~ realna_zmena * 100, type = "scatter",
@@ -220,6 +295,7 @@ graf_A15 <- data %>%
       "<br>", "Hodnota:",
       round(realna_zmena * 100,2), "%"
     ),
+    customdata = ~odvetvi_txt,  # Pass odvetvi_txt to JavaScript
     hoverlabel = list(font=list(size=revalue(data$clr,text_size_map),
                                 family=uni_font),
                       bgcolor=revalue(as.character(data$clr),color_map)),
@@ -246,7 +322,7 @@ graf_A15 <- data %>%
                                      titlefont = axis_font)),
     legend = legend_below_mid, margin = mrg6) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE) %>%
-  onRender(js)
+  onRender(js_hover)
 
 graf_A15
 
