@@ -56,6 +56,8 @@ tooltips <- readLines("graphs_mod/js/tooltips.js")
 tooltips <- c(sapply(gsub("\\.html$","",lfiles),function(g)gsub("id",g,tooltips)))
 writeLines(tooltips,"graphs_mod/js/tooltips.js")
 
+abbr_link <- "<a href=\\\\\"https://ideaapps.cerge-ei.cz/zamestnancistatu/pdf/zkratky.pdf\\\\\">seznam zkratek</a>"
+
 long <- TRUE
 
 group_graphs <- function(group,withsub = FALSE){
@@ -192,7 +194,9 @@ for(i in inx){
   }
 
   gr <- readLines(file.path("graphs", f))
+
   gr_content <- gr[grepl('id="htmlwidget',gr) | grepl('type="application',gr)]
+  gr_content <- gsub('seznam zkratek',abbr_link,gr_content)
 
   widget_id <- gsub('.*(htmlwidget-[0-9a-z]+)\".*',"\\1",gr_content[grepl('id="htmlwidget-',gr_content)])
 
@@ -232,4 +236,4 @@ gr_all <- unlist(lapply(as.list(template), function(x)
 
 writeLines(gr_all,paste0("graphs_mod/index.html"))
 
-system("scp -r graphs_mod/* root@194.182.65.144:/srv/shiny-server/zamestnancistatu_2025")
+# system("scp -r graphs_mod/* root@194.182.65.144:/srv/shiny-server/zamestnancistatu_2025")
