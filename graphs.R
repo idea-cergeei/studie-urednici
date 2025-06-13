@@ -61,8 +61,8 @@ num_tick_size <- 17
 axis_size <- 20
 lgnd_size <- 17
 hover_size <- 15
-mrk_min_size <- 10
-mrk_maj_size <- 13
+mrk_min_size <- 16
+mrk_maj_size <- 25
 
 mrg <- list(l = 0, r = 0, b = 0, t = 0, pad = 0, autoexpand = FALSE)
 mrg2 <- list(t = 50,b=100, autoexpand = TRUE)
@@ -155,6 +155,7 @@ chart_type <- function(title_y,
         list(
           label = label_bar,
           method = "update",
+          bgcolor = "darkred",
           args = list( list(visible = list(TRUE,TRUE,TRUE,
                                            FALSE,FALSE,FALSE,
                                            FALSE,FALSE,FALSE)),
@@ -553,8 +554,9 @@ graf_3 <- bar_dt %>%
                                            "K\u010D"),
                                      ""),
             hoverinfo = "text",
-            marker=list(size=mrk_maj_size,color="black"),
-            x = ~prumerny_plat_mean, y=~kategorie_2014_cz) %>%
+            marker=list(size=mrk_maj_size),
+            x = ~prumerny_plat_mean, y=~kategorie_2014_cz,color = ~kategorie_2014_cz,
+            colors = color_map) %>%
   layout(hovermode = "closest",
          title = list(font=title_font,
                       text = "<b>Graf 3a. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu (2024)</b>", y = 1.1),
