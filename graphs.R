@@ -50,6 +50,27 @@ placeLegendAnnot();
 el.on('plotly_relayout', function() {
 placeLegendAnnot();
 });
+function activateButton(btns, activeIdx) {
+btns.forEach((btn, i) => {
+if (i === activeIdx) {
+btn.classList.add('active');
+} else {
+btn.classList.remove('active');
+}
+});
+}
+
+requestAnimationFrame(() => {
+const buttons = el.querySelectorAll('.updatemenu-button');
+
+buttons.forEach((btn, i) => {
+btn.addEventListener('click', () => {
+activateButton(buttons, i);
+});
+});
+
+activateButton(buttons, 0);
+});
 }"
 
 cap_size <- 25
@@ -141,7 +162,7 @@ chart_type <- function(title_y,
                        label_bar,
                        label_bar_share = "Sloupce (v %)",
                        label_line = "Trendy",
-                       max_bar,max_bar_share=108,max_line,
+                       max_bar,max_bar_share=112,max_line,
                        dtick = 10,dtick_share = 20){
   return(
     list(
@@ -158,7 +179,8 @@ chart_type <- function(title_y,
           bgcolor = "darkred",
           args = list( list(visible = list(TRUE,TRUE,TRUE,
                                            FALSE,FALSE,FALSE,
-                                           FALSE,FALSE,FALSE)),
+                                           FALSE,FALSE,FALSE,
+                                           TRUE,FALSE)),
                        list( yaxis = c(num_ticks,frame_y,list(title = title_y,titlefont = axis_font,
                                                               dtick = dtick,range = c(0,max_bar)) ),
                              margin = list(t=50,b=100,r=20,l=70, autoexpand = TRUE))
@@ -168,7 +190,8 @@ chart_type <- function(title_y,
           method = "update",
           args = list( list(visible = list(FALSE,FALSE,FALSE,
                                            TRUE,TRUE,TRUE,
-                                           FALSE,FALSE,FALSE)),
+                                           FALSE,FALSE,FALSE,
+                                           FALSE,TRUE)),
                        list( yaxis = c(num_ticks,frame_y,list(title = title_y_share,titlefont = axis_font,
                                                               dtick = dtick_share,range = c(0,max_bar_share)) ),
                              margin = list(t=50,b=100,r=20,l=70, autoexpand = TRUE))
@@ -178,13 +201,18 @@ chart_type <- function(title_y,
           method = "update",
           args = list( list(visible = list(FALSE,FALSE,FALSE,
                                            FALSE,FALSE,FALSE,
-                                           TRUE,TRUE,TRUE)),
+                                           TRUE,TRUE,TRUE,
+                                           FALSE,FALSE)),
                        list( yaxis = c(num_ticks,frame_y,list(title = title_y,titlefont = axis_font,
                                                               dtick = dtick,range = c(0,max_line)) ),
                              margin = list(t=50,b=100,r=20,l=70, autoexpand = TRUE))
           ))
       ))
   )
+}
+
+x_ticks <- function(dta){
+  return(seq(min(dta$rok),max(dta$rok),ifelse(min(dta$rok)==2003,3,4)))
 }
 
 # Theme gg ----------------------------------------------------------------
@@ -657,6 +685,13 @@ graf_4_dta_shares <- graf_4_dta %>%
   mutate(pocet_zamestnancu_share = pocet_zamestnancu / sum(pocet_zamestnancu)) %>%
   ungroup()
 
+labels_df <- graf_4_dta %>%
+  group_by(rok) %>%
+  summarise(
+    total_label = first(pocet_zamestnancu_agg) / 1000,
+    label_text = round(first(pocet_zamestnancu_agg) / 1000,0)
+  )
+
 graf_4 <- graf_4_dta %>%
   plot_ly(
     x = ~rok, y = ~ pocet_zamestnancu / 1000, color = ~kategorie_2014_cz,
@@ -680,7 +715,7 @@ graf_4 <- graf_4_dta %>%
                                                        standoff=10),
                                           dtick=2,
                                           titlefont = axis_font),
-                   list(tickvals = seq(2003,2024,1))),
+                   list(tickvals = x_ticks(graf_4_dta))),
          yaxis = c(num_ticks,frame_y,list(title = "<b>Počet státních úředníků (v tisících)</b>",
                                           titlefont = axis_font)),
          legend = legend_below_small,
@@ -702,21 +737,31 @@ graf_4 <- graf_4_dta_shares %>%
   add_trace(x = ~as.character(rok), y = ~pocet_zamestnancu / 1000, type = 'scatter',
             mode = "line", line = list(width = 7),
             marker = list(size=5,symbol="circle-dot",line = list(color="Black",width=3))) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~total_label, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~100, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
   layout(barmode="stack",bargap=0.5,
          title = list(font=title_font,
                       text = "<b>Graf 4a. Počet státních úředníků (2003–2024)</b>",
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
-                   list(tickvals = seq(2003,2024,2))),
+                   list(tickvals = x_ticks(graf_4_dta_shares))),
          yaxis = c(num_ticks,frame_y,list(title = "<b>Počet státních úředníků (v tisících)</b>",
                                           titlefont = axis_font,
-                                          dtick = 10, range = c(0,68))),
+                                          dtick = 10, range = c(0,75))),
          legend = legend_below_small, margin = mrg2,
          updatemenus = list( chart_type(title_y = "<b>Počet státních úředníků (v tisících)</b>",
                                         title_y_share = "<b>Podíl státních úředníků (v %)</b>",
                                         label_bar = "Sloupce (v tisících)",
-                                        max_bar = 68,max_line = 55) )) %>%
+                                        max_bar = 75,max_line = 60) )) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js) %>%
   style(visible = FALSE, traces = 4:9)
@@ -763,7 +808,7 @@ graf_A4 <- vyvoj_bar %>%
          #                 annot_below),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                                   dtick=2,titlefont = axis_font),
-                           list(tickvals = seq(2003,2024,2))),
+                           list(tickvals = x_ticks(vyvoj_bar))),
          yaxis = c(num_ticks,frame_y,list(title = "<b>Výdaje na platy (v mld. Kč)</b>",titlefont = axis_font,
                                           dtick = 5)),
          legend = legend_below_small, margin = mrg2
@@ -776,6 +821,13 @@ vyvoj_bar_shares <- vyvoj_bar %>%
   mutate(prostredky_na_platy_nom_share = prostredky_na_platy_nom / sum(prostredky_na_platy_nom),
          prostredky_na_platy_real_share = prostredky_na_platy_real / sum(prostredky_na_platy_real)) %>%
   ungroup()
+
+labels_df <- vyvoj_bar_shares %>%
+  group_by(rok) %>%
+  summarise(
+    total_label = first(prostredky_na_platy_nom_agg) / 1e9,
+    label_text = round(first(prostredky_na_platy_nom_agg) / 1e9,0)
+  )
 
 graf_A4 <- vyvoj_bar_shares %>%
   plot_ly(color = ~kategorie_2014_cz, colors = color_map,
@@ -792,13 +844,23 @@ graf_A4 <- vyvoj_bar_shares %>%
   add_trace(x = ~as.character(rok), y = ~prostredky_na_platy_nom / 1e9, type = 'scatter',
             mode = "line", line = list(width = 7),
             marker = list(size=5,symbol="circle-dot",line = list(color="Black",width=3))) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~total_label, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~100, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
                       text = "<b>Graf 4c. Výdaje na platy státních úředníků (2003-2024)</b>",
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
-                   list(tickvals = seq(2003,2024,2))),
+                   list(tickvals = x_ticks(vyvoj_bar_shares))),
          yaxis = c(num_ticks,frame_y,list(title = "<b>Výdaje na platy (v mld. Kč)</b>",titlefont = axis_font,
                                           dtick = 5, range = c(0,38))),
          legend = legend_below_small, margin = mrg2,
@@ -838,13 +900,20 @@ graf_A5 <- vyvoj_bar %>%
          #                 annot_below),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),titlefont = axis_font),
                                           # xaxis = list(categoryarray = seq(2003,2024), categoryorder = "array"),
-                   list(tickvals = seq(2003,2024,5))),
-         yaxis = c(num_ticks,frame_y,list(title = "<b>Reálné výdaje na platy (v mld. Kč, ceny roku 2024)</b>",titlefont = axis_font)),
+                   list(tickvals = x_ticks(vyvoj_bar))),
+         yaxis = c(num_ticks,frame_y,list(title = "<b>Reálné výdaje na platy (v mld. Kč, ceny roku 2024)</b>",titlefont = axis_font,
+                                          dtick = 10, range = c(0,50))),
          legend = legend_below_small, margin = mrg2
   ) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
 
+labels_df <- vyvoj_bar_shares %>%
+  group_by(rok) %>%
+  summarise(
+    total_label = first(prostredky_na_platy_real_agg) / 1e9,
+    label_text = round(first(prostredky_na_platy_real_agg) / 1e9,0)
+  )
 
 graf_A5 <- vyvoj_bar_shares %>%
   plot_ly(color = ~kategorie_2014_cz, colors = color_map,
@@ -861,24 +930,35 @@ graf_A5 <- vyvoj_bar_shares %>%
   add_trace(x = ~as.character(rok), y = ~prostredky_na_platy_real / 1e9, type = 'scatter',
             mode = "line", line = list(width = 7),
             marker = list(size=5,symbol="circle-dot",line = list(color="Black",width=3))) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~total_label, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~100, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
                       text = "<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003-2024)</b>",
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
-                   list(tickvals = seq(2003,2024,2))),
+                   list(tickvals = x_ticks(vyvoj_bar_shares))),
          yaxis = c(num_ticks,frame_y,list(title = "<b>Reálné výdaje na platy (v mld. Kč, ceny roku 2024)</b>",titlefont = axis_font,
-                                          dtick = 5)),
+                                          dtick = 10, range = c(0,50))),
          legend = legend_below_small, margin = mrg2,
          updatemenus = list( chart_type(title_y = "<b>Reálné výdaje na platy (v mld. Kč, ceny roku 2024)</b>",
                                         title_y_share = "<b>Reálné výdaje na platy (v %)</b>",
                                         label_bar = "Sloupce (v mld. Kč)",
-                                        max_bar = 45,max_line = 32,dtick = 5) )) %>%
+                                        max_bar = 50,max_line = 50,dtick = 10) )) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js) %>%
-  style(visible = FALSE, traces = 4:9)
+  style(visible = FALSE, traces = c(4:9,11))
 
+graf_A5
 
 ## ----cost_cumsum_2014--------------------------------------------------------------------------------------------
 aux2 <- dta %>%
@@ -923,7 +1003,7 @@ graf_A6 <- aux2 %>%
     #                                  font = pozn_font_small)),
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),
                                      titlefont = axis_font),
-              list(tickvals = seq(2003,2024,5))),
+              list(tickvals = x_ticks(aux2))),
     yaxis = c(num_ticks,frame_y,list(title = str_wrap("<b>Změna reálných výdajů na platy oproti roku 2003 (v %, ceny roku 2024)</b>",50),
                                      ticksuffix = "%",titlefont = axis_font,
                                      ticktext = lapply(seq(-10,70,10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
@@ -955,7 +1035,6 @@ graf_5_dt <- dta %>%
   mutate(kategorie_2014_cz = as.factor(kategorie_2014_cz) %>%
            fct_relevel("Ministerstva", "Ostatní ústřední",
                        "Neústřední st. správa","Státní úředníci (celkem)"))
-graf_5_dt <- plyr::rbind.fill(graf_5_dt,data.frame(rok = 2003))
 graf_5 <- plot_ly(graf_5_dt,
                   x = ~rok, y = ~ wage_in_2024 / 1000, type = "scatter", color = ~kategorie_2014_cz,
                   colors = color_map,
@@ -980,7 +1059,7 @@ graf_5 <- plot_ly(graf_5_dt,
                 y =0.98,
                 font=title_font),
     xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
-              list(tickvals = seq(2003,2024,5))),
+              list(tickvals = x_ticks(graf_5_dt))),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Reálné průměrné mzdy (tis. Kč, ceny roku 2024)</b>",titlefont = axis_font)),
     margin = mrg2
   ) %>% config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
@@ -1029,7 +1108,6 @@ graf_A7_dt <- dta %>%
   mutate(kategorie_2014_cz = as.factor(kategorie_2014_cz) %>%
            fct_relevel("Ministerstva", "Ostatní ústřední",
                        "Neústřední st. správa","Státní úředníci (celkem)"))
-graf_A7_dt <- plyr::rbind.fill(graf_A7_dt,data.frame(rok = 2003))
 
 graf_A7 <- plot_ly(graf_A7_dt,
                    x = ~rok, y = ~ cum_pct_wage_change * 100, type = "scatter",
@@ -1056,7 +1134,7 @@ graf_A7 <- plot_ly(graf_A7_dt,
     #                      font = pozn_font_small),annot_below),
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),
                                      titlefont = axis_font),
-              list(tickvals = seq(2003,2024,5))),
+              list(tickvals = x_ticks(graf_A7_dt))),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Změna reálného průměrného platu oproti roku 2003 \n (v %, ceny roku 2024)</b>",
                                      # tickprefix = "+",
                                      # showtickprefix = "last",
@@ -1106,7 +1184,6 @@ graf_6_dt <- dta %>%
   mutate(kategorie_2014_cz = as.factor(kategorie_2014_cz) %>%
            fct_relevel("Ministerstva", "Ostatní ústřední",
                        "Neústřední st. správa","Státní úředníci (celkem)"))
-graf_6_dt <- plyr::rbind.fill(graf_6_dt,data.frame(rok = 2003))
 
 graf_6 <- plot_ly(graf_6_dt,
                   line = list(width = 7),
@@ -1132,7 +1209,7 @@ graf_6 <- plot_ly(graf_6_dt,
   # annotations = c(annot_6,list(text = str_wrap("<i>Pozn.: Pro ministerstva a ostatní ústřední orgány použité hodnoty průměrné mzdy v Praze. V ostatních případech je jako reference použitý průměrný plat v národním hospodářství. Hodnota 100% znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství.</i>",wrap_len),
   #                              font = pozn_font_small)),
   xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
-            list(tickvals = seq(2003,2024,5))),
+            list(tickvals = x_ticks(graf_6_dt))),
   yaxis = c(num_ticks,frame_y,list(title = "<b>Poměr platů státních úředníku a prům. mzdy (v %)</b>",
                                    # ticksuffix = "%",
                                    titlefont = axis_font)),
@@ -1216,7 +1293,7 @@ graf_A8 <- graf_A8_dt %>%
     showlegend = FALSE,
     xaxis = c(num_ticks,frame_x,list(title = "<b>Zm\u011Bna pr\u016Fm\u011Brn\u00E9ho platu (v %)</b>",
                                           titlefont = axis_font,
-                                          ticksuffix = "%",range = c(-5,65))),
+                                          ticksuffix = "%",range = c(-5,40))),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Zm\u011Bna po\u010Dtu zam\u011Bstnanc\u016F (v %)</b>",
                                      titlefont = axis_font,
                                      range = c(-20,20),
@@ -1301,7 +1378,7 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
     ) %>%
     layout(margin=c(t=5),
            xaxis = c(list(title= "<b>Rok</b>",titlefont = axis_font,tickangle = -90),
-                     list(tickvals = seq(2003,2024,5))),
+                     list(tickvals = x_ticks(dta))),
            yaxis = c(list(title = "",titlefont = axis_font,range = c(-30, 10),
                           ticktext = lapply(seq(-30, 0, 10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
                           tickvals = seq(-30, 0, 10),
@@ -1367,7 +1444,7 @@ graf_A10 <- dta %>%filter(!is.na(kap_name)) %>%
     ) %>%
     layout(margin = mrg7,
            xaxis = list(title = "<b>Rok</b>",titlefont = axis_font,
-                        tickangle = -90,tickvals = seq(2003,2024,5)),
+                        tickangle = -90,tickvals = x_ticks(dta)),
            # yaxis = c(list(title = "",titlefont = axis_font,range = c(-30, 10),
            #                ticktext = lapply(seq(-30, 10, 10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
            #                tickvals = seq(-30, 10, 10),
@@ -1432,7 +1509,7 @@ graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     ) %>%
     layout(bargap=0.5,margin = list(t = 100,b=0,l=70),
            xaxis = c(num_ticks,frame_y,title="<b>Rok</b>",titlefont = axis_font,
-                     list(tickvals = seq(2003,2024,5))),
+                     list(tickvals = x_ticks(dta))),
            yaxis = c(num_ticks,frame_y,list(title = "<b></b>",titlefont = axis_font,
                                             range = c(-18, 1))),showlegend = F),keep = TRUE) %>%
   subplot(nrows = 2, shareY = F, margin = c(0.07,0.07,0.15,0.15),titleY =T) %>%
@@ -1492,7 +1569,7 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     ) %>%
     layout(bargap=0.5,margin = list(t = 120,b=0,l=70),
            xaxis = c(num_ticks,frame_y,list(title="<b>Rok</b>",titlefont = axis_font),
-                     list(tickvals = seq(2003,2024,5))),
+                     list(tickvals = x_ticks(dta))),
            yaxis = c(frame_y,list(title = "",
                                   titlefont = axis_font,
                                   # tickprefix = "+",
@@ -1535,7 +1612,7 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
                        "Neústřední st. správa","Státní úředníci (celkem)")) %>%
   group_by(kategorie_2014_cz) %>%
   group_map(~ plot_ly(
-    data = ., x = ~prumerny_plat_2003/1000, y = ~ plat_change*100,
+    data = ., x = ~prumerny_plat_2003, y = ~ plat_change*100,
     type = "scatter" , mode = "markers",marker=list(size=mrk_min_size),
     color = ~kategorie_2014_cz, colors = color_map,
     hovertemplate = ~ paste(
@@ -1567,7 +1644,7 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
                                        tickvals = seq(0,30,10),
                                        tickmode = "array",
                                        ticksuffix = "%")),
-      xaxis = c(num_ticks,frame_y,list(title = "Pr\u016Fm\u011Brn\u00FD plat v roce 2003 (tisíce Kč)", titlefont = axis_font,range = c(15, 35))),
+      xaxis = c(num_ticks,frame_y,list(title = "Pr\u016Fm\u011Brn\u00FD plat v roce 2003 (tisíce Kč)", titlefont = axis_font,range = c(15, 35)*1000)),
       legend = list(x = 100, y = 0.5), showlegend = F) %>%
     add_text(text = ~ str_wrap(kap_name, 10), textposition = "bottom left",
              textfont = list(size = kat_tick_size)),keep = TRUE) %>%
@@ -1579,7 +1656,7 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
                                  font = axis_font,
                                  xshift = -80, textangle = 270, showarrow = F,
                                  xref='paper', yref='paper'),
-                            list(y = 0 , x = 0.5, text = "<b>Průměrný plat v roce 2003 (tis. Kč)</b>",
+                            list(y = 0 , x = 0.5, text = "<b>Průměrný plat v roce 2003 (Kč)</b>",
                                  font = axis_font,
                                  yshift = -70,
                                  textangle = 0, showarrow = F,
@@ -1605,6 +1682,13 @@ graf_A14_dta_shares <- graf_A14_dta %>%
   mutate(pocet_zamestnancu_share = pocet_zamestnancu / sum(pocet_zamestnancu)) %>%
   ungroup()
 
+labels_df <- graf_A14_dta_shares %>%
+  group_by(rok) %>%
+  summarise(
+    total_label = first(pocet_zamestnancu_agg) / 1000,
+    label_text = round(first(pocet_zamestnancu_agg) / 1000,0)
+  )
+
 graf_A14 <- graf_A14_dta_shares %>%
   plot_ly(color = ~kategorie_2014_cz, colors = color_map,
           hovertemplate = ~ paste0(
@@ -1619,21 +1703,31 @@ graf_A14 <- graf_A14_dta_shares %>%
   add_trace(x = ~as.character(rok), y = ~pocet_zamestnancu / 1000, type = 'scatter',
             mode = "line", line = list(width = 7),
             marker = list(size=5,symbol="circle-dot",line = list(color="Black",width=3))) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~total_label, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
+  add_trace(data = labels_df, x = ~rok, y = ~100, type = "scatter", mode = "text", text = ~label_text,
+            textposition = "top middle", showlegend = FALSE,
+            textfont = list(size = 14,family = uni_font,color = "black"),
+            inherit = FALSE
+  ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
                       text = "<b>Graf 4b. Počet státních úředníků, včetně MV a MZV (2003-2024)</b>",
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
-                   list(tickvals = seq(2003,2024,2))),
+                   list(tickvals = x_ticks(graf_A14_dta_shares))),
          yaxis = c(num_ticks,frame_y,list(title = "<b>Počet státních úředníků (v tisících)</b>",
                                           titlefont = axis_font,
-                                          dtick = 10, range = c(0,86))),
+                                          dtick = 10, range = c(0,90))),
          legend = legend_below_small, margin = mrg2,
          updatemenus = list( chart_type(title_y = "<b>Počet státních úředníků (v tisících)</b>",
                                         title_y_share = "<b>Podíl státních úředníků (v %)</b>",
                                         label_bar = "Sloupce (v tisících)",
-                                        max_bar = 86,max_line = 55) )) %>%
+                                        max_bar = 90,max_line = 55) )) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js) %>%
   style(visible = FALSE, traces = 4:9)
@@ -1722,3 +1816,5 @@ for (i in 1:length(graf_list)){
   htmlwidgets::saveWidget(as_widget(graf_list[[i]]), paste0("graphs/",names(graf_list)[i],".html"), libdir = "js", selfcontained = FALSE)
 }
 
+source("graf_rocni-zmeny-dekompozice.R")
+source("pay-change-nace_plot.R")

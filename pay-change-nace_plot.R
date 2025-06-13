@@ -202,7 +202,7 @@ text_size_map <- c(Ostatní = hover_size, Profesní = hover_size,
                    `Celá ekonomika` = hover_size,
                    `ICT` = hover_size, `Veřejná správa` = hover_size)
 
-data$tm <- year(data$tm)
+data$rok <- year(data$tm)
 
 # Updated JavaScript for adding/removing hover lines
 js_hover <- "
@@ -280,7 +280,7 @@ function(el, x) {
 # Updated main graph code
 graf_A15 <- data %>%
   plot_ly(
-    x = ~tm, y = ~ realna_zmena * 100, type = "scatter",
+    x = ~rok, y = ~ realna_zmena * 100, type = "scatter",
     color = ~clr, colors = color_map, mode = "line",
     line = list(width = revalue(data$clr,linewidth_map),
                 color = revalue(as.character(data$clr),color_map)),
@@ -290,7 +290,7 @@ graf_A15 <- data %>%
                   size=revalue(data$clr,marker_size_map),
                   color = revalue(as.character(data$clr),marker_clr_map)),
     text = ~ paste(
-      " Rok:", tm, "<br>", "Skupina NACE (odvětví):",
+      " Rok:", rok, "<br>", "Skupina NACE (odvětví):",
       str_wrap(odvetvi_txt, 30),
       "<br>", "Hodnota:",
       round(realna_zmena * 100,2), "%"
@@ -310,17 +310,34 @@ graf_A15 <- data %>%
     # annotations = c(list(text = str_wrap("<i>Zdroj: vlastní výpočet z dat ČSÚ (sady 110079 Mzdy, náklady práce - časové řady a 010022 Indexy spotř. cen)</i>",wrap_len),
     #                      font = pozn_font),annot_below),
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),
-                                     titlefont = axis_font),
-              list(tickvals = seq(2003,2023,5))),
+                                     titlefont = axis_font,range = c(min(data$rok)-1,max(data$rok)+1)),
+              list(tickvals = x_ticks(data))),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Reálná meziroční změna (očištěno o inflaci)</b>",
                                      # tickprefix = "+",
                                      ticksuffix = " %",
                                      # showtickprefix = "last",
-                                     ticktext = lapply(seq(-15,10,5), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
+                                     ticktext = lapply(seq(-15,10,5), function(x) paste(ifelse(x > 0, paste0("+", x), as.character(x)),"%")),
                                      tickvals = seq(-15,10,5),
                                      tickmode = "array",
                                      titlefont = axis_font)),
-    legend = legend_below_mid, margin = mrg6) %>%
+    legend = legend_below_mid, margin = mrg6,
+    shapes = list(
+      list(
+        type = "line",
+        x0 = min(data$rok)-1,
+        x1 = max(data$rok)+1,
+        y0 = 0,
+        y1 = 0,
+        xref = "x",
+        yref = "y",
+        line = list(
+          color = "black",
+          width = 3,
+          dash = "solid"
+        ),
+        layer = "below"
+      )
+    )) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE) %>%
   onRender(js_hover)
 

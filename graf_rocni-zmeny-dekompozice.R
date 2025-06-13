@@ -154,7 +154,7 @@ graf_A17 <- dta %>%
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",
                                                   standoff=10),
                                      titlefont = axis_font),
-              list(tickvals = seq(2003,2023,5))),
+              list(tickvals = x_ticks(dta))),
     # dtick=2,
     # titlefont = axis_font),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Meziroční změna (v tisících)</b>",

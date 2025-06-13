@@ -119,10 +119,11 @@ rect.updatemenu-item-rect {
 stroke: #c90239 !important;
 stroke-opacity: 0.9 !important;
 fill: #c90239 !important;
-fill-opacity: 0.2 !important;
+fill-opacity: 0.1 !important;
 }
 
-g.updatemenu-button::active > rect.updatemenu-item-rect {
+g.updatemenu-button:hover > rect.updatemenu-item-rect,
+g.updatemenu-button.active > rect.updatemenu-item-rect {
 stroke: #c90239 !important;
 stroke-opacity: 1 !important;
 fill: #c90239 !important;
