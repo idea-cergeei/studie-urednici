@@ -58,18 +58,22 @@ div.left {
 padding-right: 9px !important;
 padding-left: 9px !important;
 width: 330px !important;
-max-width: 330px !important;
 margin-left: 0% !important;
 margin-right: 0% !important;
-display: table-cell;
 }
 
 div.right {
-margin-left: 2% !important;
-margin-right: 2% !important;
-display: table-cell;
 padding-right: 19px !important;
 padding-left: 29px !important;
+flex: 1;
+display: flex;
+justify-content: center;
+align-items: start;
+}
+
+.graf-container {
+max-width: 1500px;
+width: 100%;
 }
 
 button {
@@ -97,6 +101,8 @@ min-height: 700px !important;
 
 .modal-dialog {
 width: 75% !important;
+max-width: 1300px;
+margin: 30px auto;
 }
 
 .modal-body {
@@ -192,4 +198,30 @@ font-size: 20px !important;
 
 #scrollToNextBtn:hover {
 background-color: #f0f0f0; /* Darker background on hover */
+}
+
+.graf-text {
+font-family: Arial;
+font-size: 1rem;
+text-align:left;
+margin-top: 15px;
+background-color: #f0f0f0;
+padding-top: 30px;
+padding-bottom: 20px;
+padding-left: 10px;
+padding-right: 35px;
+border-radius: 4px;
+box-shadow: 0 5px 10px rgb(0 0 0 / 30%) !important;
+border-left: 1px solid #c4c4c4;
+border-right: 1px solid #c4c4c4;
+border-bottom: 1px solid #c4c4c4;
+}
+
+.graf-text > ul > li {
+padding-bottom: 10px;
+overflow-wrap: break-word;
+}
+
+.tocify-extend-page {
+height: 10px !important;
 }

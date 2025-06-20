@@ -129,7 +129,7 @@ toc_list <- c(
       group_graphs(group)
     }
   },USE.NAMES = F),
-  '<li class="tocify-item" style="display: block;">Dodatečné grafy</li>',
+  '<li class="tocify-item" style="display: block;">Doplňkové grafy</li>',
   sapply(sort(unique(graph_titles$graph_group[graph_titles$graph_cat=="dodat"])),function(group){
     group_graphs(group)
   })
@@ -169,7 +169,7 @@ for(i in inx){
                               paste0("<h3 style='font-size:0px;margin:1px'>",title_sub,"</h3>")),
                               paste0("<h2 style='font-size:0px;margin:1px'>",title_short,"</h2>"))
   header_toc <- ifelse(which(graph_titles$graph[graph_titles$graph_cat==gr_cat]==gr_id)==1,
-                       paste0("<h1 style='font-size:0px!important;margin:1px'>",ifelse(gr_cat=="hlav","Hlavní grafy","Dodatečné grafy"),"</h1>",header_toc),
+                       paste0("<h1 style='font-size:0px!important;margin:1px'>",ifelse(gr_cat=="hlav","Hlavní grafy","Doplňkové grafy"),"</h1>",header_toc),
                        header_toc)
   header_page <- graph_titles$title[graph_titles$graph==gr_id]
   copy_link <- paste0('<div style="height:0px"><a href="" id="copy-link-',gr_id,'" style="color:#333333!important;position:relative;z-index:999;"><i class="fa-solid fa-link"></i></a></div>')
@@ -189,6 +189,7 @@ for(i in inx){
 
   gr_text <- unname(text_par[text_par$graph==gr_id,][["text"]])
   if(nchar(gsub("\\s","",gr_text))>0){
+    gr_text <- gsub("p>","li>",gr_text)
     gr_text <- c(text_template[1:(grep("div",text_template)[1])],
                  gr_text,text_template[(grep("div",text_template)[2]):length(text_template)])
   }

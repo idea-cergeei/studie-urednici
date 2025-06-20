@@ -727,7 +727,7 @@ graf_4 <- graf_4_dta_shares %>%
   plot_ly(color = ~kategorie_2014_cz, colors = color_map,
           hovertemplate = ~ paste0(
             "<extra></extra>", "Rok: ", rok, "<br>", "Kategorie: ", kategorie_2014_cz, "<br>",
-            "Zam\u011Bstnanc\u016F: ", format(pocet_zamestnancu, big.mark = " ")," (",round(pocet_zamestnancu_share*100,0)," %)", "<br>",
+            "Zam\u011Bstnanc\u016F: ", format(pocet_zamestnancu, big.mark = " ")," (",round(pocet_zamestnancu_share*100,1)," %)", "<br>",
             "Celkem za rok: ", format(pocet_zamestnancu_agg, big.mark = " ")
           ),
           hoverlabel = list(font=list(size=hover_size,family=uni_font)),
@@ -833,7 +833,7 @@ graf_A4 <- vyvoj_bar_shares %>%
   plot_ly(color = ~kategorie_2014_cz, colors = color_map,
           hovertemplate = ~ paste0(
             "<extra></extra>", "Rok: ", rok, "<br>", "Kategorie: ", kategorie_2014_cz, "<br>",
-            "Výdaje na platy: ", format(round(prostredky_na_platy_nom/1e6, digits = 2), big.mark = " "), " mil. K\u010D (",round(prostredky_na_platy_nom_share * 100,0)," %)",
+            "Výdaje na platy: ", format(round(prostredky_na_platy_nom/1e6, digits = 2), big.mark = " "), " mil. K\u010D (",round(prostredky_na_platy_nom_share * 100,1)," %)",
             "<br>",
             "Celkem za rok: ", format(round(prostredky_na_platy_nom_agg/1e6, digits = 2), big.mark = " "), " mil. K\u010D"
           ),
@@ -919,7 +919,7 @@ graf_A5 <- vyvoj_bar_shares %>%
   plot_ly(color = ~kategorie_2014_cz, colors = color_map,
           hovertemplate = ~ paste0(
             "<extra></extra>", "Rok: ", rok, "<br>", "Kategorie: ", kategorie_2014_cz, "<br>",
-            "Výdaje na platy: ", format(round(prostredky_na_platy_real/1e6, digits = 2), big.mark = " "), " mil. K\u010D (",round(prostredky_na_platy_real_share * 100,0)," %)",
+            "Výdaje na platy: ", format(round(prostredky_na_platy_real/1e6, digits = 2), big.mark = " "), " mil. K\u010D (",round(prostredky_na_platy_real_share * 100,1)," %)",
             "<br>",
             "Celkem za rok: ", format(round(prostredky_na_platy_real_agg/1e6, digits = 2), big.mark = " "), " mil. K\u010D"
           ),
@@ -1293,7 +1293,7 @@ graf_A8 <- graf_A8_dt %>%
     showlegend = FALSE,
     xaxis = c(num_ticks,frame_x,list(title = "<b>Zm\u011Bna pr\u016Fm\u011Brn\u00E9ho platu (v %)</b>",
                                           titlefont = axis_font,
-                                          ticksuffix = "%",range = c(-5,40))),
+                                          ticksuffix = "%",range = c(0,40))),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Zm\u011Bna po\u010Dtu zam\u011Bstnanc\u016F (v %)</b>",
                                      titlefont = axis_font,
                                      range = c(-20,20),
@@ -1693,7 +1693,7 @@ graf_A14 <- graf_A14_dta_shares %>%
   plot_ly(color = ~kategorie_2014_cz, colors = color_map,
           hovertemplate = ~ paste0(
             "<extra></extra>", "Rok: ", rok, "<br>", "Kategorie: ", kategorie_2014_cz, "<br>",
-            "Zam\u011Bstnanc\u016F: ", format(pocet_zamestnancu, big.mark = " ")," (",round(pocet_zamestnancu_share*100,0)," %)", "<br>",
+            "Zam\u011Bstnanc\u016F: ", format(pocet_zamestnancu, big.mark = " ")," (",round(pocet_zamestnancu_share*100,1)," %)", "<br>",
             "Celkem za rok: ", format(pocet_zamestnancu_agg, big.mark = " ")
           ),
           hoverlabel = list(font=list(size=hover_size,family=uni_font)),
