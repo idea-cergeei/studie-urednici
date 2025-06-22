@@ -1300,7 +1300,7 @@ graf_A8 <- graf_A8_dt %>%
                                      # tickprefix = "+",
                                      # showtickprefix = "last",
                                      ticksuffix = "%",
-                                     ticktext = lapply(seq(-20,20,5), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
+                                     ticktext = lapply(seq(-20,20,10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
                                      tickvals = seq(-20,20,10),
                                      tickmode = "array",
                                      showticksuffix = "all")),
