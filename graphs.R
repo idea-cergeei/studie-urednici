@@ -283,8 +283,8 @@ to_append = tribble(
 
 tree_data <- bind_rows(aux, to_append)
 
-pracovni_sila <- 5194800
-state_budget <- 2202.6*1e9
+pracovni_sila <- 5204000 #  # dataset ČSÚ 250180, LFS Q4
+state_budget <- 2236.8*1e9 # updated to 2024 budget from monitor.statnipokladna.cz
 
 tree_data <- tree_data %>% mutate("cost_perc" = cost/sum(cost[which(tree_data$parents == "")]),
                                   "cost_perc_budget" = cost/state_budget,
