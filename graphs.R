@@ -285,6 +285,7 @@ tree_data <- bind_rows(aux, to_append)
 
 pracovni_sila <- 5204000 #  # dataset ČSÚ 250180, LFS Q4
 state_budget <- 2236.8*1e9 # updated to 2024 budget from monitor.statnipokladna.cz
+gdp <- 8057.032000000*1e9 # see SHDPZDRY1B1GMMLNA na https://www.cnb.cz/arad/#/cs/indicators
 
 tree_data <- tree_data %>% mutate("cost_perc" = cost/sum(cost[which(tree_data$parents == "")]),
                                   "cost_perc_budget" = cost/state_budget,

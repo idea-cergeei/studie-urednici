@@ -31,3 +31,5 @@ vignettes/*.pdf
 .netlify
 /.quarto/
 .~lock.annotations.csv#
+data-input/budget_data/**
+data-input/ispv/** */
