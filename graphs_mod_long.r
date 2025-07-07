@@ -159,7 +159,10 @@ for(i in inx){
   gr_group <- graph_titles$graph_group[graph_titles$graph==gr_id]
   gr_cat <- graph_titles$graph_cat[graph_titles$graph==gr_id]
   title_sub <- graph_titles$title_sub[graph_titles$graph==gr_id]
+  title_sub_url <- gsub("\\s","",title_sub)
   title_short <- graph_titles$title_short[graph_titles$graph==gr_id]
+  title_short_url <- gsub("\\s","",title_short)
+  title_url <- ifelse(title_sub_url!="",title_sub_url,title_short_url)
   toc_id <- paste(gr_cat,gr_group,sep="_")
 
   header_toc <- ifelse(title_sub!="",
@@ -172,7 +175,7 @@ for(i in inx){
                        paste0("<h1 style='font-size:0px!important;margin:1px'>",ifelse(gr_cat=="hlav","Hlavní grafy","Doplňkové grafy"),"</h1>",header_toc),
                        header_toc)
   header_page <- graph_titles$title[graph_titles$graph==gr_id]
-  copy_link <- paste0('<div style="height:0px"><a href="" id="copy-link-',gr_id,'" style="color:#333333!important;position:relative;z-index:999;"><i class="fa-solid fa-link"></i></a></div>')
+  # copy_link <- paste0('<div style="height:0px"><a href="" id="copy-link-',gr_id,'" style="color:#333333!important;position:relative;z-index:999;"><i class="fa-solid fa-link"></i></a></div>')
   cat(f,"\n")
 
   gr_keywords <- keywords[keywords$graph==gr_id,c("keyword_name","keyword_definition")]
@@ -202,7 +205,7 @@ for(i in inx){
   widget_id <- gsub('.*(htmlwidget-[0-9a-z]+)\".*',"\\1",gr_content[grepl('id="htmlwidget-',gr_content)])
 
   gr_content <- gsub('id=\\"htmlwidget_container\\"',
-                     paste0('id="',gr_id,'" class="htmlwidget_container" style="height:100%"'),
+                     paste0('id="',title_url,'" class="htmlwidget_container" style="height:100%"'),
                      gr_content)
   gr_content <- gsub('height\\:400px','height:100%; min-height:700px"',gr_content)
 
