@@ -802,7 +802,7 @@ graf_A4 <- vyvoj_bar %>%
   ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4c. Výdaje na platy státních úředníků (2003-2024)</b>",
+                      text = "<b>Graf 4c. Výdaje na platy státních úředníků (2003–2024)</b>",
                       y = 0.98),
          # annotations = c(list(text =str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
          #                      font = pozn_font_small),
@@ -857,7 +857,7 @@ graf_A4 <- vyvoj_bar_shares %>%
   ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4c. Výdaje na platy státních úředníků (2003-2024)</b>",
+                      text = "<b>Graf 4c. Výdaje na platy státních úředníků (2003–2024)</b>",
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
@@ -894,7 +894,7 @@ graf_A5 <- vyvoj_bar %>%
   add_bars() %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003-2024)</b>",
+                      text = "<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003–2024)</b>",
                       y = 0.98),
          # annotations = c(list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
          #                      font = pozn_font_small),
@@ -943,7 +943,7 @@ graf_A5 <- vyvoj_bar_shares %>%
   ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003-2024)</b>",
+                      text = "<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003–2024)</b>",
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
@@ -1056,7 +1056,7 @@ graf_5 <- plot_ly(graf_5_dt,
     legend = legend_below_mid,
     # annotations = c(list(text = str_wrap("<i>Pozn.: Reálné hrubé měsíční platy jsou uvedeny v cenách roku 2024.</i>",wrap_len),
     #                      font = pozn_font_small),annot_below),
-    title =list(text = "<b>Graf 5a. Reálné průměrné platy státních úředníků 2004-2024 (v cenách roku 2024)</b>",
+    title =list(text = "<b>Graf 5a. Reálné průměrné platy státních úředníků 2004–2024 (v cenách roku 2024)</b>",
                 y =0.98,
                 font=title_font),
     xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
@@ -1230,7 +1230,7 @@ graf_6
 #   scale_color_manual(values = color_map, name = NULL, limits = force) +
 #   scale_x_continuous(breaks = seq(2003, 2024, 2)) +
 #   ptrr::scale_y_percent_cz() +
-#   labs(title = "Graf 6. Průměrný plat státních úředníků \nvůči průměrné mzdě v národním hospodářství (2004-2024)",
+#   labs(title = "Graf 6. Průměrný plat státních úředníků \nvůči průměrné mzdě v národním hospodářství (2004–2024)",
 #        y = "Poměr platů státních úředníku a prům. mzdy (v %)",
 #        x = "Rok",
 #        caption = str_wrap("Pozn.: pro ministerstva a ostatní ústřední orgány použité hodnoty průměrné mzdy v Praze. V ostatních případech je jako reference použitý průměrný plat v národním hospodářství. Hodnota 100% znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství.",
@@ -1288,7 +1288,7 @@ graf_A8 <- graf_A8_dt %>%
   ) %>%
   layout(
     title = list(font=title_font,
-                 text = "<b>Graf 6. Celkové změny platů a počtu zaměstnanců v období 2004-2024</b>", y = 0.98),
+                 text = "<b>Graf 6. Celkové změny platů a počtu zaměstnanců v období 2004–2024</b>", y = 0.98),
     # annotations = c(annot_below,list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
     #                                  font = pozn_font_small)),
     showlegend = FALSE,
@@ -1716,7 +1716,7 @@ graf_A14 <- graf_A14_dta_shares %>%
   ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4b. Počet státních úředníků, včetně MV a MZV (2003-2024)</b>",
+                      text = "<b>Graf 4b. Počet státních úředníků, včetně MV a MZV (2003–2024)</b>",
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
