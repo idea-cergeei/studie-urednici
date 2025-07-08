@@ -11,7 +11,7 @@ for(graph_id in graph_titles$graph){
 if(!dir.exists("graphs_mod/files")){dir.create("graphs_mod/files")}
 system(paste("7z a ",paste0("graphs_mod/files/",zip_file),"graphs_pdf/."))
 
-system("scp -r graphs_mod/files root@194.182.65.144:/srv/shiny-server/zamestnancistatu_2025/")
+system("scp -r graphs_mod/files root@194.182.65.144:/srv/shiny-server/zamestnancistatu/")
 
 unlink(x = paste0("graphs_mod/files/",list.files("graphs_mod/files")))
 unlink(x = paste0("graphs_pdf/",list.files("graphs_pdf/")))
