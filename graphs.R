@@ -22,7 +22,7 @@ library(coloratio)
 library(ggokabeito)
 unloadNamespace("plyr")
 
-library(arrow)
+library(nanoparquet)
 options(scipen = 100, digits = 8)
 
 dta <- readRDS("./data-interim/sections.rds")
@@ -283,9 +283,11 @@ to_append = tribble(
 
 tree_data <- bind_rows(aux, to_append)
 
-pracovni_sila <- 5204000 #  # dataset ČSÚ 250180, LFS Q4
-state_budget <- 2236.8*1e9 # updated to 2024 budget from monitor.statnipokladna.cz
-gdp <- 8057.032000000*1e9 # see SHDPZDRY1B1GMMLNA na https://www.cnb.cz/arad/#/cs/indicators
+macro_numbers <- readr::read_rds("data-interim/macro_numbers.rds")
+
+pracovni_sila <- macro_numbers$employed_total #  # dataset ČSÚ 250180, LFS Q4
+state_budget <- macro_numbers$sr_vydaje # via CNB ARAD indicator SRUMD08402C
+gdp <- macro_numbers$gdp # see SHDPZDRY1B1GMMLNA na https://www.cnb.cz/arad/#/cs/indicators
 
 tree_data <- tree_data %>% mutate("cost_perc" = cost/sum(cost[which(tree_data$parents == "")]),
                                   "cost_perc_budget" = cost/state_budget,

@@ -1,7 +1,7 @@
 # see howto-update-nextyear.md
 
 source("standardize_input_data.R")
-
+source("get_macro_numbers.R")
 
 source("graphs.R")
 source("pay-change-nace_plot.R")
@@ -32,3 +32,4 @@ system2("netlify", args = c("deploy",
 "--dir", "graphs_mod" ,
 "--site", "studie-urednici",
 "--prod"))
+
