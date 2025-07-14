@@ -1,14 +1,22 @@
 # Státní úředníci: studie / aplikace IDEA při CERGE-EI
 
-Datová analýza: Státní zaměstnanci a úředníci
+Datová analýza: Státní zaměstnanci a úředníci.
 
-## Aktuální výsledky
+Kód, data a zdrojové soubory pro 
 
-[Hlavní výsledky](https://idea-cergeei.github.io/studie-urednici/index.html) aktualizovány v červnu 2022 na základě dat do roku 2021, tj. včetně skutečného plnění rozpočtu 2021. Studie a její grafy na webu IDEA stále odrážejí stav s daty do roku 2020.
+- studii IDEA č. 2/2022
+- aplikaci IDEA na adrese https://ideaapps.cerge-ei.cz/urednici/ a předchozích verzích
 
-Aktualizace s daty za rok 2022 je v přípravě - výsledek bude grafová miniaplikace bez studie.
+Hlavním vstupem je verze dat Státního závěrečného účtu poskytnutá Ministerstvem financí. Jde o verzi tabulek 10 a 11 v SZÚ. Pro výpočty dále používáme data z ČSÚ (průměrné mzdy, velikost pracovní síly), státní pokladny (rozpočet) a národních účtů (HDP).
 
-Technický log k využití aktualizovaných dat je v log.md, potažmo [log.html](https://idea-cergeei.github.io/studie-urednici/log.html)
+## Autoři
+
+Na studii pracovali Petr Bouchal, Daniel Bartušek a Petr Janský. Spoluautorem aplikace od roku 2022 je Taras Hrendash. Daniel Münich tuto práci provází od začátku a v poslední verzi aplikace je spoluautorem. 
+
+## Aplikace 
+
+- aktuální verze aplikace je na adrese <https://ideaapps.cerge-ei.cz/urednici/>
+- předchozí verze aplikace je <https://ideaapps.cerge-ei.cz/urednici/2024/>
 
 ## Studie
 
@@ -22,16 +30,16 @@ Text v souboru `results.Rmd` neodpovídá textu studie, který prošel oddělen�
 
 ## Data
 
-Exportována v CSV a parquet do adresáře `data-export`, spolu s codebookem 
+Exportována v CSV a parquet do adresáře `data-export`, spolu s codebookem - viz [Github](https://github.com/idea-cergeei/studie-urednici/tree/main/data-export)
 
 - lidsky čitelný popis na [webu](https://idea-cergeei.github.io/studie-urednici/codebook.html)
 - YAML export v souboru `codebook.yml`
 
-Názvy sloupců v exportech jsou upraveny pro srozumitelnost, neodpovídají názvům v kódu. Rozdíly lze odvodit ze skriptu `export_data.R`.
+Názvy sloupců v exportech jsou upraveny pro srozumitelnost, neodpovídají názvům používaným v kódu při tvorbě grafů. Rozdíly lze odvodit ze skriptu `export_data.R`.
 
 ### Data o platech z ČSÚ
 
-Toto je poznámka for posterity
+Toto je poznámka for posterity - před publikací oficiálních ČSÚ (typicky druhá polovina května) je třeba ručně vložit data o mzdách je potřeba vybrat ta správná.
 
 - datová sada ČSÚ 110080, kterou ČSÚ publikuje v otevřených datech vychází ze šetření struktury výdělků
 - oproti tomu čísla ve VDB pochází *většinou* z firemních výkazů
@@ -41,6 +49,8 @@ Toto je poznámka for posterity
 
 ## Reprodukování výstupů a dat
 
+Jak aktualizovat data z nového zdroje viz [howto-update-nextyear.md](howto-update-nextyear.md).
+
 ```r
 install.packages("renv")
 renv::restore()
@@ -48,6 +58,7 @@ source("standardize_input_data.R")
 rmarkdown::render("results.Rmd")
 source("graphs.R")
 source("graphs_mod.R")
+source("graphs_mod_long.R")
 source("export_data.R")
 rmarkdown::render("codebook.Rmd")
 ```
