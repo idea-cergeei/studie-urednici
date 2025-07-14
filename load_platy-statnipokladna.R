@@ -3,7 +3,7 @@ library(readr)
 library(dplyr)
 library(stringr)
 library(ggplot2)
-library(arrow)
+library(nanoparquet)
 library(tidyr)
 
 options(statnipokladna.dest_dir = "data-input/budget_data")

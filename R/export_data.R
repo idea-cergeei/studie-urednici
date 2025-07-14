@@ -41,7 +41,7 @@ main_df_update$kap_zkr[main_df_update$kap_zkr == "Mspr"] <- "MSp"
 
 
 readr::write_excel_csv2(main_df_update, "data-export/data_all.csv")
-arrow::write_parquet(main_df_update, "data-export/data_all.parquet")
+nanoparquet::write_parquet(main_df_update, "data-export/data_all.parquet")
 
 cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabulka") |>
   info_tabular(info = "Pokud není uvedeno jinak, zdrojem jsou data MF odpovídající Státnímu závěrečnému účtu") |>
