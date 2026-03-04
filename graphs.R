@@ -220,78 +220,84 @@ x_ticks <- function(dta){
 source("theme.R")
 
 ## ----tree_prep---------------------------------------------------------------------------------------------------
-aux <- dta %>%
-  filter(!is.na(kategorie_2014_cz), typ_rozpoctu == "SKUT",
-         !kategorie_2014 %in% c("Statni sprava", "Statni urednici"),
-         rok == 2024) %>%
-  group_by(kategorie_2014_cz) %>%
-  summarise(cost = sum(prostredky_na_platy),
-            count = sum(pocet_zamestnancu)) %>%
-  rename(labels = kategorie_2014_cz) %>%
-  mutate(parents = case_match(labels,
-                              "Příspěvkové organizace" ~ "",
-                              "Sbory" ~ "Státní správa",
-                              "Ostatní vč. armády" ~ "Organizační složky státu",
-                              "Neústřední st. správa" ~ "Státní úředníci (celkem)",
-                              "Ostatní ústřední" ~ "Ústřední orgány",
-                              "Ministerstva" ~ "Ústřední orgány"
+tree_prep <- function(y){
+  ## ----tree_prep---------------------------------------------------------------------------------------------------
+  aux <- dta %>%
+    filter(!is.na(kategorie_2014_cz), typ_rozpoctu == "SKUT",
+           !kategorie_2014 %in% c("Statni sprava", "Statni urednici"),
+           rok == y) %>%
+    group_by(kategorie_2014_cz) %>%
+    summarise(cost = sum(prostredky_na_platy),
+              count = sum(pocet_zamestnancu)) %>%
+    rename(labels = kategorie_2014_cz) %>%
+    mutate(parents = case_match(labels,
+                                "Příspěvkové organizace" ~ "",
+                                "Sbory" ~ "Státní správa",
+                                "Ostatní vč. armády" ~ "Organizační složky státu",
+                                "Neústřední st. správa" ~ "Státní úředníci (celkem)",
+                                "Ostatní ústřední" ~ "Ústřední orgány",
+                                "Ministerstva" ~ "Ústřední orgány"
 
-  ))
+    ))
 
-aux_sum <- aux |>
-  summarise(across(c(cost, count), sum), .by = parents)
+  aux_sum <- aux |>
+    summarise(across(c(cost, count), sum), .by = parents)
 
-to_append = tribble(
-  ~labels,               ~parents,
-  "Ústřední orgány", "Státní úředníci (celkem)",
-  "Státní úředníci (celkem)", "Státní správa",
-  "Státní správa", "Organizační složky státu",
-  "Organizační složky státu", "") |>
-  mutate(
-  cost = c(
-    aux$cost[aux$labels == "Ministerstva"] +
-      aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"],
-    aux$cost[aux$labels == "Ministerstva"] +
-      aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"]+
-      aux$cost[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
-    aux$cost[aux$labels == "Ministerstva"] +
-      aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
-      aux$cost[aux$labels == "Sbory"] +
-      aux$cost[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
-    aux$cost[aux$labels == "Ministerstva"] +
-      aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
-      aux$cost[aux$labels == "Sbory"] +
-      aux$cost[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"] +
-      aux$cost[aux$labels == "Ostatn\u00ED v\u010D. arm\u00E1dy"]
-  ),
-  count = c(
-    aux$count[aux$labels == "Ministerstva"] +
-      aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"],
-    aux$count[aux$labels == "Ministerstva"] +
-      aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"]+
-      aux$count[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
-    aux$count[aux$labels == "Ministerstva"] +
-      aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
-      aux$count[aux$labels == "Sbory"] +
-      aux$count[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
-    aux$count[aux$labels == "Ministerstva"] +
-      aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
-      aux$count[aux$labels == "Sbory"] +
-      aux$count[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"] +
-      aux$count[aux$labels == "Ostatn\u00ED v\u010D. arm\u00E1dy"]
-  ))
+  to_append = tribble(
+    ~labels,               ~parents,
+    "Ústřední orgány", "Státní úředníci (celkem)",
+    "Státní úředníci (celkem)", "Státní správa",
+    "Státní správa", "Organizační složky státu",
+    "Organizační složky státu", "") |>
+    mutate(
+      cost = c(
+        aux$cost[aux$labels == "Ministerstva"] +
+          aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"],
+        aux$cost[aux$labels == "Ministerstva"] +
+          aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"]+
+          aux$cost[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
+        aux$cost[aux$labels == "Ministerstva"] +
+          aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
+          aux$cost[aux$labels == "Sbory"] +
+          aux$cost[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
+        aux$cost[aux$labels == "Ministerstva"] +
+          aux$cost[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
+          aux$cost[aux$labels == "Sbory"] +
+          aux$cost[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"] +
+          aux$cost[aux$labels == "Ostatn\u00ED v\u010D. arm\u00E1dy"]
+      ),
+      count = c(
+        aux$count[aux$labels == "Ministerstva"] +
+          aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"],
+        aux$count[aux$labels == "Ministerstva"] +
+          aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"]+
+          aux$count[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
+        aux$count[aux$labels == "Ministerstva"] +
+          aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
+          aux$count[aux$labels == "Sbory"] +
+          aux$count[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"],
+        aux$count[aux$labels == "Ministerstva"] +
+          aux$count[aux$labels == "Ostatn\u00ED \u00FAst\u0159edn\u00ED"] +
+          aux$count[aux$labels == "Sbory"] +
+          aux$count[aux$labels == "Ne\u00FAst\u0159edn\u00ED st. spr\u00E1va"] +
+          aux$count[aux$labels == "Ostatn\u00ED v\u010D. arm\u00E1dy"]
+      ))
 
-tree_data <- bind_rows(aux, to_append)
+  tree_data <- bind_rows(aux, to_append)
 
-pracovni_sila <- 5204000 #  # dataset ČSÚ 250180, LFS Q4
-state_budget <- 2236.8*1e9 # updated to 2024 budget from monitor.statnipokladna.cz
-gdp <- 8057.032000000*1e9 # see SHDPZDRY1B1GMMLNA na https://www.cnb.cz/arad/#/cs/indicators
+  pracovni_sila <- 5204000 #  # dataset ČSÚ 250180, LFS Q4
+  state_budget <- 2236.8*1e9 # updated to 2024 budget from monitor.statnipokladna.cz
+  gdp <- 8057.032000000*1e9 # see SHDPZDRY1B1GMMLNA na https://www.cnb.cz/arad/#/cs/indicators
 
-tree_data <- tree_data %>% mutate("cost_perc" = cost/sum(cost[which(tree_data$parents == "")]),
-                                  "cost_perc_budget" = cost/state_budget,
-                                  "count_perc" = count/sum(count[which(tree_data$parents  == "")]),
-                                  "count_perc_sila" = count/pracovni_sila,
-                                  labels = as.character(labels))
+  tree_data <- tree_data %>% mutate("cost_perc" = cost/sum(cost[which(tree_data$parents == "")]),
+                                    "cost_perc_budget" = cost/state_budget,
+                                    "count_perc" = count/sum(count[which(tree_data$parents  == "")]),
+                                    "count_perc_sila" = count/pracovni_sila,
+                                    labels = as.character(labels))
+  return(tree_data)
+}
+
+tree_data <- tree_prep(2024)
 
 ## ----priprava_zbytek------------------------------------------------------------------------------------------------
 dta <- dta %>%
@@ -389,57 +395,112 @@ tree_data %>%
 
 graf_A1
 
-graf_1 <- tree_data %>%
-  left_join(cols_df, by = "labels")
-graf_1$labels_tree <- graf_1$labels
-graf_1$labels_tree[graf_1$labels_tree=="Ostatní ústřední"] <- "  "
-graf_1$labels_tree[graf_1$labels_tree=="Ostatní vč. armády"] <- "Ostatní<br>vč. armády"
-graf_1$labels_tree[graf_1$labels %in% c("Příspěvkové organizace","Sbory","Neústřední st. správa","Ministerstva","Ostatní vč. armády")] <-
-  paste0(graf_1$labels_tree[graf_1$labels %in% c("Příspěvkové organizace","Sbory","Neústřední st. správa","Ministerstva","Ostatní vč. armády")],"<br><sup>",
-        gsub("^\\s+","",format(graf_1$count[graf_1$labels %in% c("Příspěvkové organizace","Sbory","Neústřední st. správa","Ministerstva","Ostatní vč. armády")],big.mark = " ")),
-        " zaměst.</sup>")
-graf_1$parents[graf_1$parents==""] <- root_label
-graf_1 <- rbind(graf_1,data.frame(labels = root_label,
-                                  labels_tree = root_label,
-                                  cost = sum(graf_1$cost[graf_1$parents==root_label]),
-                                  count = sum(graf_1$count[graf_1$parents==root_label]),
-                                  cost_perc = sum(graf_1$cost_perc[graf_1$parents==root_label]),
-                                  cost_perc_budget = sum(graf_1$cost_perc_budget[graf_1$parents==root_label]),
-                                  count_perc = sum(graf_1$count_perc[graf_1$parents==root_label]),
-                                  count_perc_sila = sum(graf_1$count_perc_sila[graf_1$parents==root_label]),
-                                  color = root_color,
-                                  color_text = "black",
-                                  parents = ""))
+graf_1_prep <- function(y){
+  tree_data <- tree_prep(y)
 
-graf_1 <- graf_1 |>
-  plot_ly(
-    type = "treemap",
-    branchvalues = "total",
-    labels = ~labels_tree,
-    parents = ~parents,
-    marker = list(colors = ~color),
-    pathbar = list(side = "bottom", thickness = 30),
-    values = ~count,
-    textfont = list(family=uni_font, size = 18,color = ~color_text),
-    hovertemplate = ~ paste("<extra></extra>", " Kategorie: ", labels, "<br>",
-                            " Po\u010Det zam\u011Bstnanc\u016F:",
-                            format(count, big.mark = " "), "<br>", " Pod\u00EDl na zaměstnancích státu:",
-                            round(count_perc * 100, 1), "%", "<br>", " Pod\u00EDl na pracovní síle ČR:",
-                            round(count_perc_sila * 100,1), "%"),
-    hoverlabel = list(font = list(size = hover_size,color = text_color_map)),
-    domain = list(column = 0)
+  graf_1 <- tree_data %>%
+    left_join(cols_df, by = "labels")
+  graf_1$labels_tree <- graf_1$labels
+  graf_1$labels_tree[graf_1$labels_tree=="Ostatní ústřední"] <- "  "
+  graf_1$labels_tree[graf_1$labels_tree=="Ostatní vč. armády"] <- "Ostatní<br>vč. armády"
+  graf_1$labels_tree[graf_1$labels %in% c("Příspěvkové organizace","Sbory","Neústřední st. správa","Ministerstva","Ostatní vč. armády")] <-
+    paste0(graf_1$labels_tree[graf_1$labels %in% c("Příspěvkové organizace","Sbory","Neústřední st. správa","Ministerstva","Ostatní vč. armády")],"<br><sup>",
+           gsub("^\\s+","",format(graf_1$count[graf_1$labels %in% c("Příspěvkové organizace","Sbory","Neústřední st. správa","Ministerstva","Ostatní vč. armády")],big.mark = " ")),
+           " zaměst.</sup>")
+  graf_1$parents[graf_1$parents==""] <- root_label
+  graf_1 <- rbind(graf_1,data.frame(labels = root_label,
+                                    labels_tree = root_label,
+                                    cost = sum(graf_1$cost[graf_1$parents==root_label]),
+                                    count = sum(graf_1$count[graf_1$parents==root_label]),
+                                    cost_perc = sum(graf_1$cost_perc[graf_1$parents==root_label]),
+                                    cost_perc_budget = sum(graf_1$cost_perc_budget[graf_1$parents==root_label]),
+                                    count_perc = sum(graf_1$count_perc[graf_1$parents==root_label]),
+                                    count_perc_sila = sum(graf_1$count_perc_sila[graf_1$parents==root_label]),
+                                    color = root_color,
+                                    color_text = "black",
+                                    parents = ""))
+  graf_1$year <- y
+  return(graf_1)
+}
+
+graf_1 <- do.call(rbind,lapply(years,function(y)graf_1_prep(y)))
+
+years <- sort(unique(dta$rok))
+
+p <- plot_ly()
+
+for (i in seq_along(years)) {
+
+  df_year <- graf_1[graf_1$year == years[i], ]
+
+  p <- p %>%
+    add_trace(
+      data = df_year,
+      type = "treemap",
+      branchvalues = "total",
+      labels = ~labels_tree,
+      parents = ~parents,
+      values = ~count,
+      marker = list(colors = ~color),
+      textfont = list(family = uni_font, size = 18, color = ~color_text),
+      hovertemplate = ~ paste(
+        "<extra></extra>",
+        " Kategorie: ", labels, "<br>",
+        " Počet zaměstnanců:", format(count, big.mark = " "), "<br>",
+        " Podíl na zaměstnancích státu:",
+        round(count_perc * 100, 1), "%<br>",
+        " Podíl na pracovní síle ČR:",
+        round(count_perc_sila * 100, 1), "%"
+      ),
+      hoverlabel = list(font = list(size = hover_size, color = text_color_map)),
+      visible = ifelse(i == 1, TRUE, FALSE)   # Only first year visible initially
+    )
+}
+
+p <- p %>%
+  layout(
+    title = list(
+      font = title_font,
+      text = paste0(
+        "<b>Graf 1a. Počet zaměstnanců státu dle regulace zaměstnanosti</b>",
+        "<br><sup>Velikost obdélníků je úměrná podílu dané skupiny na celkovém počtu zaměstnanců státu</sup>"
+      ),
+      y = 0.97
+    ),
+    margin = mrg8,
+    uniformtext = list(minsize = lbl_size, mode = "show"),
+
+    updatemenus = list(
+      list(
+        active = 0,
+        type = "dropdown",
+        x = 0.1,
+        y = 1.15,
+        buttons = lapply(seq_along(years), function(i) {
+          list(
+            label = years[i],
+            method = "update",
+            args = list(
+              list(visible = seq_along(years) == i),
+              list(title = paste0(
+                "<b>Graf 1a. Počet zaměstnanců státu dle regulace zaměstnanosti (",
+                years[i], ")</b>",
+                "<br><sup>Velikost obdélníků je úměrná podílu dané skupiny na celkovém počtu zaměstnanců státu</sup>"
+              ))
+            )
+          )
+        })
+      )
+    )
   ) %>%
-  layout(title = list(font = title_font,
-                      text = paste0("<b>Graf 1a. Počet zaměstnanců státu dle regulace zaměstnanosti (2024)</b>",
-                                    "<br>","<sup>","Velikost obdélníků je úměrná podílu dané skupiny na celkovém počtu zaměstnanců státu","</sup>"),
-                      y = 0.97),
-         margin = mrg8) %>%
-  # layout(annotations = list(text = "<i>Pozn.: Pro bližší detail lze kategorie rozkliknout.</i>", x = 1,
-  #                           y = -0.05, showarrow = FALSE, font = pozn_font_small)) %>%
-  layout(uniformtext = list(minsize=lbl_size, mode = 'show')) %>%
-  config(displaylogo = FALSE, modeBarButtonsToRemove = btnrm,displayModeBar = TRUE) %>%
+  config(
+    displaylogo = FALSE,
+    modeBarButtonsToRemove = btnrm,
+    displayModeBar = TRUE
+  ) %>%
   onRender(js)
 
+graf_1 <- p
 graf_1
 
 
