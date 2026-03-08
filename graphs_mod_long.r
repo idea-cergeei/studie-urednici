@@ -35,11 +35,30 @@ template <- readLines("www/template_long.html")
 keywords <- data.table::fread("keywords.csv")
 keywords_template <- readLines("www/keywords_template.html")
 
+# use config year to replace static '2024' in textual CSV fields
+cfg <- config::get()
+this_year <- if (!is.null(cfg$rok)) cfg$rok else if (!is.null(cfg$this_year)) cfg$this_year else 2024
+this_year_chr <- as.character(this_year)
+
+# normalize year mentions in loaded CSV/text data
+if (nrow(keywords) > 0 && "keyword_definition" %in% names(keywords)) {
+  keywords[, keyword_definition := gsub("\\{YEAR\\}", this_year_chr, keyword_definition)]
+}
+
+annotations <- data.table::fread("annotations.csv")
+annotations_template <- readLines("www/annotation_template.html")
+if (nrow(annotations) > 0 && "annotation_text" %in% names(annotations)) {
+  annotations[, annotation_text := gsub("\\{YEAR\\}", this_year_chr, annotation_text)]
+}
+
 annotations <- data.table::fread("annotations.csv")
 annotations_template <- readLines("www/annotation_template.html")
 
 text_par <- data.table::fread("text.csv")
 text_template <- readLines("www/text_template.html")
+if (nrow(text_par) > 0 && "text" %in% names(text_par)) {
+  text_par[, text := gsub("\\{YEAR\\}", this_year_chr, text)]
+}
 
 script_template <- readLines("www/template_script.js")
 

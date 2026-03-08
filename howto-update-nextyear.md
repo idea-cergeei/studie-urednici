@@ -16,6 +16,8 @@
   - [ ] `graphs_mod_long.r`: Update year in title/text
   - [ ] `www/template_long.html`: Update year references
 
+- **Manual step:** `text.csv` (and `annotations.csv` where needed) use `XXX` as placeholders for specific numbers; update them by hand with current values when you change the year.
+
 ## Output Updates
 
 - Update static PDF documents:

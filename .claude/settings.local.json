@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__r-acquaint__btw_tool_files_read_text_file",
+      "Bash(Rscript:*)",
+      "mcp__r-acquaint__btw_tool_env_describe_environment",
+      "mcp__r-acquaint__btw_tool_session_check_package_installed"
+    ],
+    "deny": []
+  }
+}

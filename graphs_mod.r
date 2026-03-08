@@ -34,11 +34,27 @@ template <- readLines("www/template.html")
 keywords <- data.table::fread("keywords.csv")
 keywords_template <- readLines("www/keywords_template.html")
 
+# use config year to replace static '2024' in textual CSV fields
+cfg <- config::get()
+this_year <- if (!is.null(cfg$rok)) cfg$rok else if (!is.null(cfg$this_year)) cfg$this_year else 2024
+this_year_chr <- as.character(this_year)
+
+# normalize year mentions in loaded CSV/text data
+if (nrow(keywords) > 0 && "keyword_definition" %in% names(keywords)) {
+  keywords[, keyword_definition := gsub("\\{YEAR\\}", this_year_chr, keyword_definition)]
+}
+
 lfiles <- list.files("graphs", full.names = FALSE)
 lfiles <- lfiles[grepl("html",lfiles) & !grepl("mod",lfiles)]
 lfiles <- lfiles[order(as.numeric(gsub("[^0-9]","",lfiles)))]
 
 graph_titles <- data.table::fread("graph_titles.csv")
+## replace year placeholder in graph titles with config year
+if (nrow(graph_titles) > 0) {
+  if ("title" %in% names(graph_titles)) graph_titles[, title := gsub("\\{YEAR\\}", this_year_chr, title)]
+  if ("title_short" %in% names(graph_titles)) graph_titles[, title_short := gsub("\\{YEAR\\}", this_year_chr, title_short)]
+  if ("title_sub" %in% names(graph_titles)) graph_titles[, title_sub := gsub("\\{YEAR\\}", this_year_chr, title_sub)]
+}
 tooltips <- readLines("graphs_mod/js/tooltips.js")
 tooltips <- c(sapply(gsub("\\.html$","",lfiles),function(g)gsub("id",g,tooltips)))
 writeLines(tooltips,"graphs_mod/js/tooltips.js")
