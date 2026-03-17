@@ -258,7 +258,3 @@ gr_all <- unlist(lapply(as.list(template), function(x)
 
 
 writeLines(gr_all,paste0("graphs_mod/index.html"))
-
-system("scp -r graphs_mod/* root@194.182.65.144:/srv/shiny-server/zamestnancistatu")
-
-unlink(x = paste0("graphs/",grep("graf",list.files("graphs"),value = T)))

@@ -27,7 +27,7 @@ options(scipen = 100, digits = 8)
 library(config)
 cfg <- config::get()
 # derive target year from config; fallback to 2024 if absent
-this_year <- if (!is.null(cfg$this_year)) as.integer(cfg$this_year) else 2024
+this_year <- if (!is.null(cfg$rok)) as.integer(cfg$rok) else 2024
 this_year_chr <- as.character(this_year)
 
 dta <- readRDS("./data-interim/sections.rds")
@@ -115,8 +115,8 @@ kat_ticks<-list(tickfont=list(size=kat_tick_size,family=uni_font),showticklabels
 kat_ticks_rotated<-list(tickfont=list(size=kat_tick_size,family=uni_font),showticklabels = TRUE,tickangle = -90,tickmode = "array")
 num_ticks <- list(tickfont=list(size=num_tick_size,family=uni_font))
 num_tilt_ticks <- list(tickfont=list(size=num_tick_size,family=uni_font),tickangle = -45)
-frame_y<-list(mirror=T,linewidth = 2,ticks='outside',showline=T,gridcolor = grdclr)
-frame_x<-list(mirror=T,linewidth = 2,ticks='outside',showline=T,dtick=5)
+frame_y<-list(mirror=TRUE,linewidth = 2,ticks='outside',showline=TRUE,gridcolor = grdclr)
+frame_x<-list(mirror=TRUE,linewidth = 2,ticks='outside',showline=TRUE,dtick=5)
 annot_below<-list(                       align='left',
                                          xref='paper',
                                          yref="paper",
@@ -156,7 +156,7 @@ text_color_map <- coloratio::cr_choose_bw(color_map)
 names(text_color_map) <- names(color_map)
 
 kaps <- unique(dta$kap_name)
-color_map_kap <- ifelse(substr(kaps,1,1) == "M", "dimgray", "cornflowerblue")
+color_map_kap <- ifelse(startsWith(kaps, "M"), "dimgray", "cornflowerblue")
 names(color_map_kap) <- kaps
 cols_df <- tibble(labels = names(color_map), color = unname(color_map)) |>
   mutate(color_text = cr_choose_bw(color_map))
@@ -608,7 +608,7 @@ graf_3 <- bar_dt %>%
          #                    text = str_wrap("<i>Pozn.: Průměrné platy se liší dle typu organizací i napříč jednotlivými organizacemi.</i>",wrap_len)),
          xaxis = c(num_ticks,frame_y,list(dtick = 5,title = "<b>Průměrný hrubý měsíční plat (v tisících Kč)</b>",
                                           titlefont = axis_font)),
-         yaxis = c(num_ticks,frame_y,list(title = "",titlefont = axis_font)),showlegend = F,
+         yaxis = c(num_ticks,frame_y,list(title = "",titlefont = axis_font)),showlegend = FALSE,
          margin = mrg2) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
@@ -1375,7 +1375,7 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
   ) %>%
     add_annotations(
       text =~paste("<b>",unique(kap_name),"</b>"),
-      x = .5,
+      x = 0.5,
       y = 1.05,
       yref = "paper",
       xref = "paper",
@@ -1407,7 +1407,7 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
 
 
 ## ----platy_skut_rozp_kap-----------------------------------------------------------------------------------------
-kap_order <- ifelse(substr(kaps,1,1) == "M",1,2)
+kap_order <- ifelse(startsWith(kaps, "M"),1,2)
 names(kap_order) <- kaps
 kap_order <- sort(kap_order)
 
@@ -1820,7 +1820,7 @@ names(graf_list)<-c(
 saveRDS(graf_list,"data-interim/graf_list.rds")
 saveRDS(tree_data,"data-interim/tree_data.rds")
 
-for (i in 1:length(graf_list)){
+for (i in seq_along(graf_list)){
   htmlwidgets::saveWidget(as_widget(graf_list[[i]]), paste0("graphs/",names(graf_list)[i],".html"), libdir = "js", selfcontained = FALSE)
 }
 

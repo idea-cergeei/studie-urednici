@@ -3,7 +3,7 @@
 "graf_2","Pozn.: Ministerstvo školství, mládeže a tělovýchovy zkresluje graf vzhledem k zahrnutí učitelů v kategorii “Příspěvkové organizace”. Lze odfiltrovat kliknutím na patřičnou položku legendy."
 "graf_3",
 "graf_4","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
-"graf_5","Pozn.: Reálné hrubé měsíční platy jsou uvedeny v cenách roku 2023 a vypočteny podle indexů spotř. cen (<a href='https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen' target='_blank'>datová sada ČSÚ 010022 Indexy spotř. cen</a>)."
+"graf_5","Pozn.: Reálné hrubé měsíční platy jsou uvedeny v cenách roku {YEAR} a vypočteny podle indexů spotř. cen (<a href='https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen' target='_blank'>datová sada ČSÚ 010022 Indexy spotř. cen</a>)."
 "graf_6","Pozn.: Pro ministerstva a ostatní ústřední orgány srovnáváme s průměrnou mzdou v Praze. V ostatních případech srovnáváme s průměrnou mzdou v národním hospodářství. Údaje o průměrných mzdách čerpáme z datové sady ČSÚ <a href='https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich' target='_blank'>Průměrná hrubá měsíční mzda a medián mezd v krajích</a>.  Hodnota 100 % znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství."
 "graf_A1","Pozn.: Pro bližší detail lze jednotlivé nadřazené kategorie rozkliknout."
 "graf_A2","Pozn.: Ministerstvo školství, mládeže a tělovýchovy zkresluje graf vzhledem k zahrnutí učitelů v kategorii “Příspěvkové organizace”. Lze odfiltrovat kliknutím na patřičnou položku legendy."

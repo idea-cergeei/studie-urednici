@@ -12,7 +12,7 @@ source(here::here("R", "divideMain.R"))
 library(config)
 cfg <- config::get()
 # derive target year from config; fallback to 2024 if absent
-this_year <- if (!is.null(cfg$this_year)) cfg$this_year else 2024
+this_year <- if (!is.null(cfg$rok)) cfg$rok else 2024
 options("scipen" = 100, "digits" = 4)
 # readr::read_csv("http://vdb.czso.cz/pll/eweb/lkod_ld.seznam")
 # catalogue <- czso_get_catalogue()
@@ -362,7 +362,7 @@ df_infl <- data.frame(
   inflation = c(0.1, 2.8, 1.9, 2.5, 2.8, 6.3, 1.0, 1.5, 1.9, 3.3, 1.4, 0.4, 0.3, 0.7, 2.5, 2.1, 2.8, 3.2) / 100 + 1
 )
 
-df_infl <- czso_get_table("010022", dest_dir = "data-input/czso", force_redownload = T) %>%
+df_infl <- czso_get_table("010022", dest_dir = "data-input/czso", force_redownload = TRUE) %>%
   filter(is.na(ucel_txt)) %>%
   filter(casz_txt == "stejné období předchozího roku") %>%
   group_by(rok) %>%
@@ -402,7 +402,7 @@ main_df_urednici <- main_df_recat |>
   filter(name %in% c("UO", "OSS_SS")) |>
   group_by(rok, typ_rozpoctu, kap_name, kap_num, full_kap_name, cz_kap_name) |>
   summarise(across(.cols = c(prostredky_na_platy, oppp, prostredky_na_platy_a_oppp,
-                             pocet_zamestnancu), .fns = ~sum(.x, na.rm = T)),
+                             pocet_zamestnancu), .fns = ~sum(.x, na.rm = TRUE)),
             prumerny_plat = prostredky_na_platy / pocet_zamestnancu / 12) |>
   mutate(kategorie_2014 = "Statni urednici")
 
