@@ -44,7 +44,7 @@ make_nace_plot <- function(data, add_years = 5) {
   new_breaks <- make_date(seq(year(min(data$tm)), year(max(data$tm))))
   print(new_breaks)
 
-  fmt_pct_change <- scales::label_number(.1, 100, suffix = " %", decimal.mark = ",",
+  fmt_pct_change <- scales::label_number(0.1, 100, suffix = " %", decimal.mark = ",",
                                          style_positive = "plus", style_negative = "minus")
   fmt_pct_change_axis <- scales::label_number(1, 100, suffix = " %", decimal.mark = ",",
                                               style_positive = "plus", style_negative = "minus")
@@ -56,13 +56,13 @@ make_nace_plot <- function(data, add_years = 5) {
                        group = clr)) +
     geom_hline(yintercept = 0, colour = "grey10", linetype = "solid") +
     geom_point(aes(alpha = clr != "Ostatní"), fill = "white") +
-    scale_alpha_discrete(range = c(.6, 1), guide = "none") +
+    scale_alpha_discrete(range = c(0.6, 1), guide = "none") +
     geom_line(data = ~subset(., clr == "Celá ekonomika")) +
     geom_point(data = ~subset(., clr == "Celá ekonomika"), size = 2) +
     geom_point(data = ~subset(., clr == "Celá ekonomika"), colour = "white", size = 1.2) +
-    geom_line(data = ~subset(., public == TRUE)) +
-    geom_point(data = ~subset(., public == TRUE), size = 2) +
-    geom_point(data = ~subset(., public == TRUE), colour = "white", size = 1.2) +
+    geom_line(data = ~subset(., public)) +
+    geom_point(data = ~subset(., public), size = 2) +
+    geom_point(data = ~subset(., public), colour = "white", size = 1.2) +
     ggrepel::geom_label_repel(data = ~subset(., needs_label),
                aes(label = paste(fmt_pct_change(realna_zmena), name_for_label), fill = clr,
               segment.colour = clr),
@@ -80,10 +80,10 @@ make_nace_plot <- function(data, add_years = 5) {
                  expand = expansion(add = c(0, 365 * add_years)),
                  limits = c(as.Date("2000-09-01"), as.Date("2026-03-31")),
     ) +
-    scale_y_continuous(expand = expansion(add = c(.02, 0.001)),
+    scale_y_continuous(expand = expansion(add = c(0.02, 0.001)),
                        # limits = c(-.2, .2),
                        labels = fmt_pct_change_axis,
-                       breaks = seq(-.3, .3, .05)) +
+                       breaks = seq(-0.3, 0.3, 0.05)) +
     guides(colour = guide_legend(reverse = T, title = "Skupina NACE (odvětví)"), size = "none", fill = "none", segment.color = "none") +
     labs(title = "Meziroční změny průměrných reálných mezd (v odvětvích dle NACE), v %",
          x = "Rok", y = "Reálná meziroční změna (očištěno o inflaci)",
@@ -171,7 +171,7 @@ print(new_labels)
 new_breaks <- make_date(seq(year(min(data$tm)), year(max(data$tm))))
 print(new_breaks)
 
-fmt_pct_change <- scales::label_number(.1, 100, suffix = " %", decimal.mark = ",",
+fmt_pct_change <- scales::label_number(0.1, 100, suffix = " %", decimal.mark = ",",
                                        style_positive = "plus", style_negative = "minus")
 fmt_pct_change_axis <- scales::label_number(1, 100, suffix = " %", decimal.mark = ",",
                                             style_positive = "plus", style_negative = "minus")

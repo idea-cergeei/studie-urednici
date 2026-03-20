@@ -1,4 +1,7 @@
 
+library(dplyr)
+library(tidyr)
+
 # Column-detection helpers shared by all three functions.
 # Rather than relying on the exact number of columns in each section group
 # (which varies between file vintages), we identify each data column by its
@@ -91,7 +94,7 @@ divide_sections <- function(df, sheet_name, section_names) {
   names_df <- data.frame(kap_num = kap_num_vec, full_kap_name, cz_kap_name)
 
   # Trim at the CELKEM summary row
-  last_val <- which(grepl("C E L K E M", df[[3]]))
+  last_val <- grep("C E L K E M", df[[3]])
   if (length(last_val)) df <- df[seq_len(last_val), ]
 
   # Pre-compute row-1 headers and ASCII-transliterated rows 3&4 for column detection
