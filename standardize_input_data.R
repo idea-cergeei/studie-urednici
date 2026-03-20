@@ -168,8 +168,8 @@ summary_names <- c(
 )
 
 summary <- divide_summary(input[[length(input)]], "Summary", summary_names)
-summary21 <- divide_summary(input[[length(input21)]], "Summary", summary_names)
-summary_thisyr <- divide_summary(input[[length(input_thisyr)]], "Summary", summary_names)
+summary21 <- divide_summary(input21[[length(input21)]], "Summary", summary_names)
+summary_thisyr <- divide_summary(input_thisyr[[length(input_thisyr)]], "Summary", summary_names)
 
 main_df <- bind_rows(
   main_df,

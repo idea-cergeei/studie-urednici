@@ -1,9 +1,31 @@
 
+# Column-detection helpers shared by all three functions.
+# Rather than relying on the exact number of columns in each section group
+# (which varies between file vintages), we identify each data column by its
+# row-3 / row-4 header text within the section's column span, build a named
+# tibble directly, and let bind_rows() fill missing optional columns with NA.
+
+# Internal: find the first df column whose row-3 or row-4 header matches
+# `pattern` within `col_range`.  Returns NA_integer_ when nothing matches.
+.find_col <- function(pattern, col_range, hdr) {
+  hits <- grep(pattern, hdr[col_range], ignore.case = TRUE)
+  if (!length(hits)) NA_integer_ else col_range[[hits[[1L]]]]
+}
+
+# Internal: normalise typ_rozpoctu labels
+.clean_typ <- function(x) {
+  dplyr::case_when(
+    grepl("SKUT",  x) ~ "SKUT",
+    grepl("SCHV",  x) ~ "SCHV",
+    grepl("UPRAV", x) ~ "UPRAV",
+    .default = x
+  )
+}
+
+
 # loads and clean the main sections of input data
 divide_sections <- function(df, sheet_name, section_names) {
-  num_names <- c("prostredky_na_platy_a_oppp", "oppp", "prostredky_na_platy", "prumerny_plat", "schv_ke_schv", "skut_k_rozp", "skut_ke_skut")
-  int_names <- c("rok", "kap_num", "poradi_prumerneho_platu", "pocet_zamestnancu")
-  kap_num <- c(
+  kap_num_vec <- c(
     301, 302, 303, 304, 306, 307, 308, 309, 312, 313, 314, 315, 317, 321, 322, 327, 328, 329, 333, 334, 335, 336, 343, 344, 345, 346, 348, 349,
     353, 355, 358, 359, 361, 362, 371, 372, 373, 374, 375, 376, 377, 378, 381
   )
@@ -22,328 +44,294 @@ divide_sections <- function(df, sheet_name, section_names) {
     "nejvyssi_kontrolni_urad"
   )
   cz_kap_name <- c(
-    "Kancel\u00E1\u0159 prezidenta",
+    "Kancel\u00e1\u0159 prezidenta",
     "Parlament",
-    "Kancel\u00E1\u0159 Sen\u00E1tu",
-    "\u00DA\u0159ad vl\u00E1dy",
-    "Ministerstvo zahrani\u010Dn\u00EDch v\u011Bc\u00ED",
+    "Kancel\u00e1\u0159 Sen\u00e1tu",
+    "\u00da\u0159ad vl\u00e1dy",
+    "Ministerstvo zahrani\u010dn\u00edch v\u011bc\u00ed",
     "Ministerstvo obrany                                      ",
-    "N\u00E1rodn\u00ED bezpe\u010Dnostn\u00ED \u00FA\u0159ad",
-    "Kancel\u00E1\u0159 ve\u0159ejn\u00E9ho ochr\u00E1nce pr\u00E1v",
-    "Ministerstvo financ\u00ED                       ",
-    "Ministerstvo pr\u00E1ce a soci\u00E1ln\u00EDch v\u011Bc\u00ED",
+    "N\u00e1rodn\u00ed bezpe\u010dnostn\u00ed \u00fa\u0159ad",
+    "Kancel\u00e1\u0159 ve\u0159ejn\u00e9ho ochr\u00e1nce pr\u00e1v",
+    "Ministerstvo financ\u00ed                       ",
+    "Ministerstvo pr\u00e1ce a soci\u00e1ln\u00edch v\u011bc\u00ed",
     "Ministerstvo vnitra                                ",
-    "Ministerstvo \u017Eivotn\u00EDho prost\u0159ed\u00ED",
-    "Ministerstvo pro m\u00EDstn\u00ED rozvoj",
-    "Grantov\u00E1 agentura",
-    "Ministerstvo pr\u016Fmyslu a obchodu",
+    "Ministerstvo \u017eivotn\u00edho prost\u0159ed\u00ed",
+    "Ministerstvo pro m\u00edstn\u00ed rozvoj",
+    "Grantov\u00e1 agentura",
+    "Ministerstvo pr\u016fmyslu a obchodu",
     "Ministerstvo dopravy",
-    "\u010Cesk\u00FD telekomunika\u010Dn\u00ED \u00FA\u0159ad",
-    "Ministerstvo zem\u011Bd\u011Blstv\u00ED",
-    "Ministerstvo \u0161kolstv\u00ED, ml\u00E1de\u017Ee a t\u011Blov\u00FDchovy",
+    "\u010cesk\u00fd telekomunika\u010dn\u00ed \u00fa\u0159ad",
+    "Ministerstvo zem\u011bd\u011blstv\u00ed",
+    "Ministerstvo \u0161kolstv\u00ed, ml\u00e1de\u017ee a t\u011blov\u00fdchovy",
     "Ministerstvo kultury",
-    "Ministerstvo zdravotnictv\u00ED",
+    "Ministerstvo zdravotnictv\u00ed",
     "Ministerstvo spravedlnosti",
-    "\u00DA\u0159ad pro ochranu osobn\u00EDch \u00FAdaj\u016F",
-    "\u00DA\u0159ad pr\u016Fmyslov\u00E9ho vlastnictv\u00ED",
-    "\u010Cesk\u00FD statistick\u00FD \u00FA\u0159ad                               ",
-    "\u010Cesk\u00FD \u00FA\u0159ad zem\u011Bm\u011B\u0159ick\u00FD a katastr\u00E1ln\u00ED",
-    "\u010Cesk\u00FD b\u00E1\u0148sk\u00FD \u00FA\u0159ad",
-    "Energetick\u00FD regula\u010Dn\u00ED \u00FA\u0159ad",
-    "Ministerstvo pro hospod\u00E1\u0159skou sout\u011B\u017E",
-    "\u00DAstav pro studium totalitn\u00EDch re\u017Eim\u016F",
-    "\u00DAstavn\u00ED soud",
-    "\u00DA\u0159ad N\u00E1rodn\u00ED rozpo\u010Dtov\u00E9 rady",
-    "Akademie v\u011Bd",
-    "N\u00E1rodn\u00ED sportovn\u00ED agentura",
-    "\u00DA\u0159ad pro dohled nad hospoda\u0159en\u00EDm politick\u00FDch stran a politick\u00FDch hnut\u00ED",
-    "Rada pro rozhlasov\u00E9 a televizn\u00ED vys\u00EDl\u00E1n\u00ED",
-    "\u00DA\u0159ad pro p\u0159\u00EDstup k dopravn\u00ED infrastruktu\u0159e",
-    "Spr\u00E1va st\u00E1tn\u00EDch hmotn\u00FDch rezerv",
-    "St\u00E1tn\u00ED \u00FA\u0159ad pro jadernou bezpe\u010Dnost",
-    "Gener\u00E1ln\u00ED inspekce bezpe\u010Dnostn\u00EDch sbor\u016F",
-    "Technologick\u00E1 agentura \u010CR",
-    "N\u00E1rodn\u00ED \u00FA\u0159ad pro kybernetickou a informa\u010Dn\u00ED bezpe\u010Dnost",
-    "Nejvy\u0161\u0161\u00ED kontroln\u00ED \u00FA\u0159ad"
+    "\u00da\u0159ad pro ochranu osobn\u00edch \u00fadaj\u016f",
+    "\u00da\u0159ad pr\u016fmyslov\u00e9ho vlastnictv\u00ed",
+    "\u010cesk\u00fd statistick\u00fd \u00fa\u0159ad                               ",
+    "\u010cesk\u00fd \u00fa\u0159ad zem\u011bm\u011b\u0159ick\u00fd a katastr\u00e1ln\u00ed",
+    "\u010cesk\u00fd b\u00e1\u0148sk\u00fd \u00fa\u0159ad",
+    "Energetick\u00fd regula\u010dn\u00ed \u00fa\u0159ad",
+    "Ministerstvo pro hospod\u00e1\u0159skou sout\u011b\u017e",
+    "\u00dastav pro studium totalit\u00ednch re\u017eim\u016f",
+    "\u00dastavni soud",
+    "\u00da\u0159ad N\u00e1rodn\u00ed rozpo\u010dtov\u00e9 rady",
+    "Akademie v\u011bd",
+    "N\u00e1rodn\u00ed sportovn\u00ed agentura",
+    "\u00da\u0159ad pro dohled nad hospoda\u0159en\u00edm politick\u00fdch stran a politick\u00fdch hnut\u00ed",
+    "Rada pro rozhlasov\u00e9 a televizn\u00ed vys\u00edl\u00e1n\u00ed",
+    "\u00da\u0159ad pro p\u0159\u00edstup k dopravn\u00ed infrastruktu\u0159e",
+    "Spr\u00e1va st\u00e1tn\u00edch hmotn\u00fdch rezerv",
+    "St\u00e1tn\u00ed \u00fa\u0159ad pro jadernou bezpe\u010dnost",
+    "Gener\u00e1ln\u00ed inspekce bezpe\u010dnostn\u00edch sbor\u016f",
+    "Technologick\u00e1 agentura \u010cR",
+    "N\u00e1rodn\u00ed \u00fa\u0159ad pro kybernetickou a informa\u010dn\u00ed bezpe\u010dnost",
+    "Nejvy\u0161\u0161\u00ed kontroln\u00ed \u00fa\u0159ad"
   )
-  names_df <- data.frame(kap_num, full_kap_name, cz_kap_name)
-  res <- data.frame()
+  names_df <- data.frame(kap_num = kap_num_vec, full_kap_name, cz_kap_name)
 
-  # leave out rows with unwanted commentary at the end of the data
-  last_val <- which(grepl("C E L K E M", df$...3))
-  df <- df[1:last_val, ]
+  # Trim at the CELKEM summary row
+  last_val <- which(grepl("C E L K E M", df[[3]]))
+  if (length(last_val)) df <- df[seq_len(last_val), ]
 
-  for (i in 3:ncol(df)) {
-    # searching for the start of the next category
-    if (is.na(df[1, i]) || grepl("INDEX", df[1, i])) {
-      next
-    }
-    ncols <- 1 # count the number of columns belonging to this section
-    for (j in i + 1:ncol(df)) {
-      if (!is.null(df[1, j]) && (is.na(df[1, j]) || grepl("INDEX", df[1, j]))) {
-        ncols <- 1 + ncols
-      } else { # next section beginning
-        break
-      }
-    }
+  # Pre-compute row-1 headers and ASCII-transliterated rows 3&4 for column detection
+  hdr1 <- as.character(unlist(df[1, ]))
+  hdr3 <- iconv(as.character(unlist(df[3, ])), from = "UTF-8", to = "ASCII//TRANSLIT")
+  hdr4 <- iconv(as.character(unlist(df[4, ])), from = "UTF-8", to = "ASCII//TRANSLIT")
 
-    upper_index <- i + ncols - 1
-    section <- df[6:nrow(df), c(1, 2, i:upper_index)]
-    # treating the last summary row
-    section[nrow(section), 2] <- section[nrow(section) - 1, 1]
-    section[nrow(section), 1] <- NA
-    section <- section[-c(nrow(section) - 1), ]
-    # there are three types of section: SKUTECNY ROZPOCET, SCHVALENY ROZPOCET, UPRAVENY ROZPOCET
-    # the sections end with index comparison to previous years, we treat each section differently
-    if (grepl("SKUT", df[1, i]) && ncol(section) %in% 10:11) {
-      if(ncol(section == 11)) section <- section[, -11]
-      section <- add_column(section, NA, .after = 8)
-    } else if (grepl("SCHV", df[1, i]) && ncol(section) == 9) {
-      section <- add_column(section, NA, .after = 9)
-      section <- add_column(section, NA, .after = 10)
-    } else if (grepl("UPRAV", df[1, i]) && ncol(section) == 8) {
-      section <- add_column(section, NA, .after = 8)
-      section <- add_column(section, NA, .after = 9)
-      section <- add_column(section, NA, .after = 10)
-    }
-    # no other name or length expected
-    else {
-      print(ncol(section))
-      print(head(section))
-      print(sheet_name)
-      print(df[1, i])
-    }
+  # Pre-extract ID columns for all data rows, then apply CELKEM row treatment:
+  # the last row's display name lives in col 1 of the second-to-last row.
+  full_rows    <- seq(6L, nrow(df))
+  kap_num_raw  <- as.character(df[full_rows, 1, drop = TRUE])
+  kap_name_raw <- as.character(df[full_rows, 2, drop = TRUE])
+  n            <- length(kap_num_raw)
+  kap_name_raw[n] <- kap_num_raw[n - 1L]
+  kap_num_raw[n]  <- NA_character_
+  keep          <- setdiff(seq_len(n), n - 1L)
+  kap_num_data  <- kap_num_raw[keep]
+  kap_name_data <- kap_name_raw[keep]
+  data_rows     <- full_rows[keep]
 
-    # additional descriptive columns
-    section <- cbind(a = sheet_name, section)
-    section <- cbind(a = df[1, i], section)
-    # finally assign the colnames and merge with the main dataframe
-    colnames(section) <- section_names
-    res <- rbind(res, section)
-    if(is.na(df[1, i]) && is.na(df[1, i + 1])) {
-      break
-    }
+  find_col <- function(pattern, col_range, hdr) .find_col(pattern, col_range, hdr)
+
+  get_num <- function(col) {
+    if (is.na(col)) return(rep(NA_real_, length(data_rows)))
+    suppressWarnings(as.numeric(df[data_rows, col, drop = TRUE]))
   }
 
+  res <- vector("list")
+  for (i in seq(3L, ncol(df))) {
+    h1 <- hdr1[[i]]
+    if (is.na(h1) || grepl("INDEX", h1)) next
 
-  # cleaning the data
-  res <- res %>%
-    separate(Rozpocet_a_rok, into = c("typ_rozpoctu", "rok"), sep = -4, remove = TRUE) %>%
-    clean_names() %>%
-    mutate(aux_names = iconv(res$full_name, from = "UTF-8", to = "ASCII//TRANSLIT")) %>%
-    mutate(name = case_when(
-      aux_names == "UO" ~ "UO",
-      aux_names == "OSS SS" ~ "OSS_SS",
-      aux_names == "SOBCPO" ~ "SOBCPO",
-      aux_names == "STATNI SPRAVA" ~ "SS",
-      aux_names == "OOSS" ~ "OOSS",
-      aux_names == "OSS (RO)" ~ "OSS",
-      aux_names == "PO" ~ "PO",
-      aux_names == "ROPO CELKEM" ~ "ROPO",
-      aux_names == "ZAMCI_5011_platy" ~ "ZAMCI_5011_platy",
-      aux_names == "VOJACI_5012" ~ "VOJACI_5012",
-      aux_names == "ST_ZAMCI_5013" ~ "ST_ZAMCI_5013",
-      aux_names == "ST_ZASTUP_5014" ~ "ST_ZASTUP_5014",
-      aux_names == "UC_S_5022" ~ "UC_S_5022",
-      aux_names == "SOBCPO  JEDNOTLIVY" ~ "SOBCPO_JEDNOTL",
-      aux_names == "OSS SS - jednotl" ~ "OSS_SS_JEDNOTL"
-    )) %>%
-    select(-c("aux_names", "full_name")) %>%
-    mutate(kap_name = ifelse(str_detect(iconv(kap_name, from = "UTF-8", to = "ASCII//TRANSLIT"), "UDHPSH|UPDSH|UDHPS", negate = FALSE), "UDHPS", kap_name)) %>%
-    mutate(kap_num = as.numeric(kap_num)) %>%
-    left_join(names_df, by = "kap_num")
-  res[num_names] <- sapply(res[num_names], as.numeric)
-  res["pocet_zamestnancu"] <- sapply(res["pocet_zamestnancu"], as.numeric)
-  res["pocet_zamestnancu"] <- sapply(res["pocet_zamestnancu"], round,digits = 0)
-  res[int_names] <- sapply(res[int_names], as.integer)
-  res$typ_rozpoctu[which(grepl("SKUT", res$typ_rozpoctu))] <- "SKUT"
-  res$typ_rozpoctu[which(grepl("SCHV", res$typ_rozpoctu))] <- "SCHV"
-  res$typ_rozpoctu[which(grepl("UPRAV", res$typ_rozpoctu))] <- "UPRAV"
+    # Section extent: count consecutive NA/INDEX columns in row 1
+    ncols <- 1L
+    for (j in seq(i + 1L, ncol(df))) {
+      v <- hdr1[[j]]
+      if (is.na(v) || grepl("INDEX", v)) ncols <- ncols + 1L else break
+    }
+    sec_cols <- seq(i, i + ncols - 1L)
 
-  return(res)
+    # Identify each data column by its row-3 / row-4 header name
+    platy_oppp_col <- find_col("PLATY A OPPP", sec_cols, hdr3)
+    oppp_col       <- find_col("^OPPP",        sec_cols, hdr4)
+    platy_col      <- find_col("NA PLATY$",    sec_cols, hdr4)
+    pocet_col      <- find_col("POCET",        sec_cols, hdr3)
+    prum_col       <- find_col("plat v K",     sec_cols, hdr3)
+    poradi_col     <- find_col("Poradi",       sec_cols, hdr3)
+
+    res[[length(res) + 1L]] <- tibble(
+      Rozpocet_a_rok             = h1,
+      kap_num                    = kap_num_data,
+      kap_name                   = kap_name_data,
+      prostredky_na_platy_a_oppp = get_num(platy_oppp_col),
+      oppp                       = get_num(oppp_col),
+      prostredky_na_platy        = get_num(platy_col),
+      pocet_zamestnancu          = get_num(pocet_col),
+      prumerny_plat              = get_num(prum_col),
+      poradi_prumerneho_platu    = get_num(poradi_col),
+      schv_ke_schv               = NA_real_,
+      skut_k_rozp                = NA_real_,
+      skut_ke_skut               = NA_real_
+    )
+  }
+
+  if (!length(res)) return(tibble())
+
+  bind_rows(res) |>
+    separate(Rozpocet_a_rok, into = c("typ_rozpoctu", "rok"), sep = -4, remove = TRUE) |>
+    mutate(
+      name = case_when(
+        sheet_name == "ROPO CELKEM"   ~ "ROPO",
+        sheet_name == "OSS (RO)"      ~ "OSS",
+        sheet_name == "PO"            ~ "PO",
+        sheet_name == "OOSS"          ~ "OOSS",
+        sheet_name == "STATNI SPRAVA" ~ "SS",
+        sheet_name == "UO"            ~ "UO",
+        sheet_name == "OSS SS"        ~ "OSS_SS",
+        sheet_name == "SOBCPO"        ~ "SOBCPO"
+      ),
+      kap_name = ifelse(
+        str_detect(iconv(kap_name, from = "UTF-8", to = "ASCII//TRANSLIT"),
+                   "UDHPSH|UPDSH|UDHPS"),
+        "UDHPS", kap_name
+      ),
+      kap_num           = as.numeric(kap_num),
+      pocet_zamestnancu = as.integer(round(pocet_zamestnancu)),
+      rok               = as.integer(rok),
+      typ_rozpoctu      = .clean_typ(typ_rozpoctu)
+    ) |>
+    left_join(names_df, by = join_by(kap_num))
 }
 
 
 # loads and clean the sections of input data containing detailed granularity
 divide_jednotl <- function(df, sheet_name, section_names) {
-  num_names <- c("prostredky_na_platy_a_oppp", "oppp", "prostredky_na_platy", "prumerny_plat", "schv_ke_schv", "skut_k_rozp", "skut_ke_skut")
-  int_names <- c("rok", "kap_num", "poradi_prumerneho_platu", "pocet_zamestnancu")
-  res <- data.frame()
+  # Fill cols 1&2 downward: kap_num and kap_name are merged cells in the source.
+  filled <- df |> dplyr::select(1:2) |> tidyr::fill(1, 2)
+  df[seq_len(nrow(df) - 1L), 1:2] <- filled[seq_len(nrow(df) - 1L), ]
 
-  # applying the fill function
-  aux <- df %>%
-    select(1, 2) %>%
-    fill(1, 2)
-  df[1:nrow(df) - 1, c(1, 2)] <- aux[(1:nrow(aux) - 1), ]
+  hdr1 <- as.character(unlist(df[1, ]))
+  hdr3 <- iconv(as.character(unlist(df[3, ])), from = "UTF-8", to = "ASCII//TRANSLIT")
+  hdr4 <- iconv(as.character(unlist(df[4, ])), from = "UTF-8", to = "ASCII//TRANSLIT")
 
-  for (i in 4:ncol(df)) {
-    # searching for the start of the next category
-    if (is.na(df[1, i]) || grepl("INDEX", df[1, i])) {
-      next
-    }
-    ncols <- 1 # count the number of columns belonging to this section
-    for (j in i + 1:ncol(df)) {
-      if (!is.null(df[1, j]) && (is.na(df[1, j]) || grepl("INDEX", df[1, j]))) {
-        ncols <- 1 + ncols
-      } else { # next section beginning
-        break
-      }
-    }
+  # No CELKEM treatment needed for individual-granularity sheets
+  data_rows     <- seq(6L, nrow(df))
+  kap_num_data  <- as.character(df[data_rows, 1, drop = TRUE])
+  kap_name_data <- as.character(df[data_rows, 2, drop = TRUE])
+  org_data      <- as.character(df[data_rows, 3, drop = TRUE])
 
-    upper_index <- i + ncols - 1
-    section <- df[6:nrow(df), c(1, 2, 3, i:upper_index)]
-    # there are three types of section: SKUTECNY ROZPOCET, SCHVALENY ROZPOCET, UPRAVENY ROZPOCET
-    # the sections end with index comparison to previous years, we treat each section differently
+  find_col <- function(pattern, col_range, hdr) .find_col(pattern, col_range, hdr)
 
-    if (grepl("SKUT", df[1, i]) && ncol(section) %in% 11:12) {
-      if(ncol(section) == 12) section <- section[, -12] # empty column
-      section <- add_column(section, NA, .after = 9)
-    } else if (grepl("SCHV", df[1, i])) {
-      # OSS SS - jednotl: chybí index prumerného platu za schv.rozpoctem každého roku
-      if (sheet_name == "OSS SS - jednotl" && ncol(section) == 9) {
-        section <- add_column(section, NA, .after = 9)
-        section <- add_column(section, NA, .after = 10)
-        section <- add_column(section, NA, .after = 11)
-      } else if (sheet_name == "SOBCPO  JEDNOTLIVY" && ncol(section) == 10) {
-        section <- add_column(section, NA, .after = 11)
-        section <- add_column(section, NA, .after = 12)
-      } else {
-        print(dim(section))
-        print(head(section))
-        print(sheet_name)
-        print(df[1, i])
-      }
-    } else if (grepl("UPRAV", df[1, i]) && ncol(section) == 9) {
-      section <- add_column(section, NA, .after = 9)
-      section <- add_column(section, NA, .after = 10)
-      section <- add_column(section, NA, .after = 11)
-    }
-    # no other name or length expected
-    else {
-      print(dim(section))
-      print(head(section))
-      print(sheet_name)
-      print(df[1, i])
-    }
-
-    # additional descriptive columns
-    section <- cbind(a = sheet_name, section)
-    section <- cbind(a = df[1, i], section)
-
-
-    # finally assign the colnames and merge with the main dataframe
-    colnames(section) <- section_names
-    res <- rbind(res, section)
+  get_num <- function(col) {
+    if (is.na(col)) return(rep(NA_real_, length(data_rows)))
+    suppressWarnings(as.numeric(df[data_rows, col, drop = TRUE]))
   }
 
+  res <- vector("list")
+  for (i in seq(4L, ncol(df))) {
+    h1 <- hdr1[[i]]
+    if (is.na(h1) || grepl("INDEX", h1)) next
 
-  # cleaning the data
-  res <- res %>%
-    separate(Rozpocet_a_rok, into = c("typ_rozpoctu", "rok"), sep = -4, remove = TRUE) %>%
-    clean_names() %>%
-    mutate(aux_names = iconv(res$full_name, from = "UTF-8", to = "ASCII//TRANSLIT")) %>%
-    mutate(name = case_when(
-      aux_names == "UO" ~ "UO",
-      aux_names == "OSS SS" ~ "OSS_SS",
-      aux_names == "SOBCPO" ~ "SOBCPO",
-      aux_names == "STATNI SPRAVA" ~ "SS",
-      aux_names == "OOSS" ~ "OOSS",
-      aux_names == "OSS (RO)" ~ "OSS",
-      aux_names == "PO" ~ "PO",
-      aux_names == "ROPO CELKEM" ~ "ROPO",
-      aux_names == "ZAMCI_5011_platy" ~ "ZAMCI_5011_platy",
-      aux_names == "VOJACI_5012" ~ "VOJACI_5012",
-      aux_names == "ST_ZAMCI_5013" ~ "ST_ZAMCI_5013",
-      aux_names == "ST_ZASTUP_5014" ~ "ST_ZASTUP_5014",
-      aux_names == "UC_S_5022" ~ "UC_S_5022",
-      aux_names == "SOBCPO  JEDNOTLIVY" ~ "SOBCPO_JEDNOTL",
-      aux_names == "OSS SS - jednotl" ~ "OSS_SS_JEDNOTL",
-    )) %>%
-    select(-"aux_names", "full_name")
-  res[num_names] <- sapply(res[num_names], as.numeric)
-  res[int_names] <- sapply(res[int_names], as.integer)
-  res$typ_rozpoctu[which(grepl("SKUT", res$typ_rozpoctu))] <- "SKUT"
-  res$typ_rozpoctu[which(grepl("SCHV", res$typ_rozpoctu))] <- "SCHV"
-  res$typ_rozpoctu[which(grepl("UPRAV", res$typ_rozpoctu))] <- "UPRAV"
-  return(res)
+    ncols <- 1L
+    for (j in seq(i + 1L, ncol(df))) {
+      v <- hdr1[[j]]
+      if (is.na(v) || grepl("INDEX", v)) ncols <- ncols + 1L else break
+    }
+    sec_cols <- seq(i, i + ncols - 1L)
+
+    platy_oppp_col <- find_col("PLATY A OPPP", sec_cols, hdr3)
+    oppp_col       <- find_col("^OPPP",        sec_cols, hdr4)
+    platy_col      <- find_col("NA PLATY$",    sec_cols, hdr4)
+    pocet_col      <- find_col("POCET",        sec_cols, hdr3)
+    prum_col       <- find_col("plat v K",     sec_cols, hdr3)
+    poradi_col     <- find_col("Poradi",       sec_cols, hdr3)
+
+    res[[length(res) + 1L]] <- tibble(
+      Rozpocet_a_rok             = h1,
+      kap_num                    = kap_num_data,
+      kap_name                   = kap_name_data,
+      organizace                 = org_data,
+      prostredky_na_platy_a_oppp = get_num(platy_oppp_col),
+      oppp                       = get_num(oppp_col),
+      prostredky_na_platy        = get_num(platy_col),
+      pocet_zamestnancu          = get_num(pocet_col),
+      prumerny_plat              = get_num(prum_col),
+      poradi_prumerneho_platu    = get_num(poradi_col),
+      schv_ke_schv               = NA_real_,
+      skut_k_rozp                = NA_real_,
+      skut_ke_skut               = NA_real_
+    )
+  }
+
+  if (!length(res)) return(tibble())
+
+  bind_rows(res) |>
+    separate(Rozpocet_a_rok, into = c("typ_rozpoctu", "rok"), sep = -4, remove = TRUE) |>
+    mutate(
+      name = case_when(
+        sheet_name == "SOBCPO  JEDNOTLIVY" ~ "SOBCPO_JEDNOTL",
+        sheet_name == "OSS SS - jednotl"   ~ "OSS_SS_JEDNOTL"
+      ),
+      kap_num           = as.numeric(kap_num),
+      pocet_zamestnancu = as.integer(round(pocet_zamestnancu)),
+      rok               = as.integer(rok),
+      typ_rozpoctu      = .clean_typ(typ_rozpoctu)
+    )
 }
-
-
-
 
 
 # slightly different procedure used for loading the SUMMARY data
 divide_summary <- function(df, sheet_name, section_names) {
-  num_names <- c("prostredky_na_platy_a_oppp", "oppp", "prostredky_na_platy", "prumerny_plat", "schv_ke_schv", "skut_k_rozp", "skut_ke_skut")
-  int_names <- c("rok", "poradi_prumerneho_platu", "pocet_zamestnancu")
+  hdr1 <- as.character(unlist(df[1, ]))
+  hdr3 <- iconv(as.character(unlist(df[3, ])), from = "UTF-8", to = "ASCII//TRANSLIT")
+  hdr4 <- iconv(as.character(unlist(df[4, ])), from = "UTF-8", to = "ASCII//TRANSLIT")
 
-  res <- data.frame()
-  for (i in 3:ncol(df)) {
-    # searching for the start of the next category
-    if (is.na(df[1, i]) || grepl("INDEX", df[1, i])) {
-      next
-    }
-    ncols <- 1 # count the number of columns belonging to this section
-    for (j in i + 1:ncol(df)) {
-      if (!is.null(df[1, j]) && (is.na(df[1, j]) || grepl("INDEX", df[1, j]))) {
-        ncols <- 1 + ncols
-      } else { # next section beginning
-        break
-      }
-    }
+  # col 2 of the summary sheet contains the group display names (full_name)
+  data_rows      <- seq(6L, nrow(df))
+  full_name_data <- as.character(df[data_rows, 2, drop = TRUE])
 
-    upper_index <- i + ncols - 1
-    section <- df[6:nrow(df), c(2, i:upper_index)]
+  find_col <- function(pattern, col_range, hdr) .find_col(pattern, col_range, hdr)
 
-    # there are three types of section: SKUTECNY ROZPOCET, SCHVALENY ROZPOCET, UPRAVENY ROZPOCET
-    # the sections end with index comparison to previous years, we treat each section differently
-    if (grepl("SKUT", df[1, i]) && ncol(section) %in% 9:10) {
-      if(ncol(section) == 10) section <- section[, -10]
-      section <- add_column(section, NA, .after = 7)
-    } else if (grepl("SCHV", df[1, i]) && ncol(section) == 8) {
-      section <- add_column(section, NA, .after = 8)
-      section <- add_column(section, NA, .after = 9)
-    } else if (grepl("UPRAV", df[1, i]) && ncol(section) == 7) {
-      section <- add_column(section, NA, .after = 7)
-      section <- add_column(section, NA, .after = 8)
-      section <- add_column(section, NA, .after = 9)
-    }
-    # no other name or length expected
-    else {
-      print(ncol(section))
-      print(head(section))
-      print(sheet_name)
-      print(df[1, i])
-    }
-    # additional descriptive columns
-    section <- cbind(a = df[1, i], section)
-    # finally assign the colnames and merge with the main dataframe
-    colnames(section) <- section_names
-    res <- rbind(res, section)
+  get_num <- function(col) {
+    if (is.na(col)) return(rep(NA_real_, length(data_rows)))
+    suppressWarnings(as.numeric(df[data_rows, col, drop = TRUE]))
   }
 
-  # cleaning the data
-  res <- res %>%
-    separate(Rozpocet_a_rok, into = c("typ_rozpoctu", "rok"), sep = -4, remove = TRUE) %>%
-    clean_names() %>%
-    mutate(aux_names = iconv(res$full_name, from = "UTF-8", to = "ASCII//TRANSLIT")) %>%
-    mutate(name = case_when(
-      aux_names == "Ustredni organy statni spravy (UO)" ~ "UO",
-      aux_names == "OSS -  Statni sprava" ~ "OSS_SS",
-      aux_names == "Sprava ve sloz. Obrany, bezpecnost. Celni a pravni ochrany (SOBCPO)" ~ "SOBCPO",
-      aux_names == "Statni sprava" ~ "SS",
-      aux_names == "Statni sprava bez SOBCPO" ~ "SS_bez_SOBCPO",
-      aux_names == "Ostatni organizacni slozky statu (OOSS)" ~ "OOSS",
-      aux_names == "Organizacni slozky statu (OSS)" ~ "OSS",
-      aux_names == "Prispevkove organizace (PO)" ~ "PO",
-      aux_names == "OSS A PO CELKEM" ~ "ROPO"
-    )) %>%
-    select(-"aux_names", "full_name")
-  res[num_names] <- sapply(res[num_names], as.numeric)
-  res[int_names] <- sapply(res[int_names], as.integer)
-  res$typ_rozpoctu[which(grepl("SKUT", res$typ_rozpoctu))] <- "SKUT"
-  res$typ_rozpoctu[which(grepl("SCHV", res$typ_rozpoctu))] <- "SCHV"
-  res$typ_rozpoctu[which(grepl("UPRAV", res$typ_rozpoctu))] <- "UPRAV"
+  res <- vector("list")
+  for (i in seq(3L, ncol(df))) {
+    h1 <- hdr1[[i]]
+    if (is.na(h1) || grepl("INDEX", h1)) next
 
-  return(res)
+    ncols <- 1L
+    for (j in seq(i + 1L, ncol(df))) {
+      v <- hdr1[[j]]
+      if (is.na(v) || grepl("INDEX", v)) ncols <- ncols + 1L else break
+    }
+    sec_cols <- seq(i, i + ncols - 1L)
+
+    platy_oppp_col <- find_col("PLATY A OPPP", sec_cols, hdr3)
+    oppp_col       <- find_col("^OPPP",        sec_cols, hdr4)
+    platy_col      <- find_col("NA PLATY$",    sec_cols, hdr4)
+    pocet_col      <- find_col("POCET",        sec_cols, hdr3)
+    prum_col       <- find_col("plat v K",     sec_cols, hdr3)
+    poradi_col     <- find_col("Poradi",       sec_cols, hdr3)
+
+    res[[length(res) + 1L]] <- tibble(
+      Rozpocet_a_rok             = h1,
+      full_name                  = full_name_data,
+      prostredky_na_platy_a_oppp = get_num(platy_oppp_col),
+      oppp                       = get_num(oppp_col),
+      prostredky_na_platy        = get_num(platy_col),
+      pocet_zamestnancu          = get_num(pocet_col),
+      prumerny_plat              = get_num(prum_col),
+      poradi_prumerneho_platu    = get_num(poradi_col),
+      schv_ke_schv               = NA_real_,
+      skut_k_rozp                = NA_real_,
+      skut_ke_skut               = NA_real_
+    )
+  }
+
+  if (!length(res)) return(tibble())
+
+  bind_rows(res) |>
+    separate(Rozpocet_a_rok, into = c("typ_rozpoctu", "rok"), sep = -4, remove = TRUE) |>
+    mutate(
+      aux = iconv(full_name, from = "UTF-8", to = "ASCII//TRANSLIT"),
+      name = case_when(
+        str_detect(aux, "SOBCPO")              ~ "SOBCPO",
+        str_detect(aux, "OSS.*Statni|Statni.*OSS") ~ "OSS_SS",
+        str_detect(aux, "bez SOBCPO")          ~ "SS_bez_SOBCPO",
+        str_detect(aux, "Ostatni organizacni") ~ "OOSS",
+        str_detect(aux, "Organizacni slozky")  ~ "OSS",
+        str_detect(aux, "Statni sprava")       ~ "SS",
+        str_detect(aux, "Prispevkove")         ~ "PO",
+        str_detect(aux, "OSS A PO")            ~ "ROPO",
+        str_detect(aux, "Ustredni organy")     ~ "UO"
+      ),
+      pocet_zamestnancu = as.integer(round(pocet_zamestnancu)),
+      rok               = as.integer(rok),
+      typ_rozpoctu      = .clean_typ(typ_rozpoctu)
+    ) |>
+    select(-"aux")
 }
