@@ -5,7 +5,7 @@ library(lubridate)
 
 # read configuration and derive current year
 cfg <- config::get()
-this_year <- if (!is.null(cfg$this_year)) cfg$this_year else 2024
+this_year <- if (!is.null(cfg$rok)) cfg$rok else 2024
 this_year_chr <- as.character(this_year)
 
 year_label <- paste0("roku ", this_year_chr)  # for describing output
