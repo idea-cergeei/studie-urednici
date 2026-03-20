@@ -174,19 +174,19 @@ summary_thisyr <- divide_summary(input[[length(input_thisyr)]], "Summary", summa
 main_df <- bind_rows(
   main_df,
   main_df21 |> filter(rok == 2021),
-  main_df_thisyr |> filter(rok == as.character(this_year))
+  main_df_thisyr |> filter(rok %in% as.character(c(2024, this_year)))
   )
 
 jednotl_df <- bind_rows(
   jednotl_df,
-  jednotl_df21 |> filter(rok == 2021)
-  # jednotl_df_thisyr |> filter(rok == as.character(this_year))
+  jednotl_df21 |> filter(rok == 2021),
+  # jednotl_df_thisyr |> filter(rok == as.character(c(2024, this_year)))
   )
 
 summary <- bind_rows(
   summary,
   summary21 |> filter(rok == 2021),
-  summary_thisyr |> filter(rok == as.character(this_year))
+  summary_thisyr |> filter(rok %in% as.character(c(2024, this_year)))
   )
 
 # now we will extend the new datasets with data from previous years
