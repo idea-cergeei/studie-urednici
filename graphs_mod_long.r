@@ -246,6 +246,35 @@ for(i in inx){
   gr_content_all <- append(gr_content_all,c(gr_content, "</div>",gr_annotation,gr_text,"<br>",gr_keywords,"<hr><br>"))
 }
 
+# ── Prohlížečka (interactive dashboard) ───────────────────────────────────────
+if (file.exists("dashboard.html")) {
+  file.copy("dashboard.html", "graphs_mod/prohlizecka.html", overwrite = TRUE)
+} else {
+  warning("dashboard.html not found — run dashboard.R first. Skipping Prohlížečka section.")
+}
+prohlizecka_content <- c(
+  "<h1 style='font-size:0px!important;margin:1px'>Prohlížečka</h1>",
+  paste0(
+    "<div style='width:100%; height:95vh; min-height:700px;'>",
+    "<iframe src='prohlizecka.html' style='width:100%; height:100%; border:none;'",
+    " title='Prohlíže\u010dka plat\u016f st\u00e1tn\u00edch zam\u011bstnanc\u016f'></iframe>",
+    "</div>"
+  ),
+  "<br>"
+)
+gr_content_all <- c(gr_content_all, prohlizecka_content)
+
+# Bold the Prohlížečka item in the auto-generated tocify TOC after it renders
+extra_script2_all <- c(
+  extra_script2_all,
+  paste0(
+    "<script>$(function(){setTimeout(function(){",
+    "$('#toc .tocify-item a').filter(function(){",
+    "return $(this).text().trim()==='Prohlí\u017ee\u010dka';",
+    "}).css('font-weight','bold');},100);});</script>"
+  )
+)
+
 gr_all <- unlist(lapply(as.list(template), function(x)
   if(grepl("page title here",x)) "Zaměstnanci státu a úředníci: kde pracuji a za kolik?"
   # else if(grepl("list of graphs here",x)) paste(unlist(toc_list),collapse="\n")

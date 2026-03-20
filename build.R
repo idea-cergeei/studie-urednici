@@ -5,6 +5,7 @@ source("get_macro_numbers.R")
 
 source("graphs.R")
 source("graphs_mod.R")
+source("dashboard.R")
 source("graphs_mod_long.r")
 # system("scp -r graphs_mod/* root@194.182.65.144:/srv/shiny-server/zamestnancistatu")
 # unlink(x = paste0("graphs/",grep("graf",list.files("graphs"),value = T)))
