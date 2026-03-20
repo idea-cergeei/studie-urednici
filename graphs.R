@@ -423,9 +423,9 @@ graf_1_prep <- function(y){
   return(graf_1)
 }
 
+years <- sort(unique(dta$rok))
 graf_1 <- do.call(rbind,lapply(years,function(y)graf_1_prep(y)))
 
-years <- sort(unique(dta$rok))
 
 p <- plot_ly()
 
