@@ -342,6 +342,14 @@ wages_later <- czso_get_table("110080", force_redownload = TRUE) %>%
   rename("czsal_all" = 2, "phasal_all" = 3)
 
 
+#### Only as a temp patch before official stats are released
+
+wages_lastyr <- wages_later |> 
+  filter(rok == max(rok)) |> 
+  mutate(czsal_all = czsal_all * 1.072, 
+    phasal_all = phasal_all * 1.096,
+    rok = "2025")
+
 wages_early <- chapters_old %>%
   select(Year, czsal_all, phasal_all) %>%
   unique() %>%
@@ -351,6 +359,7 @@ wages_benchmark <- wages_early %>%
   filter(Year < 2011) %>%
   rename("rok" = Year) %>%
   rbind(wages_later) %>%
+  bind_rows(wages_lastyr) |> 
   mutate(rok = as.integer(rok))
 
 

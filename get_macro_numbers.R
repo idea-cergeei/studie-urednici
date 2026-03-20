@@ -25,7 +25,7 @@ employed_total <- lfs_data %>%
   arrange(desc(rok), desc(ctvrtleti))
 
 employed_total_thisyr <- employed_total %>%
-  filter(.data$rok == .env$rok, ctvrtleti == 4) |>
+  filter(.data$rok == .env$rok, ctvrtleti == 3) |>
   pull(hodnota)
 
 macro_numbers$employed_total <- employed_total_thisyr * 1000
