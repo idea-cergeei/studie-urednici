@@ -13,7 +13,7 @@ year_label <- paste0("roku ", this_year_chr)  # for describing output
 options(scipen = 99)
 
 main_df_update <- readRDS("./data-interim/sections.rds") |>
-  rename(
+  dplyr::rename(
     faze_rozpoctu = typ_rozpoctu,
     kap_kod = kap_num,
     kap_zkr = kap_name,
@@ -35,8 +35,8 @@ main_df_update <- readRDS("./data-interim/sections.rds") |>
     prumerny_plat_skut_skut = platy_skut_ke_skut,
     !!paste0("prumerny_plat_c", this_year_chr) := wage_in_thisyr,
     !!paste0("prumerny_plat_c", this_year_chr, "_mezirocne") := wage_in_thisyr_change,
-    prumerny_plat_real_od2024 = cum_pct_wage_change_real,
-    prumerny_plat_nomi_od2024 = cum_pct_wage_change,
+    prumerny_plat_real_od2003 = cum_pct_wage_change_real,
+    prumerny_plat_nomi_od2003 = cum_pct_wage_change,
     prumerny_plat_2003 = wage_base,
     prumerny_plat_vucinh = wage_to_general,
     prumerny_plat_vucinh_mezirocne = mzda_k_nh
@@ -120,7 +120,7 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
   info_columns("prumerny_plat_skut_skut",
                info = "Index změny průměrného platu oproti předchozímu roku",
                měřítko = "1 = žádná změna, > 1 = nárůst") |>
-  info_columns("prumerny_plat_real_od2024",
+  info_columns("prumerny_plat_real_od2003",
                info = "Změna průměrného platu od roku 2003 očištěná o inflaci",
                měřítko = "0 = žádná změna, > 0 = nárůst") |>
   info_columns(glue::glue("prumerny_plat_c{this_year_chr}"),
@@ -131,7 +131,7 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
                měřítko = "0 = žádná změna, 0.01 = nárůst o 1 %") |>
   info_columns("prumerny_plat_2003",
                info = "Průměrný plat roku 2003 (pro výpočet)") |>
-  info_columns("prumerny_plat_nomi_od2024",
+  info_columns("prumerny_plat_nomi_od2003",
                info = "Změna průměrného platu od roku 2003, neočištěno o inflaci",
                měřítko = "0 = žádná změna, 1 = nárůst o 100 %") |>
   info_columns("prumerny_plat_vucinh",
