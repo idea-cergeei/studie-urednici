@@ -7,7 +7,7 @@ locale: en
 table:
   name: tabulka
   _columns: 35
-  _rows: 14401.0
+  _rows: 15108.0
   _type: tbl_df
   info: Pokud není uvedeno jinak, zdrojem jsou data MF odpovídající Státnímu závěrečnému
     účtu
@@ -47,7 +47,7 @@ columns:
     upřesnění: Hrubý, bez odvodů zaměstnavatele a dalších nákladů práce
     jednotka: Kč za měsíc
   poradi_prumerneho_platu:
-    _type: integer
+    _type: numeric
   platy_schv_schv:
     _type: numeric
     info: Index změny schválených rozpočtů mezi lety R a R-1
@@ -89,9 +89,9 @@ columns:
     info: Cenový index vůči roku 2003
     měřítko: 1 = nulová inflace
     zdroj: Odvozeno ze sloupce 'ceny_index'
-  ceny_deflator_2024:
+  ceny_deflator_2025:
     _type: numeric
-    info: Cenový index vůči roku 2024
+    info: Cenový index vůči roku 2025
   prumerna_mzda_cr:
     _type: numeric
     info: Průměrná mzda v národním hospodářství
@@ -114,13 +114,13 @@ columns:
     _type: numeric
     info: Změna průměrného platu od roku 2003 očištěná o inflaci
     měřítko: 0 = žádná změna, > 0 = nárůst
-  prumerny_plat_c2024:
+  prumerny_plat_c2025:
     _type: numeric
-    info: Průměrný plat v cenách roku 2024
-  prumerny_plat_c2024_mezirocne:
+    info: Průměrný plat v cenách roku 2025
+  prumerny_plat_c2025_mezirocne:
     _type: numeric
     info: Meziroční změna platů v reálném vyjádření
-    upřesnění: Podle vyjádření v cenách roku 2024
+    upřesnění: Podle vyjádření v cenách roku 2025
     měřítko: 0 = žádná změna, 0.01 = nárůst o 1 %
   prumerny_plat_2003:
     _type: numeric
