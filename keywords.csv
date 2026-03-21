@@ -57,3 +57,8 @@
 "graf_A7","Reálné průměrné platy","Průměrné platy převádíme do reálných hodnot (cen roku {YEAR}) s využitím indexu spotřebitelských cen dle datové sady ČSÚ 01022 Indexy spotřebitelských cen."
 "graf_A9","Rozpočtové kapitoly","Zahrnují více organizací, vč. ústředního orgánu, např. ministerstva, které je zodpovědné za řízení výdajů celé kapitoly. Vysvětlivky zkratek rozpočtových kapitol - <a href='pdf/zkratky.pdf' target='_blank'>odkaz</a>."
 "graf_A9","Schválený a skutečný","Jedná se o srovnání dvou fází rozpočtového cyklu: schváleného rozpočtu a skutečně vykázaného stavu na konci roku."
+"prohlizecka","Zdroje dat a výpočtů","V interaktivním nástroji se zobrazují data vycházející ze stejných dat jako předchozích grafech"
+"prohlizecka","Záběr a srovnatelnost","Souhrnné kategorie zahrnují i ministerstva zahraničí a obrany, což znemožňuje srovnání v čase u dílčích kategorí před a po roce 2012."
+"prohlizecka","Očištění o inflaci","Údaje očištěné o inflaci pracují s cenami roku 2025 na základě indexu spotřebitelských cen dle ČSÚ."
+"prohlizecka","Srovnání s ekonomikou","Jde o srovnání průměrného platu v dané skupině organizací resp. zaměstnanců s průměrným platem v ekonomice dle statistik struktury výdělků (ČSÚ)."
+

@@ -141,14 +141,12 @@ border-top: 2px solid #c90239;
 }
 
 
-#tocify-header0 > ul.tocify-subheader > li.tocify-item,
-#tocify-header1 > ul.tocify-subheader > li.tocify-item {
+[id^="tocify-header"] > ul.tocify-subheader > li.tocify-item {
 border-top: 1px solid #ccc !important;
 background-color: #f3f3f3 !important;
 }
 
-#tocify-header0 > li.tocify-item,
-#tocify-header1 > li.tocify-item {
+[id^="tocify-header"] > li.tocify-item {
 font-weight: 800 !important;
 }
 

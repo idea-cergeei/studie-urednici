@@ -15,27 +15,28 @@ defl_col  <- paste0("ceny_deflator_", this_year)
 
 # ── Category labels and colours (match graphs.R) ──────────────────────────────
 kat_lbls <- c(
+  "Všichni",
   "Ministerstva",
-  "Ostatn\u00ed \u00fast\u0159edn\u00ed",
-  "Ne\u00fast\u0159edn\u00ed st\u00e1tn\u00ed spr\u00e1va",
-  "V\u0161ichni st\u00e1tn\u00ed \u00fa\u0159edn\u00edci",
+  "Ostatní ústřední",
+  "Neústřední státní správa",
+  "Všichni státní úředníci",
   "Sbory",
-  "Ostatn\u00ed v\u010d. arm\u00e1dy",
-  "P\u0159\u00edsp\u011bvkov\u00e9 organizace"
+  "Ostatní vč. armády",
+  "Příspěvkové organizace"
 )
 kat_colors <- setNames(
-  c(palette_okabe_ito(c(1, 2, 3, 7, 5, 4)), "#CCCCCC"),
+  c("#333333", palette_okabe_ito(c(1, 2, 3, 7, 5, 4)), "#CCCCCC"),
   kat_lbls
 )
 
 # ── Data ──────────────────────────────────────────────────────────────────────
 data_raw <- read_parquet("data-export/data_all.parquet") |>
-  filter(!is.na(kap_kod), !is.na(kategorie_2014_cz), faze_rozpoctu == "SKUT") |>
-  mutate(
+  dplyr::filter(!is.na(kap_kod), !is.na(kategorie_2014_cz), faze_rozpoctu == "SKUT") |>
+  dplyr::mutate(
     kap_nazev         = str_trim(kap_nazev),
-    kategorie_2014_cz = case_when(
-      kategorie_2014_cz == "St\u00e1tn\u00ed \u00fa\u0159edn\u00edci"   ~ "V\u0161ichni st\u00e1tn\u00ed \u00fa\u0159edn\u00edci",
-      kategorie_2014_cz == "Ne\u00fast\u0159edn\u00ed st. spr\u00e1va" ~ "Ne\u00fast\u0159edn\u00ed st\u00e1tn\u00ed spr\u00e1va",
+    kategorie_2014_cz = dplyr::case_when(
+      kategorie_2014_cz == "Státní úředníci"        ~ "Všichni státní úředníci",
+      kategorie_2014_cz == "Neústřední st. správa"  ~ "Neústřední státní správa",
       .default = kategorie_2014_cz
     ),
     platy_real         = platy         * .data[[defl_col]],
@@ -43,44 +44,76 @@ data_raw <- read_parquet("data-export/data_all.parquet") |>
   )
 
 CELKEM_VAL <- "__CELKEM__"
-CELKEM_LBL <- "\u2014 Celkem (v\u0161echny kapitoly) \u2014"
+CELKEM_LBL <- "Celkem (všechny kapitoly)"
 
 celkem_data <- data_raw |>
-  group_by(rok, kategorie_2014_cz) |>
-  summarise(
+  dplyr::group_by(rok, kategorie_2014_cz) |>
+  dplyr::summarise(
     platy             = sum(platy,             na.rm = TRUE),
     platy_real        = sum(platy_real,        na.rm = TRUE),
     pocet_zamestnancu = sum(pocet_zamestnancu, na.rm = TRUE),
     .groups           = "drop"
   ) |>
-  mutate(
+  dplyr::mutate(
     prumerny_plat      = platy      / pocet_zamestnancu / 12,
     prumerny_plat_real = platy_real / pocet_zamestnancu / 12,
     kap_nazev          = CELKEM_LBL,
     kap_zkr            = "CELKEM"
   )
 
+vsichni_data <- data_raw |>
+  dplyr::group_by(rok, kap_nazev, kap_zkr) |>
+  dplyr::summarise(
+    platy             = sum(platy,             na.rm = TRUE),
+    platy_real        = sum(platy_real,        na.rm = TRUE),
+    pocet_zamestnancu = sum(pocet_zamestnancu, na.rm = TRUE),
+    .groups           = "drop"
+  ) |>
+  dplyr::mutate(
+    prumerny_plat      = platy      / pocet_zamestnancu / 12,
+    prumerny_plat_real = platy_real / pocet_zamestnancu / 12,
+    kategorie_2014_cz  = "Všichni"
+  )
+
+vsichni_celkem <- celkem_data |>
+  dplyr::group_by(rok) |>
+  dplyr::summarise(
+    platy             = sum(platy,             na.rm = TRUE),
+    platy_real        = sum(platy_real,        na.rm = TRUE),
+    pocet_zamestnancu = sum(pocet_zamestnancu, na.rm = TRUE),
+    .groups           = "drop"
+  ) |>
+  dplyr::mutate(
+    prumerny_plat      = platy      / pocet_zamestnancu / 12,
+    prumerny_plat_real = platy_real / pocet_zamestnancu / 12,
+    kap_nazev          = CELKEM_LBL,
+    kap_zkr            = "CELKEM",
+    kategorie_2014_cz  = "Všichni"
+  )
+
 keep_cols <- c("kap_nazev", "kap_zkr", "kategorie_2014_cz", "rok",
                "platy", "platy_real", "prumerny_plat", "prumerny_plat_real",
                "pocet_zamestnancu")
 
-js_data <- bind_rows(
-  data_raw    |> select(all_of(keep_cols)),
-  celkem_data |> select(all_of(keep_cols))
+js_data <- dplyr::bind_rows(
+  data_raw       |> dplyr::select(dplyr::all_of(keep_cols)),
+  celkem_data    |> dplyr::select(dplyr::all_of(keep_cols)),
+  vsichni_data   |> dplyr::select(dplyr::all_of(keep_cols)),
+  vsichni_celkem |> dplyr::select(dplyr::all_of(keep_cols))
 ) |>
-  mutate(across(c(platy, platy_real, prumerny_plat, prumerny_plat_real,
+  dplyr::mutate(dplyr::across(c(platy, platy_real, prumerny_plat, prumerny_plat_real,
                   pocet_zamestnancu), round))
 
 kap_df <- data_raw |>
-  distinct(kap_nazev, kap_zkr) |>
-  arrange(kap_nazev) |>
-  mutate(lbl = paste0(kap_zkr, " \u2013 ", kap_nazev))
+  dplyr::distinct(kap_nazev, kap_zkr) |>
+  dplyr::arrange(kap_nazev) |>
+  dplyr::mutate(lbl = paste0(kap_zkr, " – ", kap_nazev))
 
 # Average wages per year (benchmark for sal_vs_avg)
 mzda_by_year <- data_raw |>
-  filter(!is.na(prumerna_mzda_cr)) |>
-  distinct(rok, prumerna_mzda_cr, prumerna_mzda_pha) |>
-  arrange(rok)
+  dplyr::filter(!is.na(prumerna_mzda_cr)) |>
+  dplyr::distinct(rok, prumerna_mzda_cr, prumerna_mzda_pha) |>
+  dplyr::arrange(rok)
 mzda_list <- setNames(
   lapply(seq_len(nrow(mzda_by_year)), \(i)
     list(cr  = round(mzda_by_year$prumerna_mzda_cr[i]),
@@ -118,6 +151,7 @@ h4   { color: #c90239; margin-bottom: 14px; font-size: 1.1rem; }
   display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
 }
 .kap-box:focus-within { border-color: #c90239; }
+#kap-tags { display: inline-flex; flex-wrap: wrap; gap: 3px; align-items: center; }
 .kap-tag {
   display: inline-flex; align-items: center; gap: 3px;
   background: #c90239; color: #fff; border-radius: 3px;
@@ -160,8 +194,15 @@ h4   { color: #c90239; margin-bottom: 14px; font-size: 1.1rem; }
 .pill.active { background: #c90239; color: #fff; border-color: #c90239; }
 .mode-row { margin-bottom: 4px; }
 .mode-controls {
-  display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 6px;
+  display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 6px;
 }
+.metric-col {
+  display: flex; flex-direction: column; gap: 3px; align-items: stretch;
+  border: 1px solid #ddd; border-radius: 5px; padding: 5px 6px; background: #f8f8f8;
+}
+.btn-row { display: flex; gap: 3px; }
+.btn-row .btn { flex: 1; }
+.metric-col-lbl { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
 .chk-label {
   display: flex; align-items: center; gap: 6px;
   font-size: 13px; cursor: pointer; user-select: none;
@@ -220,7 +261,7 @@ function computeY(r, baseRow) {
   if (mode === "sal_vs_avg") {
     const mzda = META.mzda[r.rok];
     if (!mzda || r.prumerny_plat == null) return null;
-    const bm = (r.kategorie_2014_cz === "Ministerstva" || r.kategorie_2014_cz === "Ostatn\u00ed \u00fast\u0159edn\u00ed") ? mzda.pha : mzda.cr;
+    const bm = (r.kategorie_2014_cz === "Ministerstva" || r.kategorie_2014_cz === "Ostatní ústřední") ? mzda.pha : mzda.cr;
     return bm ? (r.prumerny_plat / bm - 1) * 100 : null;
   }
   if (!baseRow) return null;
@@ -277,19 +318,22 @@ function buildTraces() {
         const y = computeY(r, baseRow);
         if (y == null) return;
         xs.push(r.rok);
-        ys.push(+y.toFixed(2));
+        ys.push(+(mode === "sal_level" ? y / 1000 : y).toFixed(2));
         texts.push(fmtHover(y, isRelPct));
       });
       if (!xs.length) return;
-      const col = KAT_COLOR[kat] || "#888888";
-      const nm  = selKaps.length > 1 ? kat + " (" + zkr + ")" : kat;
+      const col  = KAT_COLOR[kat] || "#888888";
+      const nm   = selKaps.length > 1 ? kat + " – " + zkr : kat;
+      const htpl = selKaps.length > 1
+        ? "<b>" + kat + "</b><br>" + zkr + "<br>%{text}<extra></extra>"
+        : "<b>" + kat + "</b><br>%{text}<extra></extra>";
       traces.push({
         x: xs, y: ys, text: texts,
         type: "scatter", mode: "lines+markers",
         name: nm, legendgroup: nm,
         line:   { color: col, width: 2.5, dash: dsh },
-        marker: { color: col, size: 7 },
-        hovertemplate: "<b>" + nm + "</b><br>Rok: %{x}<br>%{text}<extra></extra>"
+        marker: { color: "#000000", size: 7 },
+        hovertemplate: htpl
       });
     });
   });
@@ -298,16 +342,16 @@ function buildTraces() {
 ')
 
 # y-axis labels (UTF-8 in R strings, no \u sequences needed in JS)
-lbl_sal_nom  <- paste0("Pr\u016fm\u011brn\u00fd plat (K\u010d/m\u011bs\u00edc)")
-lbl_sal_real <- paste0("Pr\u016fm\u011brn\u00fd plat (K\u010d, ceny ", this_year, ")")
-lbl_sal_chg  <- paste0("Pr\u016fm. plat \u2013 zm\u011bna od BASE (%)")
-lbl_cst_nom  <- paste0("N\u00e1klady na platy (mld. K\u010d)")
-lbl_cst_real <- paste0("N\u00e1klady na platy (mld. K\u010d, ceny ", this_year, ")")
-lbl_cst_chg  <- paste0("N\u00e1klady \u2013 zm\u011bna od BASE (%)")
-lbl_vsavg    <- paste0("Odchylka pr\u016fm. platu od pr\u016fm. mzdy (%)")
-lbl_staff    <- paste0("Po\u010det zam\u011bstnanc\u016f (FTE)")
-lbl_stf_chg  <- paste0("Po\u010det zam. \u2013 zm\u011bna od BASE (%)")
-lbl_zaklad   <- paste0("Z\u00e1klad: ")
+lbl_sal_nom  <- paste0("Průměrný plat (tis. Kč/měsíc)")
+lbl_sal_real <- paste0("Průměrný plat (tis. Kč/měsíc, ceny roku ", this_year, ")")
+lbl_sal_chg  <- paste0("Průměrný plat – změna od roku BASE (%)")
+lbl_cst_nom  <- paste0("Náklady na platy (mld. Kč)")
+lbl_cst_real <- paste0("Náklady na platy (mld. Kč, ceny roku ", this_year, ")")
+lbl_cst_chg  <- paste0("Náklady – změna od roku BASE (%)")
+lbl_vsavg    <- paste0("Odchylka průměrného platu od průměrné mzdy v ekonomice (%)")
+lbl_staff    <- paste0("Počet zaměstnanců (FTE)")
+lbl_stf_chg  <- paste0("Počet zam. – změna od roku BASE (%)")
+lbl_zaklad   <- paste0("Základ: ")
 
 js4 <- paste0(
 'function makePctTicks(yMin, yMax) {
@@ -379,7 +423,7 @@ function buildLayout() {
   return {
     shapes, annotations,
     xaxis: {
-      title:    { text: "Rok", font: { size: 16, family: "Arial", color: "#000" } },
+      // title:    { text: "Rok", font: { size: 16, family: "Arial", color: "#000" } },
       tickfont: { size: 14, family: "Arial" },
       dtick: 2, tick0: 2003,
       mirror: true, linewidth: 2, ticks: "outside", showline: true, gridcolor: "grey"
@@ -464,7 +508,7 @@ function renderKapTags() {
     const lbl  = document.createElement("span");
     lbl.textContent = entry.lbl;
     const xbtn = document.createElement("button");
-    xbtn.textContent = "\u00d7";
+    xbtn.textContent = "×";
     xbtn.addEventListener("mousedown", e => { e.preventDefault(); removeKap(kap); });
     tag.appendChild(lbl);
     tag.appendChild(xbtn);
@@ -598,26 +642,27 @@ document.addEventListener("DOMContentLoaded", () => {
 js <- paste0(js1, js2, js3, js4, js5, js6)
 
 # ── UI text helpers ───────────────────────────────────────────────────────────
-hdr_lbl   <- "Platy ve st\u00e1tn\u00ed spr\u00e1v\u011b \u2013 p\u0159ehled kapit\u00f3l"
-kap_lbl   <- "Kapit\u00f3la"
-kap_hint  <- "(max 6, Enter nebo klik pro v\u00fdb\u011br)"
-kap_ph    <- "Vyhledat kapit\u00f3lu\u2026"
-chk_lbl   <- paste0("Zobrazit v cen\u00e1ch roku ", this_year)
+hdr_lbl   <- "Platy ve státní správě – přehled kapitol"
+kap_lbl   <- "Kapitola"
+metrika_lbl <- "Metrika"
+metrika_hint <- "(výchozí rok pro výpočet změnových metrik můžeme změnit posununím oranžové čáry)"
+kap_hint  <- "(vyberte až 6: vyhledejte psaním, pak vyberte kliknutím nebo enterem)"
+kat_lbl   <- "Kategorie"
+kat_hint <- "(dvojklikem vypnete ostatní)"
+kap_ph    <- "Vybrat rozpočtovou kapitolu…"
+chk_lbl   <- paste0("Zobrazit v cenách roku ", this_year)
 src_note  <- paste0(
-  "Zdroj: Ministerstvo financ\u00ed \u010cR, St\u00e1tn\u00ed z\u00e1v\u011bre\u010dn\u00fd \u00fa\u010det. ",
-  "Skute\u010dn\u00e9 v\u00fddaje (SKUT). ",
-  "Re\u00e1ln\u00e9 hodnoty v cen\u00e1ch ", this_year, " K\u010d (CPI, \u010cS\u00da)."
+  "Zdroj: Ministerstvo financí ČR, Státní závěrečný účet. ",
+  "Skutečné výdaje (SKUT). ",
+  "Reálné hodnoty v cenách ", this_year, " Kč (CPI, ČSÚ)."
 )
-pct_hint  <- "\u261c P\u0159et\u00e1hn\u011bte svislou \u010d\u00e1ru v grafu pro v\u00fdb\u011br z\u00e1kladn\u00edho roku."
-mzda_note <- "Ministerstva jsou porovn\u00e1v\u00e1na s pr\u016fm\u011brnou mzdou v Praze, ostatn\u00ed s pr\u016fm\u011brnou mzdou v \u010cR."
+pct_hint  <- "☜ Přetáhněte svislou čáru v grafu pro výběr základního roku."
+mzda_note <- "Ministerstva jsou porovnávána s průměrnou mzdou v Praze, ostatní s průměrnou mzdou v ČR."
 
-btn_sal   <- "\u00d8 plat"
-btn_sal_c <- "\u00d8 plat \u2013 v\u00fdvoj"
-btn_cst   <- "Plat. n\u00e1klady"
-btn_cst_c <- "Plat. n\u00e1klady \u2013 v\u00fdvoj"
-btn_avg   <- "Plat vs. trh pr\u00e1ce"
-btn_stf   <- "Zam\u011bstnanci"
-btn_stf_c <- "Zam\u011bstnanci \u2013 v\u00fdvoj"
+btn_sal <- "Průměrný plat"
+btn_cst <- "Platové náklady"
+btn_avg <- "Průměr vs. trh práce"
+btn_stf <- "Počty zaměstnanců"
 
 # ── Assemble HTML ─────────────────────────────────────────────────────────────
 html <- paste0(
@@ -632,8 +677,6 @@ html <- paste0(
 </head>
 <body>
 
-<h4>Prohlíže\u010dka</h4>
-
 <div class="row">
   <div style="flex:1 1 320px">
     <p class="lbl">', kap_lbl, ' <span style="font-weight:400;color:#999">', kap_hint, '</span></p>
@@ -645,25 +688,45 @@ html <- paste0(
     </div>
   </div>
 </div>
-
-<p class="lbl">Kategorie</p>
+<p class="lbl">', kat_lbl, ' <span style="font-weight:400;color:#999">', kat_hint, '</span></p>
 <div id="cat-pills"></div>
 
 <div class="mode-row">
-  <p class="lbl">Zobrazit</p>
+  <p class="lbl">', metrika_lbl, ' <span style="font-weight:400;color:#999">', metrika_hint, '</span></p>
   <div class="mode-controls">
-    <div class="btn-group">
-      <button class="btn mode-btn active" data-mode="sal_level">',  btn_sal,   '</button>
-      <button class="btn mode-btn" data-mode="sal_change">',        btn_sal_c, '</button>
-      <button class="btn mode-btn" data-mode="cost_level">',        btn_cst,   '</button>
-      <button class="btn mode-btn" data-mode="cost_change">',       btn_cst_c, '</button>
-      <button class="btn mode-btn" data-mode="sal_vs_avg">',        btn_avg,   '</button>
-      <button class="btn mode-btn" data-mode="staff">',             btn_stf,   '</button>
-      <button class="btn mode-btn" data-mode="staff_change">',      btn_stf_c, '</button>
+    <div class="metric-col">
+      <span class="metric-col-lbl">', btn_sal, '</span>
+      <div class="btn-row">
+        <button class="btn mode-btn active" data-mode="sal_level">vývoj</button>
+        <button class="btn mode-btn"        data-mode="sal_change">změny</button>
+      </div>
     </div>
-    <label class="chk-label" id="real-chk-wrap">
-      <input type="checkbox" id="real-chk" checked> ', chk_lbl, '
-    </label>
+    <div class="metric-col">
+      <span class="metric-col-lbl">', btn_cst, '</span>
+      <div class="btn-row">
+        <button class="btn mode-btn" data-mode="cost_level">vývoj</button>
+        <button class="btn mode-btn" data-mode="cost_change">změny</button>
+      </div>
+    </div>
+    <div class="metric-col">
+      <span class="metric-col-lbl">', btn_stf, '</span>
+      <div class="btn-row">
+        <button class="btn mode-btn" data-mode="staff">vývoj</button>
+        <button class="btn mode-btn" data-mode="staff_change">změny</button>
+      </div>
+    </div>
+    <div class="metric-col">
+      <span class="metric-col-lbl">Relativní platy</span>
+      <div class="btn-row">
+        <button class="btn mode-btn" data-mode="sal_vs_avg">', btn_avg, '</button>
+      </div>
+    </div>
+    <div class="metric-col">
+      <span class="metric-col-lbl">Očištění o inflaci</span>
+      <label class="chk-label" id="real-chk-wrap" style="align-items:center; padding:6px 0; border:1px solid transparent; border-radius:4px;">
+        <input type="checkbox" id="real-chk" checked> ', chk_lbl, '
+      </label>
+    </div>
   </div>
   <p id="pct-hint">',   pct_hint,  '</p>
   <p id="mzda-note">', mzda_note, '</p>
