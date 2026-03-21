@@ -1048,12 +1048,12 @@ graf_5 <- plot_ly(graf_5_dt,
                   colors = color_map,
                   mode = "line", line = list(width = 7),
                   marker = list(size=5,symbol="circle-dot",line = list(color="Black",width=3)),
-                  text = ~ paste(
-                    " Rok:", rok, "<br>", "Kategorie:", kategorie_2014_cz, "<br>", "Hodnota:",
+                  text = ~ paste0(
+                    " Rok: ", rok, " <br> ", "Kategorie: ", kategorie_2014_cz, " <br> ", "Hodnota: ",
                     format(round(wage_in_thisyr, 0), big.mark = " "), "K\u010D", "<br>",
-                    "Nejv\u011Bt\u0161\u00ED nárůst:", "<br>", max_change_kap, ": ",
-                    max_change * 100, " %", "<br>",
-                    ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst:","Nejv\u011Bt\u0161\u00ED pokles:"), "<br>",
+                    "Nejv\u011Bt\u0161\u00ED nárůst: ", " <br> ", max_change_kap, ": ",
+                    max_change * 100, " %", " <br> ",
+                    ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst: ","Nejv\u011Bt\u0161\u00ED pokles: "), "<br>",
                     min_change_kap, ": ",
                     min_change * 100, " %"),
                   hoverlabel = list(font=list(size=hover_size,family=uni_font)),
@@ -1122,12 +1122,12 @@ graf_A7 <- plot_ly(graf_A7_dt,
                    color = ~kategorie_2014_cz, colors = color_map, mode = "line",
                    line = list(width = 7),
                    marker = list(size=5,symbol = "circle",line = list(width = 3,color="black")),
-                   text = ~ paste(
-                     " Rok:", rok, "<br>", "Kategorie:", kategorie_2014_cz, "<br>", "Hodnota:",
-                     round(cum_pct_wage_change * 100,2), "%","<br>",
-                     "Nejv\u011Bt\u0161\u00ED nárůst:", "<br>", max_change_kap, ": ",
-                     max_change * 100, " %", "<br>",
-                     ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst:","Nejv\u011Bt\u0161\u00ED pokles:"), "<br>",
+                   text = ~ paste0(
+                     " Rok: ", rok, " <br> ", "Kategorie: ", kategorie_2014_cz, " <br> ", "Hodnota: ",
+                     round(cum_pct_wage_change * 100,2), " %"," <br> ",
+                     "Nejv\u011Bt\u0161\u00ED nárůst: ", " <br> ", max_change_kap, ": ",
+                     max_change * 100, " %", " <br> ",
+                     ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst: ","Nejv\u011Bt\u0161\u00ED pokles: "), "<br>",
                      min_change_kap, ": ", min_change * 100, " %", "<br>"
                    ),
                    hoverlabel = list(font=list(size=hover_size,family=uni_font)),
@@ -1200,12 +1200,12 @@ graf_6 <- plot_ly(graf_6_dt,
                   colors = color_map,mode = "line",
                   marker = list(size=5,symbol="circle-dot",
                                 line = list(color="Black",width=3)),
-                  text = ~ paste(
-                    " Rok:", rok, "<br>", "Kategorie:", kategorie_2014_cz, "<br>",
-                    "Nejv\u011Bt\u0161\u00ED nárůst:", "<br>", max_change_kap, ": ",
+                  text = ~ paste0(
+                    " Rok: ", rok, " <br> ", "Kategorie: ", kategorie_2014_cz, " <br> ",
+                    "Nejv\u011Bt\u0161\u00ED nárůst: ", "<br>", max_change_kap, ": ",
                     max_change * 100, " %", "<br>",
-                    ifelse(min_change > 0, "Nejmen\u0161\u00ED nárůst:","Nejv\u011Bt\u0161\u00ED pokles:"),
-                    "<br>", min_change_kap, ": ", min_change * 100, " %", "<br>"
+                    ifelse(min_change > 0, "Nejmen\u0161\u00ED nárůst: ","Nejv\u011Bt\u0161\u00ED pokles: "),
+                    " <br> ", min_change_kap, ": ", min_change * 100, " %", " <br>"
                   ),
                   hoverlabel = list(font=list(size=hover_size,family=uni_font)),
                   hoverinfo = "text",
@@ -1366,9 +1366,9 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
       "<extra></extra>",
       "Rok:", rok, "<br>",
       "Kapitola:", cz_kap_name, "<br>",
-      "Schválený po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Schválený po\u010Det zam\u011Bstnanc\u016F: ",
       format(UPRAV, big.mark = " "), "<br>",
-      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F: ",
       format(SKUT, big.mark = " ")
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
@@ -1432,9 +1432,9 @@ graf_A10 <- dta %>%filter(!is.na(kap_name)) %>%
       "<extra></extra>",
       "Rok:", rok, "<br>",
       "Kapitola:", cz_kap_name, "<br>",
-      "Schválený pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Schválený pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(UPRAV, 0), big.mark = " "), "K\u010D", "<br>",
-      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(SKUT, 0), big.mark = " "), "K\u010D"
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
@@ -1497,9 +1497,9 @@ graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     hovertemplate = ~ paste(
       "<extra></extra>",
       "Rok:", rok, "<br>",
-      "Schválený po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Schválený po\u010Det zam\u011Bstnanc\u016F: ",
       format(UPRAV, big.mark = " "), "<br>",
-      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F: ",
       format(SKUT, big.mark = " ")
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
@@ -1557,9 +1557,9 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     hovertemplate = ~ paste(
       "<extra></extra>",
       "Rok:", rok, "<br>",
-      "Schválený pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Schválený pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(UPRAV, 0), big.mark = " "), "K\u010D", "<br>",
-      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(SKUT, 0), big.mark = " "), "K\u010D"
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
@@ -1623,14 +1623,14 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
     data = ., x = ~prumerny_plat_2003, y = ~ plat_change*100,
     type = "scatter" , mode = "markers",marker=list(size=mrk_min_size),
     color = ~kategorie_2014_cz, colors = color_map,
-    hovertemplate = ~ paste(
+    hovertemplate = ~ paste0(
       "<extra></extra>",
-      "Kapitola: ", cz_kap_name, "<br>",
-      "Pr\u016Fm\u011Brn\u00FD plat 2003 ", ": ",
+      "Kapitola: ", cz_kap_name, " <br> ",
+      "Pr\u016Fm\u011Brn\u00FD plat 2003: ",
       format(round(prumerny_plat_2003, 0), big.mark = " "), "K\u010D", "<br>",
       paste0("Pr\u016Fm\u011Brn\u00FD plat ", this_year_chr), ": ",
       format(round(.data[[paste0("prumerny_plat_", this_year)]], 0), big.mark = " "), "K\u010D", "<br>",
-      "Zm\u011Bna", ": ", format(round(plat_change*100, 1),big.mark = " "), "%"
+      "Zm\u011Bna: ", format(round(plat_change*100, 1),big.mark = " "), " %"
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
   ) %>%
