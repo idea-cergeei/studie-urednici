@@ -160,7 +160,7 @@ color_map_kap <- ifelse(startsWith(kaps, "M"), "dimgray", "cornflowerblue")
 names(color_map_kap) <- kaps
 cols_df <- tibble(labels = names(color_map), color = unname(color_map)) |>
   mutate(color_text = cr_choose_bw(color_map))
-colorspace::swatchplot(cols_df$color)
+# colorspace::swatchplot(cols_df$color)
 
 chart_type <- function(title_y,
                        title_y_share,
@@ -458,7 +458,7 @@ graf_2 <- bar_dt %>% group_by(kategorie_2014_cz)%>%
     color = ~kategorie_2014_cz, colors = color_map,
     #marker=list(size=10, colors=color_map[bar_dt$kategorie_2014_cz]),
     hovertemplate = ~ ifelse(pocet_zamestnancu > 0, paste(
-      "<extra></extra>", "Kategorie:", name, "<br>", "Kapitola:", cz_kap_name, "<br>",
+      "<extra></extra>", "Kategorie:", kategorie_2014_cz, "<br>", "Kapitola:", cz_kap_name, "<br>",
       "Po\u010Det zam\u011Bstnanc\u016F:",
       format(pocet_zamestnancu, big.mark = " "), "<br>", "Celkem za kapitolu: ",
       format(pocet_zamestnancu_agg, big.mark = " ")
@@ -499,7 +499,7 @@ graf_A2 <- plot_ly(bar_dt,
                    color = ~kategorie_2014_cz, colors = color_map,
                    hovertemplate = ~ ifelse(prostredky_na_platy > 0,
                                             paste("<extra></extra>", "Kategorie:",
-                                                  name, "<br>", "Kapitola:",
+                                                  kategorie_2014_cz, "<br>", "Kapitola:",
                                                   cz_kap_name, "<br>", "Platy celkem:",
                                                   format(prostredky_na_platy, big.mark = " "),
                                                   "K\u010D", "<br>", "Celkem za kapitolu: ",
@@ -575,7 +575,7 @@ graf_3 <- bar_dt %>%
           opacity = 1,
           type = "scatter" , mode = "line+markers",
           hovertemplate = ~ ifelse(prostredky_na_platy > 0,
-                                   paste("<extra></extra>", "Kategorie:", name, "<br>",
+                                   paste("<extra></extra>", "Kategorie:", kategorie_2014_cz, "<br>",
                                          "Kapitola:", cz_kap_name, "<br>", "Pr\u016Fm\u011Brn\u00FD plat:",
                                          format(prumerny_plat, big.mark = " "), "K\u010D"),
                                    ""),
@@ -629,7 +629,7 @@ graf_A3 <- bar_dt %>%
   group_map(~ plot_ly(
     data = .,
     hovertemplate = ~  paste(
-      "<extra></extra>", "Zdroj:", name, "<br>", "Kapitola:", cz_kap_name, "<br>",
+      "<extra></extra>", "Kategorie:", kategorie_2014_cz, "<br>", "Kapitola:", cz_kap_name, "<br>",
       "Pr\u016Fm\u011Brn\u00FD plat:",
       format(prumerny_plat, big.mark = " "), "K\u010D", "<br>",
       "Rozd\u00EDl k pr\u016Fm\u011Brn\u00E9 mzd\u011B:",
