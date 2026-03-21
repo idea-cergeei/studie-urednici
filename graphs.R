@@ -216,8 +216,12 @@ chart_type <- function(title_y,
   )
 }
 
-x_ticks <- function(dta){
-  return(seq(min(dta$rok),max(dta$rok),ifelse(min(dta$rok)==2003,3,4)))
+x_ticks <- function(dta, step = 2){
+  start <- min(dta$rok)
+  end   <- max(dta$rok)
+  if (step == 2 && start %% 2 == 0) start <- start + 1  # align to odd years so end year is always labelled
+  if (step  > 2) return(rev(seq(end, start, -step)))     # anchor from end so end year is always labelled
+  return(seq(start, end, step))
 }
 
 # Theme gg ----------------------------------------------------------------
@@ -1067,7 +1071,7 @@ graf_5 <- plot_ly(graf_5_dt,
                 y =0.98,
                 font=title_font),
     xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
-              list(tickvals = x_ticks(graf_5_dt))),
+              list(tickvals = x_ticks(graf_5_dt, step=3))),
     yaxis = c(num_ticks,frame_y,list(title = paste0("<b>Reálné průměrné mzdy (tis. Kč, ceny roku ", this_year, ")</b>"),titlefont = axis_font)),
     margin = mrg2
   ) %>% config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
@@ -1142,7 +1146,7 @@ graf_A7 <- plot_ly(graf_A7_dt,
     #                      font = pozn_font_small),annot_below),
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),
                                      titlefont = axis_font),
-              list(tickvals = x_ticks(graf_A7_dt))),
+              list(tickvals = x_ticks(graf_A7_dt, step=3))),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Změna reálného průměrného platu oproti roku 2004 \n (v % základny roku 2004)</b>",
                                      # tickprefix = "+",
                                      # showtickprefix = "last",
@@ -1217,7 +1221,7 @@ graf_6 <- plot_ly(graf_6_dt,
   # annotations = c(annot_6,list(text = str_wrap("<i>Pozn.: Pro ministerstva a ostatní ústřední orgány použité hodnoty průměrné mzdy v Praze. V ostatních případech je jako reference použitý průměrný plat v národním hospodářství. Hodnota 100% znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství.</i>",wrap_len),
   #                              font = pozn_font_small)),
   xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
-            list(tickvals = x_ticks(graf_6_dt))),
+            list(tickvals = x_ticks(graf_6_dt, step=3))),
   yaxis = c(num_ticks,frame_y,list(title = "<b>Poměr platů státních úředníku a prům. mzdy (v %)</b>",
                                    # ticksuffix = "%",
                                    titlefont = axis_font)),
@@ -1386,7 +1390,7 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
     ) %>%
     layout(margin=c(t=5),
            xaxis = c(list(title= "<b>Rok</b>",titlefont = axis_font,tickangle = -90),
-                     list(tickvals = x_ticks(dta))),
+                     list(tickvals = x_ticks(dta, step=4))),
            yaxis = c(list(title = "",titlefont = axis_font,range = c(-30, 10),
                           ticktext = lapply(seq(-30, 0, 10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
                           tickvals = seq(-30, 0, 10),
@@ -1452,7 +1456,7 @@ graf_A10 <- dta %>%filter(!is.na(kap_name)) %>%
     ) %>%
     layout(margin = mrg7,
            xaxis = list(title = "<b>Rok</b>",titlefont = axis_font,
-                        tickangle = -90,tickvals = x_ticks(dta)),
+                        tickangle = -90,tickvals = x_ticks(dta, step=4)),
            # yaxis = c(list(title = "",titlefont = axis_font,range = c(-30, 10),
            #                ticktext = lapply(seq(-30, 10, 10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
            #                tickvals = seq(-30, 10, 10),
@@ -1517,7 +1521,7 @@ graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     ) %>%
     layout(bargap=0.5,margin = list(t = 100,b=0,l=70),
            xaxis = c(num_ticks,frame_y,title="<b>Rok</b>",titlefont = axis_font,
-                     list(tickvals = x_ticks(dta))),
+                     list(tickvals = x_ticks(dta, step=4))),
            yaxis = c(num_ticks,frame_y,list(title = "<b></b>",titlefont = axis_font,
                                             range = c(-18, 1))),showlegend = F),keep = TRUE) %>%
   subplot(nrows = 2, shareY = F, margin = c(0.07,0.07,0.15,0.15),titleY =T) %>%
@@ -1577,7 +1581,7 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     ) %>%
     layout(bargap=0.5,margin = list(t = 120,b=0,l=70),
            xaxis = c(num_ticks,frame_y,list(title="<b>Rok</b>",titlefont = axis_font),
-                     list(tickvals = x_ticks(dta))),
+                     list(tickvals = x_ticks(dta, step=4))),
            yaxis = c(frame_y,list(title = "",
                                   titlefont = axis_font,
                                   # tickprefix = "+",
@@ -1758,8 +1762,8 @@ graf_A16 <- plot_ly(graf_A16_dt, type = "scatter", mode = "lines+markers",
             name = "Počet zaměstnanců veřejného sektoru") %>%
   layout(
     yaxis = c(num_ticks,frame_y,list(title = "<b>Počet zaměstnanců (v tisících přepočtených osob)</b>",titlefont = axis_font, range = c(0, 1800))),
-    xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),titlefont = axis_font)
-              # list(tickvals = seq(1993,this_year,3))
+    xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),titlefont = axis_font),
+              list(tickvals = seq(1993, max(graf_A16_dt$rok, na.rm=TRUE), 2))
               ),showlegend=FALSE,
     # annotations = c(list(text ='<i>Pozn.:Kategorie: Statistické ročenky České republiky za jednotlivé roky, zde například údaje za rok 2020:</i><br><a href="https://www.czso.cz/csu/czso/10-trh-prace-o73cun42om" target="_blank"><i>https://www.czso.cz/csu/czso/10-trh-prace-o73cun42om</i></a>',
     #                      font = pozn_font_small),annot_below),
