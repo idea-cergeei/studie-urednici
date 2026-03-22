@@ -11,7 +11,9 @@
       "Bash(grep -n \"tocify\\\\|font-weight\\\\|bold\" /Users/petr/cwork/studie-urednici/graphs_mod/styles/*.css)",
       "Bash(grep -rn \"crosstalk.css\\\\|tocify-header\" /Users/petr/cwork/studie-urednici/*.r /Users/petr/cwork/studie-urednici/*.R)",
       "Bash(grep -rn \"crosstalk\\\\|tocify-header\" /Users/petr/cwork/studie-urednici/ --include=*.r --include=*.R --include=*.html --exclude-dir=graphs_mod --exclude-dir=graphs)",
-      "Bash(grep -n \"htmlwidget_container\\\\|Vlastní srovnání\\\\|Počty zaměstnanců\\\\|blue\\\\|#[0-9a-fA-F]\\\\{3,6\\\\}\" /Users/petr/cwork/studie-urednici/graphs_mod/index.html)"
+      "Bash(grep -n \"htmlwidget_container\\\\|Vlastní srovnání\\\\|Počty zaměstnanců\\\\|blue\\\\|#[0-9a-fA-F]\\\\{3,6\\\\}\" /Users/petr/cwork/studie-urednici/graphs_mod/index.html)",
+      "Bash(ls /Users/petr/cwork/studie-urednici/*.R /Users/petr/cwork/studie-urednici/*.r)",
+      "Bash(grep -n \"x_ticks\\\\|graf_A16_dt$rok\" /Users/petr/cwork/studie-urednici/graphs.R)"
     ],
     "deny": []
   }

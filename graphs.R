@@ -40,7 +40,7 @@ dta$kap_name[dta$kap_name == "Mzdr"] <- "MZd"
 dta$kap_name[dta$kap_name == "Mspr"] <- "MSp"
 dta$kategorie_2014_cz <- plyr::revalue(dta$kategorie_2014_cz,c("Státní úředníci"="Státní úředníci (celkem)"))
 
-## ----plotly-utils------------------------------------------------------------------------------------------------
+## plotly-utils------------------------------------------------------------------------------------------------
 
 btnrm <- c("zoomIn2d", "zoomOut2d", "pan2d", "lasso2d", "select2d", "autoScale2d")
 grdclr <- "grey"
@@ -228,7 +228,7 @@ x_ticks <- function(dta, step = 2){
 
 source("theme.R")
 
-## ----tree_prep---------------------------------------------------------------------------------------------------
+## tree_prep---------------------------------------------------------------------------------------------------
 aux <- dta %>%
     filter(!is.na(kategorie_2014_cz), typ_rozpoctu == "SKUT",
       !kategorie_2014 %in% c("Statni sprava", "Statni urednici"),
@@ -304,7 +304,7 @@ tree_data <- tree_data %>% mutate("cost_perc" = cost/sum(cost[which(tree_data$pa
                                   "count_perc_sila" = count/pracovni_sila,
                                   labels = as.character(labels))
 
-## ----priprava_zbytek------------------------------------------------------------------------------------------------
+## priprava_zbytek------------------------------------------------------------------------------------------------
 dta <- dta %>%
   # mutate(kategorie_2014_cz = ifelse(kategorie_2014_cz == "Státní správa",
   #                                   "Státní úředníci celkem",kategorie_2014_cz)) %>%
@@ -336,7 +336,7 @@ bar_dt <- dta %>%
          prumerny_plat_agg = sum(prumerny_plat))
 lty <- c(schvaleny = "dash", skutecnost = "solid")
 
-## ----tree_plot---------------------------------------------------------------------------------------------------
+## tree_plot---------------------------------------------------------------------------------------------------
 root_label <- "Zaměstnanci státu"
 root_color <- "#f0f0f0"
 
@@ -454,7 +454,7 @@ graf_1 <- graf_1 |>
 graf_1
 
 
-## ----counts------------------------------------------------------------------------------------------------------
+## counts------------------------------------------------------------------------------------------------------
 
 graf_2 <- bar_dt %>% group_by(kategorie_2014_cz)%>%
   plot_ly(
@@ -486,7 +486,7 @@ graf_2 <- bar_dt %>% group_by(kategorie_2014_cz)%>%
   onRender(js)
 graf_2
 
-## ----costs, include = F------------------------------------------------------------------------------------------
+## costs, include = F------------------------------------------------------------------------------------------
 
 # annot_below_A2 <- list(align='left',
 #                        xref='paper',
@@ -529,7 +529,7 @@ graf_A2 <- plot_ly(bar_dt,
   onRender(js)
 
 
-## ----mean_costs_ALL----------------------------------------------------------------------------------------------
+## mean_costs_ALL----------------------------------------------------------------------------------------------
 
 kat_means <- bar_dt %>% filter(kategorie_2014_cz != "Státní úředníci (celkem)") %>% group_by(kategorie_2014_cz)%>%
   summarise(prumerny_plat_mean = (sum(prostredky_na_platy) / sum(pocet_zamestnancu)/12)/1e3)
@@ -619,7 +619,7 @@ graf_3 <- bar_dt %>%
 graf_3
 
 bar_dt$width<-0.8
-## ----mean_costs_v2-----------------------------------------------------------------------------------------------
+## mean_costs_v2-----------------------------------------------------------------------------------------------
 graf_A3 <- bar_dt %>%
   group_by(kategorie_2014_cz) %>%
   filter(kategorie_2014 != "Prispevkove organizace") %>%
@@ -665,14 +665,14 @@ graf_A3 <- bar_dt %>%
            title = list(font=title_font,
                         text = str_wrap(paste0("<b>Graf 3b. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu v poměru k průměrné mzdě v ekonomice dle rozp. kapitoly (", this_year, ")</b>"),70),
                         x = 50, y = 0.95), legend = list(x = 50, y = 0.5),
-           showlegend = F
+           showlegend = TRUE
     ), keep = TRUE) %>%
-  subplot(nrows = 2, shareY = F, margin = c(0.07,0.07,0.15,0.15),titleY =T) %>%
+  subplot(nrows = 2, shareY = FALSE, margin = c(0.07,0.07,0.15,0.15),titleY =TRUE) %>%
   config(displaylogo = FALSE, modeBarButtonsToRemove = btnrm,displayModeBar = TRUE) %>%
   onRender(js)
 graf_A3
 
-## ----count_2014--------------------------------------------------------------------------------------------------
+## count_2014--------------------------------------------------------------------------------------------------
 #kapitoly s velkým nárůstem zaměstnanců v období 2011-2012
 zk <- dta %>% filter(rok %in% c(2011,2012)) %>%
   filter(typ_rozpoctu == "SKUT", kategorie_2014 %in% c("Ministerstva")) %>%
@@ -781,7 +781,7 @@ graf_4 <- graf_4_dta_shares %>%
 graf_4
 
 
-## ----cost_2014---------------------------------------------------------------------------------------------------
+## cost_2014---------------------------------------------------------------------------------------------------
 vyvoj_bar <- dta %>%
   filter(typ_rozpoctu == "SKUT",
          kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
@@ -972,7 +972,7 @@ graf_A5 <- vyvoj_bar_shares %>%
 
 graf_A5
 
-## ----cost_cumsum_2014--------------------------------------------------------------------------------------------
+## cost_cumsum_2014--------------------------------------------------------------------------------------------
 aux2 <- dta %>%
   filter(kategorie_2014_cz %in% c("Státní úředníci (celkem)", "Ministerstva",
                                   "Ostatní ústřední", "Neústřední st. správa"),
@@ -1027,7 +1027,7 @@ graf_A6 <- aux2 %>%
   onRender(js)
 
 
-## ----mean_wage_thisyr----------------------------------------------------------------------------------------------
+## mean_wage_thisyr----------------------------------------------------------------------------------------------
 
 graf_5_dt <- dta %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
@@ -1096,7 +1096,7 @@ graf_5
 
 # ggsave("graphs-static/graf-5.png", plot = graf_5_static, width = 8, height = 5, scale = 1.5, bg = "white")
 
-## ----mean_wage_pct_change_thisyr-----------------------------------------------------------------------------------
+## mean_wage_pct_change_thisyr-----------------------------------------------------------------------------------
 graf_A7_dt <- dta %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
                                "Ostatni ustredni"),
@@ -1163,7 +1163,7 @@ graf_A7 <- plot_ly(graf_A7_dt,
 graf_A7
 
 
-## ----wage_to_general---------------------------------------------------------------------------------------------
+## wage_to_general---------------------------------------------------------------------------------------------
 
 annot_6<-list(                       align='left',
                                      xref='paper',
@@ -1188,7 +1188,7 @@ graf_6_dt <- dta %>%
     czsal_all = mean(czsal_all),
     max_change = round(max(mzda_k_nh, na.rm = TRUE), 4),
     min_change_kap = kap_name[which.min(mzda_k_nh)],
-    min_change = round(min(mzda_k_nh, na.rm = T), 4)
+    min_change = round(min(mzda_k_nh, na.rm = TRUE), 4)
   ) %>%
   mutate(wage_to_general = (ifelse(kategorie_2014 %in% c("Ministerstva", "Ostatni ustredni"),
                                    prumerny_plat_agg / phasal_all,
@@ -1252,7 +1252,7 @@ graf_6
 # ggsave("graphs-static/graf-6.png", plot = graf_6_static, width = 8, height = 5, scale = 1.5, bg = "white")
 
 
-## ----thisyr_effect-------------------------------------------------------------------------------------------------
+## thisyr_effect-------------------------------------------------------------------------------------------------
 
 line <- list(
   type = "line",
@@ -1327,7 +1327,7 @@ graf_A8
 
 
 
-## ----prac_mista_skut_rozp_kap------------------------------------------------------------------------------------
+## prac_mista_skut_rozp_kap------------------------------------------------------------------------------------
 kaps_to_exclude <- dta %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
                                "Ostatni ustredni", "Statni urednici")) %>%
@@ -1396,21 +1396,21 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
                           tickvals = seq(-30, 0, 10),
                           tickmode = "array"))),
   keep = TRUE,margin=mrg2) %>%
-  subplot(nrows = 5,shareX = T,shareY = T,titleY = FALSE,titleX=T) %>%
+  subplot(nrows = 5,shareX = TRUE,shareY = TRUE,titleY = FALSE,titleX=TRUE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7a. Rozdíl mezi schváleným a skutečným počtem zaměstnanců (v %)</b>",
                       y = 0.98),
          showlegend = FALSE,
          annotations = list(x = 0 , y = 0.5, text = "<b>Záporné = méně skutečných než schválených</b>",
                             font = list(size = axis_size),
-                            xshift = -65, textangle = 270, showarrow = F,
+                            xshift = -65, textangle = 270, showarrow = FALSE,
                             xref='paper', yref='paper'),
          margin = mrg7) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
 
 
-## ----platy_skut_rozp_kap-----------------------------------------------------------------------------------------
+## platy_skut_rozp_kap-----------------------------------------------------------------------------------------
 kap_order <- ifelse(startsWith(kaps, "M"),1,2)
 names(kap_order) <- kaps
 kap_order <- sort(kap_order)
@@ -1463,21 +1463,21 @@ graf_A10 <- dta %>%filter(!is.na(kap_name)) %>%
            #                tickmode = "array")),
            legend = list(x = 100, y = 0.5)),
   keep = TRUE) %>%
-  subplot(nrows = 5, shareX = TRUE, shareY = T, margin = c(0.01,0.01,0.05,0),
-          titleY = F) %>%
+  subplot(nrows = 5, shareX = TRUE, shareY = TRUE, margin = c(0.01,0.01,0.05,0),
+          titleY = FALSE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7c. Rozdíl v průměrných platech mezi schváleným rozpočtem a skutečností (v %)</b>",
                       y = 0.98), showlegend = FALSE,
          annotations = list(x = 0 , y = 0.5, text = "<b>Kladné = skutečný průměrný plat vyšší než schválený</b>",
                             font = list(size = axis_size),
-                            xshift = -65, textangle = 270, showarrow = F,
+                            xshift = -65, textangle = 270, showarrow = FALSE,
                             xref='paper', yref='paper')) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
 graf_A10
 
 
-## ----prac_mista_skut_rozp----------------------------------------------------------------------------------------
+## prac_mista_skut_rozp----------------------------------------------------------------------------------------
 graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
                                "Ostatni ustredni", "Statni urednici")) %>%
@@ -1523,18 +1523,18 @@ graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
            xaxis = c(num_ticks,frame_y,title="<b>Rok</b>",titlefont = axis_font,
                      list(tickvals = x_ticks(dta, step=4))),
            yaxis = c(num_ticks,frame_y,list(title = "<b></b>",titlefont = axis_font,
-                                            range = c(-18, 1))),showlegend = F),keep = TRUE) %>%
-  subplot(nrows = 2, shareY = F, margin = c(0.07,0.07,0.15,0.15),titleY =T) %>%
+                                            range = c(-18, 1))),showlegend = FALSE),keep = TRUE) %>%
+  subplot(nrows = 2, shareY = FALSE, margin = c(0.07,0.07,0.15,0.15),titleY =TRUE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7b. Rozdíl mezi schváleným a skutečným počtem zaměstnanců (%)</b>",
                       y = 0.98),
          annotations = list(x = 0 , y = 0.5, text = "<b>Záporné = skutečný počet nižší než schválený</b>",
                             font = list(size = axis_size),
-                            xshift = -70, textangle = 270, showarrow = F,
+                            xshift = -70, textangle = 270, showarrow = FALSE,
                             xref='paper', yref='paper')) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
-## ----platy_skut_rozp---------------------------------------------------------------------------------------------
+## platy_skut_rozp---------------------------------------------------------------------------------------------
 graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
                                "Ostatni ustredni", "Statni urednici")) %>%
@@ -1591,21 +1591,21 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
                                   tickvals = seq(0,20,5),
                                   tickmode = "array"
                                   )),
-           showlegend = F),
+           showlegend = FALSE),
   keep = TRUE) %>%
-  subplot(nrows = 2, shareY = F, margin = c(0.07,0.07,0.15,0.15),titleY =T) %>%
+  subplot(nrows = 2, shareY = FALSE, margin = c(0.07,0.07,0.15,0.15),titleY =TRUE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7d. Rozdíl v průměrných platech mezi schváleným rozpočtem a skutečností</b>",
                       y = 0.98), annotations = list(x = 0 , y = 0.5, text = "<b>Kladné = skutečný průměrný plat vyšší než schválený</b>",
                                                     font = list(size = axis_size),
                                                     xshift = -70, textangle = 270,
-                                                    showarrow = F,
+                                                    showarrow = FALSE,
                                                     xref='paper', yref='paper')) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
 
 
-## ----Scatter plat narust-----------------------------------------------------------------------------------------
+## Scatter plat narust-----------------------------------------------------------------------------------------
 
 infl <- dta %>% filter(rok == 2003) %>% select(base_thisyr) %>% first() %>% pull()
 graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
@@ -1647,7 +1647,7 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
       font = list(family = uni_font, size = axis_size),
       xanchor = "center",
       yanchor = "top",
-      showarrow = F
+      showarrow = FALSE
     ) %>%
     layout(
       yaxis = c(num_ticks,frame_y,list(title = "Nárůst průměrného platu od roku 2003",titlefont = axis_font,
@@ -1657,28 +1657,28 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
                                        tickmode = "array",
                                        ticksuffix = "%")),
       xaxis = c(num_ticks,frame_y,list(title = "Pr\u016Fm\u011Brn\u00FD plat v roce 2003 (tisíce Kč)", titlefont = axis_font,range = c(15, 35)*1000)),
-      legend = list(x = 100, y = 0.5), showlegend = F) %>%
+      legend = list(x = 100, y = 0.5), showlegend = FALSE) %>%
     add_text(text = ~ str_wrap(kap_name, 10), textposition = "bottom left",
              textfont = list(size = kat_tick_size)),keep = TRUE) %>%
-  subplot(nrows = 2, titleY = F, titleX = F,margin=c(0.05,0.05,0.1,0.1)) %>%
+  subplot(nrows = 2, titleY = FALSE, titleX = FALSE,margin=c(0.05,0.05,0.1,0.1)) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 8. Nárůst průměrných platů od roku 2003 (v %)</b>",
                       xaxis = list(title = "",titlefont = axis_font), y = 0.98), margin=c(t=50,l=90,b=80),
          annotations = list(list(x = 0 , y = 0.5, text = "<b>Nárůst průměrného platu od roku 2003</b>",
                                  font = axis_font,
-                                 xshift = -80, textangle = 270, showarrow = F,
+                                 xshift = -80, textangle = 270, showarrow = FALSE,
                                  xref='paper', yref='paper'),
                             list(y = 0 , x = 0.5, text = "<b>Průměrný plat v roce 2003 (Kč)</b>",
                                  font = axis_font,
                                  yshift = -70,
-                                 textangle = 0, showarrow = F,
+                                 textangle = 0, showarrow = TRUE,
                                  xref='paper', yref='paper'
                             ))) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
 
 
-## ----graf_A14----------------------------------------------------------------------------------------------------
+## graf_A14----------------------------------------------------------------------------------------------------
 graf_A14_dta <- dta %>%
   filter(typ_rozpoctu == "SKUT",
          kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
@@ -1745,7 +1745,7 @@ graf_A14 <- graf_A14_dta_shares %>%
   style(visible = FALSE, traces = 4:9)
 
 
-## ----graf_A16----------------------------------------------------------------------------------------------------
+## graf_A16----------------------------------------------------------------------------------------------------
 pubsec <- read_csv("./data-input/ver-sektor-csu-rocenka.csv")
 graf_A16_dt <- plyr::rbind.fill(pubsec,data.frame(rok = 1993))
 
@@ -1775,7 +1775,7 @@ graf_A16 <- plot_ly(graf_A16_dt, type = "scatter", mode = "lines+markers",
 graf_A16
 
 
-## ----graphs, eval = FALSE, include = FALSE-----------------------------------------------------------------------
+## graphs, eval = FALSE, include = FALSE-----------------------------------------------------------------------
 graf_list<-list(
   graf_1,
   graf_2,
