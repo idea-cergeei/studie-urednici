@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__r-acquaint__btw_tool_files_read_text_file",
+      "Bash(Rscript:*)",
+      "mcp__r-acquaint__btw_tool_env_describe_environment",
+      "mcp__r-acquaint__btw_tool_session_check_package_installed",
+      "Bash(grep -v \"^$\")",
+      "Bash(tr ';' '\\\\n')",
+      "Bash(ls /Users/petr/cwork/studie-urednici/graphs/*.html)",
+      "Bash(grep -n \"tocify\\\\|font-weight\\\\|bold\" /Users/petr/cwork/studie-urednici/graphs_mod/styles/*.css)",
+      "Bash(grep -rn \"crosstalk.css\\\\|tocify-header\" /Users/petr/cwork/studie-urednici/*.r /Users/petr/cwork/studie-urednici/*.R)",
+      "Bash(grep -rn \"crosstalk\\\\|tocify-header\" /Users/petr/cwork/studie-urednici/ --include=*.r --include=*.R --include=*.html --exclude-dir=graphs_mod --exclude-dir=graphs)",
+      "Bash(grep -n \"htmlwidget_container\\\\|Vlastní srovnání\\\\|Počty zaměstnanců\\\\|blue\\\\|#[0-9a-fA-F]\\\\{3,6\\\\}\" /Users/petr/cwork/studie-urednici/graphs_mod/index.html)"
+    ],
+    "deny": []
+  }
+}

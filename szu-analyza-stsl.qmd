@@ -25,7 +25,7 @@ library(ispv)
 library(ptrr)
 library(readr)
 library(forcats)
-library(arrow)
+library(nanoparquet)
 library(lubridate)
 library(purrr)
 ```

@@ -35,11 +35,30 @@ template <- readLines("www/template_long.html")
 keywords <- data.table::fread("keywords.csv")
 keywords_template <- readLines("www/keywords_template.html")
 
+# use config year to replace static '2024' in textual CSV fields
+cfg <- config::get()
+this_year <- if (!is.null(cfg$rok)) cfg$rok else if (!is.null(cfg$this_year)) cfg$this_year else 2024
+this_year_chr <- as.character(this_year)
+
+# normalize year mentions in loaded CSV/text data
+if (nrow(keywords) > 0 && "keyword_definition" %in% names(keywords)) {
+  keywords[, keyword_definition := gsub("\\{YEAR\\}", this_year_chr, keyword_definition)]
+}
+
+annotations <- data.table::fread("annotations.csv")
+annotations_template <- readLines("www/annotation_template.html")
+if (nrow(annotations) > 0 && "annotation_text" %in% names(annotations)) {
+  annotations[, annotation_text := gsub("\\{YEAR\\}", this_year_chr, annotation_text)]
+}
+
 annotations <- data.table::fread("annotations.csv")
 annotations_template <- readLines("www/annotation_template.html")
 
 text_par <- data.table::fread("text.csv")
 text_template <- readLines("www/text_template.html")
+if (nrow(text_par) > 0 && "text" %in% names(text_par)) {
+  text_par[, text := gsub("\\{YEAR\\}", this_year_chr, text)]
+}
 
 script_template <- readLines("www/template_script.js")
 
@@ -52,9 +71,11 @@ lfiles <- lfiles[grepl("html",lfiles) & !grepl("mod",lfiles)]
 lfiles <- lfiles[order(as.numeric(gsub("[^0-9]","",lfiles)))]
 
 graph_titles <- data.table::fread("graph_titles.csv")
-tooltips <- readLines("graphs_mod/js/tooltips.js")
-tooltips <- c(sapply(gsub("\\.html$","",lfiles),function(g)gsub("id",g,tooltips)))
-writeLines(tooltips,"graphs_mod/js/tooltips.js")
+if (length(lfiles) > 0) {
+  tooltips <- readLines("graphs_mod/js/tooltips.js")
+  tooltips <- unlist(sapply(gsub("\\.html$","",lfiles),function(g)gsub("id",g,tooltips)))
+  writeLines(tooltips,"graphs_mod/js/tooltips.js")
+}
 
 abbr_link <- "<a href=\\\\\"https://ideaapps.cerge-ei.cz/zamestnancistatu/pdf/zkratky.pdf\\\\\">seznam zkratek</a>"
 
@@ -132,6 +153,10 @@ toc_list <- c(
   '<li class="tocify-item" style="display: block;">Doplňkové grafy</li>',
   sapply(sort(unique(graph_titles$graph_group[graph_titles$graph_cat=="dodat"])),function(group){
     group_graphs(group)
+  }),
+  '<li class="tocify-item" style="display: block;">Srovnejte si sami</li>',
+  sapply(sort(unique(graph_titles$graph_group[graph_titles$graph_cat=="prohliz"])),function(group){
+    group_graphs(group)
   })
   ,'</ul>')
 # sapply(lfiles[grepl("A",lfiles,ignore.case = F)],function(li){
@@ -141,13 +166,14 @@ toc_list <- c(
 names(toc_list) <- c("open",
                      "hlav",paste("hlav",unique(graph_titles$graph_group[graph_titles$graph_cat=="hlav"]),sep="_"),
                      "dodat",paste("dodat",unique(graph_titles$graph_group[graph_titles$graph_cat=="dodat"]),sep="_"),
+                     "prohliz",paste("prohliz",unique(graph_titles$graph_group[graph_titles$graph_cat=="prohliz"]),sep="_"),
                      "close")
 
 gr_content_all <- vector(mode = "character")
 extra_script1_all <- vector(mode = "character")
 extra_script2_all <- vector(mode = "character")
 
-graph_titles <- graph_titles[order(factor(graph_titles$graph_cat,levels=c("hlav","dodat")),graph_titles$graph_group),]
+graph_titles <- graph_titles[order(factor(graph_titles$graph_cat,levels=c("hlav","dodat","prohliz")),graph_titles$graph_group),]
 
 lfiles <- graph_titles$graph
 
@@ -171,8 +197,9 @@ for(i in inx){
                                      "<h3 style='font-size:0px;margin:1px'>",title_sub,"</h3>"),
                               paste0("<h3 style='font-size:0px;margin:1px'>",title_sub,"</h3>")),
                               paste0("<h2 style='font-size:0px;margin:1px'>",title_short,"</h2>"))
+  cat_h1_label <- switch(gr_cat, hlav = "Hlavní grafy", dodat = "Doplňkové grafy", prohliz = "Srovnejte si sami", gr_cat)
   header_toc <- ifelse(which(graph_titles$graph[graph_titles$graph_cat==gr_cat]==gr_id)==1,
-                       paste0("<h1 style='font-size:0px!important;margin:1px'>",ifelse(gr_cat=="hlav","Hlavní grafy","Doplňkové grafy"),"</h1>",header_toc),
+                       paste0("<h1 style='font-size:0px!important;margin:1px'>",cat_h1_label,"</h1>",header_toc),
                        header_toc)
   header_page <- graph_titles$title[graph_titles$graph==gr_id]
   # copy_link <- paste0('<div style="height:0px"><a href="" id="copy-link-',gr_id,'" style="color:#333333!important;position:relative;z-index:999;"><i class="fa-solid fa-link"></i></a></div>')
@@ -197,27 +224,46 @@ for(i in inx){
                  gr_text,text_template[(grep("div",text_template)[2]):length(text_template)])
   }
 
-  gr <- readLines(file.path("graphs", f))
-
-  gr_content <- gr[grepl('id="htmlwidget',gr) | grepl('type="application',gr)]
-  gr_content <- gsub('seznam zkratek',abbr_link,gr_content)
-
-  widget_id <- gsub('.*(htmlwidget-[0-9a-z]+)\".*',"\\1",gr_content[grepl('id="htmlwidget-',gr_content)])
-
-  gr_content <- gsub('id=\\"htmlwidget_container\\"',
-                     paste0('id="',title_url,'" class="htmlwidget_container" style="height:100%"'),
-                     gr_content)
-  gr_content <- gsub('height\\:400px','height:100%; min-height:700px"',gr_content)
-
-  # extra_script1 <- paste0('window.addEventListener("DOMContentLoaded", placeLegendAnnot("',gr_id,'"), false);')
-  extra_script1 <- c(paste0('window.addEventListener("resize", function(e) {placeLegendAnnot("',gr_id,'","',widget_id,'")});'),
-                     paste0('window.addEventListener("DOMContentLoaded", placeLegendAnnot("',gr_id,'","',widget_id,'"), false);'))
-  # extra_script1 <- ""
-  # extra_script2 <- gsub("graph_id",gr_id,script_template)
   extra_script2 <- ""
 
-  if(!(gr_id %in% c("graf_A3","graf_A9","graf_A10","graf_A11","graf_A12","graf_A13"))){
-    extra_script1_all <- append(extra_script1_all,extra_script1)
+  if (gr_id == "prohlizecka") {
+    if (file.exists("dashboard.html")) {
+      file.copy("dashboard.html", "graphs_mod/prohlizecka.html", overwrite = TRUE)
+    } else {
+      warning("dashboard.html not found \u2014 run dashboard.R first.")
+    }
+    header_toc <- paste0("<h1 style='font-size:0px!important;margin:1px'>", cat_h1_label, "</h1>")
+    gr_content <- c(
+      paste0('<div id="', title_url, '" class="htmlwidget_container" style="height:100%">'),
+      paste0('<div style="font-family:Arial;font-size:25px;font-weight:bold;color:mediumblue;',
+             'padding:10px 10px 0 10px;">',
+             header_page, '</div>'),
+      paste0('<div style="width:100%; height:95vh; min-height:700px;">',
+             '<iframe src="prohlizecka.html" style="width:100%; height:100%; border:none;"',
+             ' title="Vlastní srovnání platů státních zaměstnanců"></iframe>',
+             '</div>')
+    )
+  } else {
+    gr <- readLines(file.path("graphs", f))
+
+    gr_content <- gr[grepl('id="htmlwidget',gr) | grepl('type="application',gr)]
+    gr_content <- gsub('seznam zkratek',abbr_link,gr_content)
+
+    widget_id <- gsub('.*(htmlwidget-[0-9a-z]+)\".*',"\\1",gr_content[grepl('id="htmlwidget-',gr_content)])
+
+    gr_content <- gsub('id=\\"htmlwidget_container\\"',
+                       paste0('id="',title_url,'" class="htmlwidget_container" style="height:100%"'),
+                       gr_content)
+    gr_content <- gsub('height\\:400px','height:100%; min-height:700px"',gr_content)
+
+    # extra_script1 <- paste0('window.addEventListener("DOMContentLoaded", placeLegendAnnot("',gr_id,'"), false);')
+    extra_script1 <- c(paste0('window.addEventListener("resize", function(e) {placeLegendAnnot("',gr_id,'","',widget_id,'")});'),
+                       paste0('window.addEventListener("DOMContentLoaded", placeLegendAnnot("',gr_id,'","',widget_id,'"), false);'))
+    # extra_script1 <- ""
+
+    if(!(gr_id %in% c("graf_A3","graf_A9","graf_A10","graf_A11","graf_A12","graf_A13"))){
+      extra_script1_all <- append(extra_script1_all,extra_script1)
+    }
   }
   extra_script2_all <- append(extra_script2_all,extra_script2)
 
@@ -239,7 +285,3 @@ gr_all <- unlist(lapply(as.list(template), function(x)
 
 
 writeLines(gr_all,paste0("graphs_mod/index.html"))
-
-system("scp -r graphs_mod/* root@194.182.65.144:/srv/shiny-server/zamestnancistatu")
-
-unlink(x = paste0("graphs/",grep("graf",list.files("graphs"),value = T)))

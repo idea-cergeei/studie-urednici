@@ -7,7 +7,7 @@ library(stringr)
 library(ggplot2)
 library(lubridate)
 library(forcats)
-library(arrow)
+library(nanoparquet)
 
 options(scipen = 100)
 

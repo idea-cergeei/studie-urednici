@@ -9,6 +9,10 @@ library(janitor)
 library(czso)
 source(here::here("R", "listSheets.R"))
 source(here::here("R", "divideMain.R"))
+library(config)
+cfg <- config::get()
+# derive target year from config; fallback to 2024 if absent
+this_year <- if (!is.null(cfg$rok)) cfg$rok else 2024
 options("scipen" = 100, "digits" = 4)
 # readr::read_csv("http://vdb.czso.cz/pll/eweb/lkod_ld.seznam")
 # catalogue <- czso_get_catalogue()
@@ -18,9 +22,15 @@ options("scipen" = 100, "digits" = 4)
 #   select(dataset_id, title, description)
 
 # load new data
-input <- read_excel_allsheets("./data-input/data_2023.xlsx")
+input   <- read_excel_allsheets("./data-input/data_2023.xlsx")
 input21 <- read_excel_allsheets("./data-input/Data_2022.xls")
-input24 <- read_excel_allsheets("./data-input/Data_2024.xlsx")
+# allow the config file to override the path for the current year's workbook
+input_path <- if (!is.null(cfg$data_path) && nzchar(cfg$data_path)) {
+  cfg$data_path
+} else {
+  paste0("./data-input/Data_", this_year, ".xlsx")
+}
+input_thisyr <- read_excel_allsheets(input_path)
 
 # load old data
 chapters_old <- read.csv("./data-input/legacy/chapters_ALL.csv", encoding = "UTF-8")
@@ -34,6 +44,32 @@ main_sheets <- c("ROPO CELKEM", "OSS (RO)", "PO", "OOSS", "STATNI SPRAVA", "UO",
 sub_sheets <- c("ZAMCI_5011_platy", "VOJACI_5012", "ST_ZAMCI_5013", "ST_ZASTUP_5014", "UC_S_5022")
 jednotl_sheets <- c("SOBCPO  JEDNOTLIVY", "OSS SS - jednotl")
 
+main_names_thisyr <- vector(mode = "list")
+polozky_names_thisyr <- vector(mode = "list")
+jednotl_names_thisyr <- vector(mode = "list")
+
+for (name in names(input_thisyr)) {
+  print(name)
+  if (name %in% main_sheets) {
+    main_names_thisyr <- append(main_names_thisyr, input_thisyr[name])
+  } else if (name %in% sub_sheets) {
+    polozky_names_thisyr <- append(polozky_names_thisyr, input_thisyr[name])
+  } else if (name %in% jednotl_sheets) {
+    jednotl_names_thisyr <- append(jednotl_names_thisyr, input_thisyr[name])
+  }
+}
+# load excel data into clean dataframe
+
+# main sheets
+section_names <- c(
+  "Rozpocet_a_rok", "full_name", "kap_num", "kap_name", "Prostredky na platy a OPPP", "OPPP", "Prostredky na platy",
+  "Pocet zamestnancu", "Prumerný plat", "Poradí prumerného platu", "Schv ke schv", "Skut k rozp", "Skut ke skut"
+)
+
+main_df <- data.frame(matrix(ncol = length(section_names), nrow = 0))
+colnames(main_df) <- section_names
+
+## populate lists for the previous-year data ("input") so main_names is defined
 main_names <- vector(mode = "list")
 polozky_names <- vector(mode = "list")
 jednotl_names <- vector(mode = "list")
@@ -49,18 +85,7 @@ for (name in names(input)) {
   }
 }
 
-# load excel data into clean dataframe
-
-# main sheets
-section_names <- c(
-  "Rozpocet_a_rok", "full_name", "kap_num", "kap_name", "Prostredky na platy a OPPP", "OPPP", "Prostredky na platy",
-  "Pocet zamestnancu", "Prumerný plat", "Poradí prumerného platu", "Schv ke schv", "Skut k rozp", "Skut ke skut"
-)
-
-main_df <- data.frame(matrix(ncol = length(section_names), nrow = 0))
-colnames(main_df) <- section_names
-
-for (i in 1:length(main_names)) {
+for (i in seq_along(main_names)) {
   res <- divide_sections(main_names[[i]], names(main_names[i]), section_names)
   main_df <- rbind(main_df, res)
 }
@@ -81,37 +106,24 @@ for (name in names(input21)) {
 }
 
 
-main_names24 <- vector(mode = "list")
-polozky_names24 <- vector(mode = "list")
-jednotl_names24 <- vector(mode = "list")
-
-for (name in names(input24)) {
-  print(name)
-  if (name %in% main_sheets) {
-    main_names24 <- append(main_names24, input24[name])
-  } else if (name %in% sub_sheets) {
-    polozky_names24 <- append(polozky_names24, input24[name])
-  } else if (name %in% jednotl_sheets) {
-    jednotl_names24 <- append(jednotl_names24, input24[name])
-  }
-}
+## (main_names_thisyr already populated above by reading input_thisyr)
 
 # load excel data into clean dataframe
 
 main_df21 <- data.frame(matrix(ncol = length(section_names), nrow = 0))
 colnames(main_df21) <- section_names
 
-for (i in 1:length(main_names21)) {
+for (i in seq_along(main_names21)) {
   res21 <- divide_sections(main_names21[[i]], names(main_names21[i]), section_names)
   main_df21 <- rbind(main_df21, res21)
 }
 
-main_df24 <- data.frame(matrix(ncol = length(section_names), nrow = 0))
-colnames(main_df24) <- section_names
+main_df_thisyr <- data.frame(matrix(ncol = length(section_names), nrow = 0))
+colnames(main_df_thisyr) <- section_names
 
-for (i in 1:length(main_names24)) {
-  res24 <- divide_sections(main_names24[[i]], names(main_names21[i]), section_names)
-  main_df24 <- rbind(main_df24, res24)
+for (i in seq_along(main_names_thisyr)) {
+  res24 <- divide_sections(main_names_thisyr[[i]], names(main_names_thisyr[i]), section_names)
+  main_df_thisyr <- rbind(main_df_thisyr, res24)
 }
 
 # sheets with various types of polozky
@@ -130,13 +142,13 @@ jednotl_section_names <- c(
   "Pocet zamestnancu", "Prumerný plat", "Poradí prumerného platu", "Schv ke schv", "Skut k rozp", "Skut ke skut"
 )
 jednotl_df <- data.frame(matrix(ncol = length(jednotl_section_names), nrow = 0))
-for (i in 1:length(jednotl_names)) {
+for (i in seq_along(jednotl_names)) {
   res <- divide_jednotl(jednotl_names[[i]], names(jednotl_names[i]), jednotl_section_names)
   jednotl_df <- rbind(jednotl_df, res)
 }
 
 jednotl_df21 <- data.frame(matrix(ncol = length(jednotl_section_names), nrow = 0))
-for (i in 1:length(jednotl_names21)) {
+for (i in seq_along(jednotl_names21)) {
   res21 <- divide_jednotl(jednotl_names21[[i]], names(jednotl_names21[i]), jednotl_section_names)
   jednotl_df21 <- rbind(jednotl_df21, res21)
 }
@@ -156,25 +168,25 @@ summary_names <- c(
 )
 
 summary <- divide_summary(input[[length(input)]], "Summary", summary_names)
-summary21 <- divide_summary(input[[length(input21)]], "Summary", summary_names)
-summary24 <- divide_summary(input[[length(input24)]], "Summary", summary_names)
+summary21 <- divide_summary(input21[[length(input21)]], "Summary", summary_names)
+summary_thisyr <- divide_summary(input_thisyr[[length(input_thisyr)]], "Summary", summary_names)
 
 main_df <- bind_rows(
   main_df,
   main_df21 |> filter(rok == 2021),
-  main_df24 |> filter(rok == 2024)
+  main_df_thisyr |> filter(rok %in% as.character(c(2024, this_year)))
   )
 
 jednotl_df <- bind_rows(
   jednotl_df,
-  jednotl_df21 |> filter(rok == 2021)
-  # jednotl_df24 |> filter(rok == 2024)
+  jednotl_df21 |> filter(rok == 2021),
+  # jednotl_df_thisyr |> filter(rok == as.character(c(2024, this_year)))
   )
 
 summary <- bind_rows(
   summary,
   summary21 |> filter(rok == 2021),
-  summary24 |> filter(rok == 2024)
+  summary_thisyr |> filter(rok %in% as.character(c(2024, this_year)))
   )
 
 # now we will extend the new datasets with data from previous years
@@ -330,6 +342,14 @@ wages_later <- czso_get_table("110080", force_redownload = TRUE) %>%
   rename("czsal_all" = 2, "phasal_all" = 3)
 
 
+#### Only as a temp patch before official stats are released
+
+wages_lastyr <- wages_later |> 
+  filter(rok == max(rok)) |> 
+  mutate(czsal_all = czsal_all * 1.072, 
+    phasal_all = phasal_all * 1.096,
+    rok = "2025")
+
 wages_early <- chapters_old %>%
   select(Year, czsal_all, phasal_all) %>%
   unique() %>%
@@ -339,6 +359,7 @@ wages_benchmark <- wages_early %>%
   filter(Year < 2011) %>%
   rename("rok" = Year) %>%
   rbind(wages_later) %>%
+  bind_rows(wages_lastyr) |> 
   mutate(rok = as.integer(rok))
 
 
@@ -350,7 +371,7 @@ df_infl <- data.frame(
   inflation = c(0.1, 2.8, 1.9, 2.5, 2.8, 6.3, 1.0, 1.5, 1.9, 3.3, 1.4, 0.4, 0.3, 0.7, 2.5, 2.1, 2.8, 3.2) / 100 + 1
 )
 
-df_infl <- czso_get_table("010022", dest_dir = "data-input/czso", force_redownload = T) %>%
+df_infl <- czso_get_table("010022", dest_dir = "data-input/czso", force_redownload = TRUE) %>%
   filter(is.na(ucel_txt)) %>%
   filter(casz_txt == "stejné období předchozího roku") %>%
   group_by(rok) %>%
@@ -358,12 +379,12 @@ df_infl <- czso_get_table("010022", dest_dir = "data-input/czso", force_redownlo
   select(contains("obdobi"),rok, hodnota) %>%
   mutate(inflation=hodnota/100)%>%
   arrange(rok)%>%
-  filter(rok>=2003,rok<=2024)
+  filter(rok>=2003,rok<=this_year)
 
 df_infl$base_2003 <- 0
-df_infl$base_2024 <- 0
+df_infl$base_thisyr <- 0
 df_infl[1, "base_2003"] <- 1
-df_infl[nrow(df_infl), "base_2024"] <- 1
+df_infl[nrow(df_infl), "base_thisyr"] <- 1
 
 
 for (i in 2:nrow(df_infl)) {
@@ -372,7 +393,7 @@ for (i in 2:nrow(df_infl)) {
 
 
 for (i in (nrow(df_infl) - 1):1) {
-  df_infl[i, "base_2024"] <- df_infl[i + 1, "base_2024"] * df_infl[i+1, "inflation"]
+  df_infl[i, "base_thisyr"] <- df_infl[i + 1, "base_thisyr"] * df_infl[i+1, "inflation"]
 }
 
 main_df_recat <- main_df %>%
@@ -390,7 +411,7 @@ main_df_urednici <- main_df_recat |>
   filter(name %in% c("UO", "OSS_SS")) |>
   group_by(rok, typ_rozpoctu, kap_name, kap_num, full_kap_name, cz_kap_name) |>
   summarise(across(.cols = c(prostredky_na_platy, oppp, prostredky_na_platy_a_oppp,
-                             pocet_zamestnancu), .fns = ~sum(.x, na.rm = T)),
+                             pocet_zamestnancu), .fns = ~sum(.x, na.rm = TRUE)),
             prumerny_plat = prostredky_na_platy / pocet_zamestnancu / 12) |>
   mutate(kategorie_2014 = "Statni urednici")
 
@@ -407,10 +428,10 @@ main_df_update <- bind_rows(main_df_recat,
   mutate(mzda_prumer_skut_ke_skut = (prumerny_plat / lag(prumerny_plat) - 1)) %>%
   mutate(plat_base = prostredky_na_platy[1]) %>%
   mutate(cum_pct_wage_change_real = (prostredky_na_platy / base_2003 - plat_base) / plat_base) %>%
-  mutate(wage_in_2024 = prumerny_plat * base_2024) %>%
-  mutate(wage_in_2024_change = wage_in_2024 / lag(wage_in_2024) - 1) %>%
-  mutate(wage_base = wage_in_2024[1]) %>%
-  mutate(cum_pct_wage_change = (wage_in_2024 - wage_base) / wage_base) %>%
+  mutate(wage_in_thisyr = prumerny_plat * base_thisyr) %>%
+  mutate(wage_in_thisyr_change = wage_in_thisyr / lag(wage_in_thisyr) - 1) %>%
+  mutate(wage_base = wage_in_thisyr[1]) %>%
+  mutate(cum_pct_wage_change = (wage_in_thisyr - wage_base) / wage_base) %>%
   mutate(wage_to_general = (ifelse(kategorie_2014 %in% c("Ministerstva", "Ostatni ustredni"), prumerny_plat / phasal_all, prumerny_plat / czsal_all))) %>%
   mutate(mzda_k_nh = wage_to_general / lag(wage_to_general) - 1) %>%
   ungroup() %>%
@@ -419,8 +440,8 @@ main_df_update <- bind_rows(main_df_recat,
 
 
 
-main_df_update %>% filter( typ_rozpoctu == "SCHV", rok == 2024) %>% select("kategorie_2014") %>% unique()
-main_df %>% filter( typ_rozpoctu == "SCHV", rok == 2024) %>% select(kap_num,name) %>% unique()
+main_df_update %>% filter( typ_rozpoctu == "SCHV", rok == this_year) %>% select("kategorie_2014") %>% unique()
+main_df %>% filter( typ_rozpoctu == "SCHV", rok == this_year) %>% select(kap_num,name) %>% unique()
 # save all dataframes
 saveRDS(main_df_update, file = "./data-interim/sections.rds")
 # saveRDS(jednotl_df, file = "./data-interim/jednotlivci.rds")

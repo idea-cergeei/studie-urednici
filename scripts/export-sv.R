@@ -1,7 +1,7 @@
 library(dplyr)
 library(writexl)
 
-dta <- arrow::read_parquet("data-export/data_all.parquet")
+dta <- nanoparquet::read_parquet("data-export/data_all.parquet")
 
 dta |>
   filter(faze_rozpoctu == "SKUT", rok == 2022, kategorie == "UO") |>

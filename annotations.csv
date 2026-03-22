@@ -3,16 +3,16 @@
 "graf_2","Pozn.: Ministerstvo školství, mládeže a tělovýchovy zkresluje graf vzhledem k zahrnutí učitelů v kategorii “Příspěvkové organizace”. Lze odfiltrovat kliknutím na patřičnou položku legendy."
 "graf_3",
 "graf_4","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
-"graf_5","Pozn.: Reálné hrubé měsíční platy jsou uvedeny v cenách roku 2023 a vypočteny podle indexů spotř. cen (<a href='https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen' target='_blank'>datová sada ČSÚ 010022 Indexy spotř. cen</a>)."
+"graf_5","Pozn.: Reálné hrubé měsíční platy jsou uvedeny v cenách roku {YEAR} a vypočteny podle indexů spotř. cen (<a href='https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen' target='_blank'>datová sada ČSÚ 010022 Indexy spotř. cen</a>)."
 "graf_6","Pozn.: Pro ministerstva a ostatní ústřední orgány srovnáváme s průměrnou mzdou v Praze. V ostatních případech srovnáváme s průměrnou mzdou v národním hospodářství. Údaje o průměrných mzdách čerpáme z datové sady ČSÚ <a href='https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich' target='_blank'>Průměrná hrubá měsíční mzda a medián mezd v krajích</a>.  Hodnota 100 % znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství."
 "graf_A1","Pozn.: Pro bližší detail lze jednotlivé nadřazené kategorie rozkliknout."
 "graf_A2","Pozn.: Ministerstvo školství, mládeže a tělovýchovy zkresluje graf vzhledem k zahrnutí učitelů v kategorii “Příspěvkové organizace”. Lze odfiltrovat kliknutím na patřičnou položku legendy."
 "graf_A3",
-"graf_A4","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce 2024 celkem cca 14 tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
-"graf_A5","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce 2024 celkem cca 14 tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
-"graf_A6","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce 2024 celkem cca 14 tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
-"graf_A7","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce 2024 celkem cca 14 tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
-"graf_A8","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce 2024 celkem cca 14 tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
+"graf_A4","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce {YEAR} celkem cca XXX tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
+"graf_A5","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce {YEAR} celkem cca XXX tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
+"graf_A6","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce {YEAR} celkem cca XXX tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
+"graf_A7","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce {YEAR} celkem cca XXX tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
+"graf_A8","Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí (v roce {YEAR} celkem cca XXX tis. úvazků), viz <a href='pdf/metodologie.pdf' target='_blank'>Data a metodologie.</a>"
 "graf_A9",
 "graf_A10",
 "graf_A11",
@@ -22,3 +22,4 @@
 "graf_A16","Zdroj: Statistické ročenky České republiky za jednotlivé roky, zde například údaje za rok 2021:<br><a href='https://www.czso.cz/csu/czso/10-trh-prace-0k6nuwq1sq' target='_blank'>https://www.czso.cz/csu/czso/10-trh-prace-0k6nuwq1sq</a>"
 "graf_A15","Zdroj: vlastní výpočet z dat ČSÚ (sady <a href='https://www.czso.cz/csu/czso/zamestnanci-a-prumerne-hrube-mesicni-mzdy-podle-odvetvi' target='_blank'>110079 Zaměstnanci a průměrné hrubé měsíční mzdy podle odvětví</a> a <a href='https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen' target='_blank'>010022 Indexy spotř. cen)</a>"
 "graf_A17","Pozn.: Změna v roce 2012 způsobena změnou klasifikace některých zaměstnanců MV a MZV"
+"prohlizecka",

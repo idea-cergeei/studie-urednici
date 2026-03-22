@@ -22,8 +22,13 @@ library(coloratio)
 library(ggokabeito)
 unloadNamespace("plyr")
 
-library(arrow)
+library(nanoparquet)
 options(scipen = 100, digits = 8)
+library(config)
+cfg <- config::get()
+# derive target year from config; fallback to 2024 if absent
+this_year <- if (!is.null(cfg$rok)) as.integer(cfg$rok) else 2024
+this_year_chr <- as.character(this_year)
 
 dta <- readRDS("./data-interim/sections.rds")
 # write_parquet(dta, "dashboard/dta.parquet")
@@ -106,12 +111,12 @@ axis_font <- list(color = "#000000",size=axis_size,
 legend_below = list(x = 0.5, y = -0.2,orientation = "h",xanchor = "center",yanchor = "top",font=list(size=lgnd_size,family=uni_font))
 legend_below_small = list(x = 0.5, y = -0.1,orientation = "h",xanchor = "center",yanchor = "top",font=list(size=lgnd_size,family=uni_font))
 legend_below_mid = list(x = 0.5, y = -0.15,orientation = "h",xanchor = "center",yanchor = "top",font=list(size=lgnd_size,family=uni_font))
-kat_ticks<-list(tickfont=list(size=kat_tick_size,family=uni_font),showticklabels = T,tickangle = 0,tickmode = "array")
-kat_ticks_rotated<-list(tickfont=list(size=kat_tick_size,family=uni_font),showticklabels = T,tickangle = -90,tickmode = "array")
+kat_ticks<-list(tickfont=list(size=kat_tick_size,family=uni_font),showticklabels = TRUE,tickangle = 0,tickmode = "array")
+kat_ticks_rotated<-list(tickfont=list(size=kat_tick_size,family=uni_font),showticklabels = TRUE,tickangle = -90,tickmode = "array")
 num_ticks <- list(tickfont=list(size=num_tick_size,family=uni_font))
 num_tilt_ticks <- list(tickfont=list(size=num_tick_size,family=uni_font),tickangle = -45)
-frame_y<-list(mirror=T,linewidth = 2,ticks='outside',showline=T,gridcolor = grdclr)
-frame_x<-list(mirror=T,linewidth = 2,ticks='outside',showline=T,dtick=5)
+frame_y<-list(mirror=TRUE,linewidth = 2,ticks='outside',showline=TRUE,gridcolor = grdclr)
+frame_x<-list(mirror=TRUE,linewidth = 2,ticks='outside',showline=TRUE,dtick=5)
 annot_below<-list(                       align='left',
                                          xref='paper',
                                          yref="paper",
@@ -151,11 +156,11 @@ text_color_map <- coloratio::cr_choose_bw(color_map)
 names(text_color_map) <- names(color_map)
 
 kaps <- unique(dta$kap_name)
-color_map_kap <- ifelse(substr(kaps,1,1) == "M", "dimgray", "cornflowerblue")
+color_map_kap <- ifelse(startsWith(kaps, "M"), "dimgray", "cornflowerblue")
 names(color_map_kap) <- kaps
 cols_df <- tibble(labels = names(color_map), color = unname(color_map)) |>
   mutate(color_text = cr_choose_bw(color_map))
-colorspace::swatchplot(cols_df$color)
+# colorspace::swatchplot(cols_df$color)
 
 chart_type <- function(title_y,
                        title_y_share,
@@ -211,8 +216,12 @@ chart_type <- function(title_y,
   )
 }
 
-x_ticks <- function(dta){
-  return(seq(min(dta$rok),max(dta$rok),ifelse(min(dta$rok)==2003,3,4)))
+x_ticks <- function(dta, step = 2){
+  start <- min(dta$rok)
+  end   <- max(dta$rok)
+  if (step == 2 && start %% 2 == 0) start <- start + 1  # align to odd years so end year is always labelled
+  if (step  > 2) return(rev(seq(end, start, -step)))     # anchor from end so end year is always labelled
+  return(seq(start, end, step))
 }
 
 # Theme gg ----------------------------------------------------------------
@@ -221,9 +230,9 @@ source("theme.R")
 
 ## ----tree_prep---------------------------------------------------------------------------------------------------
 aux <- dta %>%
-  filter(!is.na(kategorie_2014_cz), typ_rozpoctu == "SKUT",
-         !kategorie_2014 %in% c("Statni sprava", "Statni urednici"),
-         rok == 2024) %>%
+    filter(!is.na(kategorie_2014_cz), typ_rozpoctu == "SKUT",
+      !kategorie_2014 %in% c("Statni sprava", "Statni urednici"),
+      rok == this_year) %>%
   group_by(kategorie_2014_cz) %>%
   summarise(cost = sum(prostredky_na_platy),
             count = sum(pocet_zamestnancu)) %>%
@@ -283,9 +292,11 @@ to_append = tribble(
 
 tree_data <- bind_rows(aux, to_append)
 
-pracovni_sila <- 5204000 #  # dataset ČSÚ 250180, LFS Q4
-state_budget <- 2236.8*1e9 # updated to 2024 budget from monitor.statnipokladna.cz
-gdp <- 8057.032000000*1e9 # see SHDPZDRY1B1GMMLNA na https://www.cnb.cz/arad/#/cs/indicators
+macro_numbers <- readr::read_rds("data-interim/macro_numbers.rds")
+
+pracovni_sila <- macro_numbers$employed_total #  # dataset ČSÚ 250180, LFS Q4
+state_budget <- macro_numbers$sr_vydaje # via CNB ARAD indicator SRUMD08402C
+gdp <- macro_numbers$gdp # see SHDPZDRY1B1GMMLNA na https://www.cnb.cz/arad/#/cs/indicators
 
 tree_data <- tree_data %>% mutate("cost_perc" = cost/sum(cost[which(tree_data$parents == "")]),
                                   "cost_perc_budget" = cost/state_budget,
@@ -301,7 +312,7 @@ dta <- dta %>%
            fct_relevel(kat_order_all) %>% fct_rev())
 
 abs_metrics <- dta %>%
-  filter(rok == 2024, typ_rozpoctu == "SCHV") %>%
+  filter(rok == this_year, typ_rozpoctu == "SCHV") %>%
   filter(!is.na(as.numeric(kap_num))) %>%
   filter(!name %in% c("ROPO", "SS", "OSS")) %>%
   group_by(kap_name) %>%
@@ -312,7 +323,7 @@ abs_metrics <- dta %>%
   )
 
 bar_dt <- dta %>%
-  filter(rok == 2024, typ_rozpoctu == "SKUT") %>%
+  filter(rok == this_year, typ_rozpoctu == "SKUT") %>%
   filter(!is.na(kategorie_2014_cz)) %>%
   filter(!is.na(as.numeric(kap_num))) %>%
   filter(!name %in% c("ROPO", "SS", "OSS"),
@@ -373,7 +384,7 @@ graf_A1 <- graf_A1 |>
     domain = list(column = 0)
   ) %>%
   layout(title = list(font=title_font,
-                      text = paste0("<b>Graf 1b. Výdaje na zaměstnance státu dle regulace zaměstnanosti (2024)</b>",
+                      text = paste0("<b>Graf 1b. Výdaje na zaměstnance státu dle regulace zaměstnanosti (", this_year, ")</b>",
                                     "<br>","<sup>","Velikost obdélníků je úměrná podílu dané skupiny na celkových výdajích","</sup>"),
                       y = 0.97),
          margin = mrg8) %>%
@@ -430,7 +441,7 @@ graf_1 <- graf_1 |>
     domain = list(column = 0)
   ) %>%
   layout(title = list(font = title_font,
-                      text = paste0("<b>Graf 1a. Počet zaměstnanců státu dle regulace zaměstnanosti (2024)</b>",
+                      text = paste0("<b>Graf 1a. Počet zaměstnanců státu dle regulace zaměstnanosti (", this_year, ")</b>",
                                     "<br>","<sup>","Velikost obdélníků je úměrná podílu dané skupiny na celkovém počtu zaměstnanců státu","</sup>"),
                       y = 0.97),
          margin = mrg8) %>%
@@ -451,7 +462,7 @@ graf_2 <- bar_dt %>% group_by(kategorie_2014_cz)%>%
     color = ~kategorie_2014_cz, colors = color_map,
     #marker=list(size=10, colors=color_map[bar_dt$kategorie_2014_cz]),
     hovertemplate = ~ ifelse(pocet_zamestnancu > 0, paste(
-      "<extra></extra>", "Kategorie:", name, "<br>", "Kapitola:", cz_kap_name, "<br>",
+      "<extra></extra>", "Kategorie:", kategorie_2014_cz, "<br>", "Kapitola:", cz_kap_name, "<br>",
       "Po\u010Det zam\u011Bstnanc\u016F:",
       format(pocet_zamestnancu, big.mark = " "), "<br>", "Celkem za kapitolu: ",
       format(pocet_zamestnancu_agg, big.mark = " ")
@@ -464,7 +475,7 @@ graf_2 <- bar_dt %>% group_by(kategorie_2014_cz)%>%
     #                      font = pozn_font_small),
     #                 annot_below),
     title = list(font=title_font,
-                 text = "<b>Graf 2a. Počet zaměstnanců státu dle rozpo\u010Dtov\u00FDch kapitol (2024)</b>", y = 0.97),
+           text = paste0("<b>Graf 2a. Počet zaměstnanců státu dle rozpo\u010Dtov\u00FDch kapitol (", this_year, ")</b>"), y = 0.97),
     xaxis = c(kat_ticks_rotated,frame_x,
               list(title = "<b>Kapitoly státního rozpočtu (seznam zkratek)</b>",categoryorder = "array",categoryarray = arrange(bar_dt, desc(pocet_zamestnancu_agg))$kap_name,
                    titlefont = axis_font)),
@@ -492,7 +503,7 @@ graf_A2 <- plot_ly(bar_dt,
                    color = ~kategorie_2014_cz, colors = color_map,
                    hovertemplate = ~ ifelse(prostredky_na_platy > 0,
                                             paste("<extra></extra>", "Kategorie:",
-                                                  name, "<br>", "Kapitola:",
+                                                  kategorie_2014_cz, "<br>", "Kapitola:",
                                                   cz_kap_name, "<br>", "Platy celkem:",
                                                   format(prostredky_na_platy, big.mark = " "),
                                                   "K\u010D", "<br>", "Celkem za kapitolu: ",
@@ -509,7 +520,7 @@ graf_A2 <- plot_ly(bar_dt,
     #                      font = pozn_font_small),
     #                 annot_below_A2),
     title = list(font=title_font,
-                 text = str_wrap("<b>Graf 2b. Výdaje na  zaměstnance státu dle rozpo\u010Dtov\u00FDch kapitol (rok 2024, mld. K\u010D)</b>",100), y = 0.96),
+           text = str_wrap(paste0("<b>Graf 2b. Výdaje na  zaměstnance státu dle rozpo\u010Dtov\u00FDch kapitol (rok ", this_year, ", mld. K\u010D)</b>"),100), y = 0.96),
     xaxis = c(kat_ticks_rotated,frame_x, list(title="<b>Kapitoly státního rozpočtu (seznam zkratek)</b>",titlefont = axis_font,categoryorder = "array", categoryarray = arrange(bar_dt, desc(prostredky_na_platy_agg))$kap_name)),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Platy (mld. Kč)</b>",titlefont = axis_font)),
     barmode = "stack",
@@ -552,7 +563,7 @@ kat_order_graf3 <- c("Ministerstva", "Ostatní ústřední", "Neústřední st. 
 
 dt_mean_salary_all <- dta %>%
   filter(typ_rozpoctu == "SKUT",
-         !kategorie_2014 %in% c("Statni sprava", "Statni urednici"), rok == 2024) %>%
+         !kategorie_2014 %in% c("Statni sprava", "Statni urednici"), rok == this_year) %>%
   summarise(prumerny_plat = round(sum(prostredky_na_platy)/sum(pocet_zamestnancu)/12/1e3)) %>%
   pull(prumerny_plat)
 
@@ -568,7 +579,7 @@ graf_3 <- bar_dt %>%
           opacity = 1,
           type = "scatter" , mode = "line+markers",
           hovertemplate = ~ ifelse(prostredky_na_platy > 0,
-                                   paste("<extra></extra>", "Kategorie:", name, "<br>",
+                                   paste("<extra></extra>", "Kategorie:", kategorie_2014_cz, "<br>",
                                          "Kapitola:", cz_kap_name, "<br>", "Pr\u016Fm\u011Brn\u00FD plat:",
                                          format(prumerny_plat, big.mark = " "), "K\u010D"),
                                    ""),
@@ -586,9 +597,9 @@ graf_3 <- bar_dt %>%
             marker=list(size=mrk_maj_size),
             x = ~prumerny_plat_mean, y=~kategorie_2014_cz,color = ~kategorie_2014_cz,
             colors = color_map) %>%
-  layout(hovermode = "closest",
-         title = list(font=title_font,
-                      text = "<b>Graf 3a. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu dle rozp. kapitoly (2024)</b>", y = 1.1),
+    layout(hovermode = "closest",
+      title = list(font=title_font,
+         text = paste0("<b>Graf 3a. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu dle rozp. kapitoly (", this_year, ")</b>"), y = 1.1),
          # annotations = list(align='left',
          #                    xref='paper',
          #                    yref="paper",
@@ -601,7 +612,7 @@ graf_3 <- bar_dt %>%
          #                    text = str_wrap("<i>Pozn.: Průměrné platy se liší dle typu organizací i napříč jednotlivými organizacemi.</i>",wrap_len)),
          xaxis = c(num_ticks,frame_y,list(dtick = 5,title = "<b>Průměrný hrubý měsíční plat (v tisících Kč)</b>",
                                           titlefont = axis_font)),
-         yaxis = c(num_ticks,frame_y,list(title = "",titlefont = axis_font)),showlegend = F,
+         yaxis = c(num_ticks,frame_y,list(title = "",titlefont = axis_font)),showlegend = FALSE,
          margin = mrg2) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
@@ -622,7 +633,7 @@ graf_A3 <- bar_dt %>%
   group_map(~ plot_ly(
     data = .,
     hovertemplate = ~  paste(
-      "<extra></extra>", "Zdroj:", name, "<br>", "Kapitola:", cz_kap_name, "<br>",
+      "<extra></extra>", "Kategorie:", kategorie_2014_cz, "<br>", "Kapitola:", cz_kap_name, "<br>",
       "Pr\u016Fm\u011Brn\u00FD plat:",
       format(prumerny_plat, big.mark = " "), "K\u010D", "<br>",
       "Rozd\u00EDl k pr\u016Fm\u011Brn\u00E9 mzd\u011B:",
@@ -652,7 +663,7 @@ graf_A3 <- bar_dt %>%
            xaxis = c(kat_ticks_rotated,frame_x,list("categoryorder" = "total ascending"),
                      titlefont = axis_font),
            title = list(font=title_font,
-                        text = str_wrap("<b>Graf 3b. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu v poměru k průměrné mzdě v ekonomice dle rozp. kapitoly (2024)</b>",70),
+                        text = str_wrap(paste0("<b>Graf 3b. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu v poměru k průměrné mzdě v ekonomice dle rozp. kapitoly (", this_year, ")</b>"),70),
                         x = 50, y = 0.95), legend = list(x = 50, y = 0.5),
            showlegend = F
     ), keep = TRUE) %>%
@@ -708,7 +719,7 @@ graf_4 <- graf_4_dta %>%
   add_bars()%>%
   layout(barmode="stack",bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4a. Počet státních úředníků, bez MV a MZV (2003–2024)</b>",
+                      text = paste0("<b>Graf 4a. Počet státních úředníků, bez MV a MZV (2003–", this_year, ")</b>"),
                       y = 0.98),
          # annotations = c(annot_below,list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. Graf A14 s kapitolami ministerstev vnitra a zahraničních věcí je v příloze.</i>",wrap_len),
          #                                  font = pozn_font_small)),
@@ -748,10 +759,10 @@ graf_4 <- graf_4_dta_shares %>%
             textfont = list(size = 14,family = uni_font,color = "black"),
             inherit = FALSE
   ) %>%
-  layout(barmode="stack",bargap=0.5,
-         title = list(font=title_font,
-                      text = "<b>Graf 4a. Počet státních úředníků (2003–2024)</b>",
-                      y = 0.98),
+    layout(barmode="stack",bargap=0.5,
+      title = list(font=title_font,
+         text = paste0("<b>Graf 4a. Počet státních úředníků (2003–", this_year, ")</b>"),
+         y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
                    list(tickvals = x_ticks(graf_4_dta_shares))),
@@ -779,7 +790,7 @@ vyvoj_bar <- dta %>%
   group_by(kategorie_2014_cz, rok) %>%
   summarise(
     prostredky_na_platy_nom = sum(prostredky_na_platy),
-    prostredky_na_platy_real = sum(prostredky_na_platy * base_2024)
+    prostredky_na_platy_real = sum(prostredky_na_platy * base_thisyr)
   ) %>%
   group_by(rok) %>%
   mutate(prostredky_na_platy_nom_agg = sum(prostredky_na_platy_nom),
@@ -800,10 +811,10 @@ graf_A4 <- vyvoj_bar %>%
     hoverlabel = list(font=list(size=hover_size,family=uni_font)),
     hoverinfo = "text"
   ) %>%
-  layout(barmode='stack',bargap=0.5,
-         title = list(font=title_font,
-                      text = "<b>Graf 4c. Výdaje na platy státních úředníků, bez MV a MZV (2003–2024)</b>",
-                      y = 0.98),
+    layout(barmode='stack',bargap=0.5,
+      title = list(font=title_font,
+         text = paste0("<b>Graf 4c. Výdaje na platy státních úředníků, bez MV a MZV (2003–", this_year, ")</b>"),
+         y = 0.98),
          # annotations = c(list(text =str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
          #                      font = pozn_font_small),
          #                 annot_below),
@@ -857,7 +868,7 @@ graf_A4 <- vyvoj_bar_shares %>%
   ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4c. Výdaje na platy státních úředníků (2003–2024)</b>",
+                      text = paste0("<b>Graf 4c. Výdaje na platy státních úředníků (2003–", this_year_chr, ")</b>"),
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
@@ -894,15 +905,15 @@ graf_A5 <- vyvoj_bar %>%
   add_bars() %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4d. Reálné výdaje na platy státních úředníků, bez MV a MZV (2003–2024)</b>",
+                      text = paste0("<b>Graf 4d. Reálné výdaje na platy státních úředníků, bez MV a MZV (2003–", this_year_chr, ")</b>"),
                       y = 0.98),
          # annotations = c(list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
          #                      font = pozn_font_small),
          #                 annot_below),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),titlefont = axis_font),
-                                          # xaxis = list(categoryarray = seq(2003,2024), categoryorder = "array"),
+                                          # xaxis = list(categoryarray = seq(2003,this_year), categoryorder = "array"),
                    list(tickvals = x_ticks(vyvoj_bar))),
-         yaxis = c(num_ticks,frame_y,list(title = "<b>Reálné výdaje na platy (v mld. Kč, ceny roku 2024)</b>",titlefont = axis_font,
+         yaxis = c(num_ticks,frame_y,list(title = paste0("<b>Reálné výdaje na platy (v mld. Kč, ceny roku ", this_year, ")</b>"),titlefont = axis_font,
                                           dtick = 10, range = c(0,50))),
          legend = legend_below_small, margin = mrg2
   ) %>%
@@ -943,15 +954,15 @@ graf_A5 <- vyvoj_bar_shares %>%
   ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003–2024)</b>",
+                      text = paste0("<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003–", this_year_chr, ")</b>"),
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
                    list(tickvals = x_ticks(vyvoj_bar_shares))),
-         yaxis = c(num_ticks,frame_y,list(title = "<b>Reálné výdaje na platy (v mld. Kč, ceny roku 2024)</b>",titlefont = axis_font,
+         yaxis = c(num_ticks,frame_y,list(title = paste0("<b>Reálné výdaje na platy (v mld. Kč, ceny roku ", this_year, ")</b>"),titlefont = axis_font,
                                           dtick = 10, range = c(0,50))),
          legend = legend_below_small, margin = mrg2,
-         updatemenus = list( chart_type(title_y = "<b>Reálné výdaje na platy (v mld. Kč, ceny roku 2024)</b>",
+         updatemenus = list( chart_type(title_y = paste0("<b>Reálné výdaje na platy (v mld. Kč, ceny roku ", this_year, ")</b>"),
                                         title_y_share = "<b>Reálné výdaje na platy (v %)</b>",
                                         label_bar = "Sloupce (v mld. Kč)",
                                         max_bar = 50,max_line = 50,dtick = 10) )) %>%
@@ -1016,7 +1027,7 @@ graf_A6 <- aux2 %>%
   onRender(js)
 
 
-## ----mean_wage_2024----------------------------------------------------------------------------------------------
+## ----mean_wage_thisyr----------------------------------------------------------------------------------------------
 
 graf_5_dt <- dta %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
@@ -1026,27 +1037,27 @@ graf_5_dt <- dta %>%
   group_by(rok, kategorie_2014_cz) %>%
   summarise(
     prumerny_plat_agg = (sum(prostredky_na_platy) / sum(pocet_zamestnancu)) / 12,
-    base_2024 = mean(base_2024),
-    max_change_kap = kap_name[which.max(wage_in_2024_change)],
-    max_change = round(max(wage_in_2024_change, na.rm = T), 4),
-    min_change_kap = kap_name[which.min(wage_in_2024_change)],
-    min_change = round(min(wage_in_2024_change, na.rm = T), 4)
+    base_thisyr = mean(base_thisyr),
+    max_change_kap = kap_name[which.max(wage_in_thisyr_change)],
+    max_change = round(max(wage_in_thisyr_change, na.rm = TRUE), 4),
+    min_change_kap = kap_name[which.min(wage_in_thisyr_change)],
+    min_change = round(min(wage_in_thisyr_change, na.rm = TRUE), 4)
   ) %>%
-  mutate(wage_in_2024 = prumerny_plat_agg * base_2024) %>%
+  mutate(wage_in_thisyr = prumerny_plat_agg * base_thisyr) %>%
   mutate(kategorie_2014_cz = as.factor(kategorie_2014_cz) %>%
            fct_relevel("Ministerstva", "Ostatní ústřední",
                        "Neústřední st. správa","Státní úředníci (celkem)"))
 graf_5 <- plot_ly(graf_5_dt,
-                  x = ~rok, y = ~ wage_in_2024 / 1000, type = "scatter", color = ~kategorie_2014_cz,
+                  x = ~rok, y = ~ wage_in_thisyr / 1000, type = "scatter", color = ~kategorie_2014_cz,
                   colors = color_map,
                   mode = "line", line = list(width = 7),
                   marker = list(size=5,symbol="circle-dot",line = list(color="Black",width=3)),
-                  text = ~ paste(
-                    " Rok:", rok, "<br>", "Kategorie:", kategorie_2014_cz, "<br>", "Hodnota:",
-                    format(round(wage_in_2024, 0), big.mark = " "), "K\u010D", "<br>",
-                    "Nejv\u011Bt\u0161\u00ED nárůst:", "<br>", max_change_kap, ": ",
-                    max_change * 100, " %", "<br>",
-                    ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst:","Nejv\u011Bt\u0161\u00ED pokles:"), "<br>",
+                  text = ~ paste0(
+                    " Rok: ", rok, " <br> ", "Kategorie: ", kategorie_2014_cz, " <br> ", "Hodnota: ",
+                    format(round(wage_in_thisyr, 0), big.mark = " "), "K\u010D", "<br>",
+                    "Nejv\u011Bt\u0161\u00ED nárůst: ", " <br> ", max_change_kap, ": ",
+                    max_change * 100, " %", " <br> ",
+                    ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst: ","Nejv\u011Bt\u0161\u00ED pokles: "), "<br>",
                     min_change_kap, ": ",
                     min_change * 100, " %"),
                   hoverlabel = list(font=list(size=hover_size,family=uni_font)),
@@ -1054,14 +1065,14 @@ graf_5 <- plot_ly(graf_5_dt,
                   legendgroup = ~kategorie_2014_cz) %>%
   layout(
     legend = legend_below_mid,
-    # annotations = c(list(text = str_wrap("<i>Pozn.: Reálné hrubé měsíční platy jsou uvedeny v cenách roku 2024.</i>",wrap_len),
+    # annotations = c(list(text = str_wrap(paste0("<i>Pozn.: Reálné hrubé měsíční platy jsou uvedeny v cenách roku ", this_year, ".</i>"),wrap_len),
     #                      font = pozn_font_small),annot_below),
-    title =list(text = "<b>Graf 5a. Reálné průměrné platy státních úředníků 2004–2024 (v cenách roku 2024)</b>",
+    title =list(text = paste0("<b>Graf 5a. Reálné průměrné platy státních úředníků 2004–", this_year, " (v cenách roku ", this_year, ")</b>"),
                 y =0.98,
                 font=title_font),
     xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
-              list(tickvals = x_ticks(graf_5_dt))),
-    yaxis = c(num_ticks,frame_y,list(title = "<b>Reálné průměrné mzdy (tis. Kč, ceny roku 2024)</b>",titlefont = axis_font)),
+              list(tickvals = x_ticks(graf_5_dt, step=3))),
+    yaxis = c(num_ticks,frame_y,list(title = paste0("<b>Reálné průměrné mzdy (tis. Kč, ceny roku ", this_year, ")</b>"),titlefont = axis_font)),
     margin = mrg2
   ) %>% config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
@@ -1070,22 +1081,22 @@ graf_5
 
 # G5 static ---------------------------------------------------------------
 
-# graf_5_static <- ggplot(graf_5_dt, aes(rok, wage_in_2024/1e3, colour = kategorie_2014_cz)) +
+# graf_5_static <- ggplot(graf_5_dt, aes(rok, wage_in_thisyr/1e3, colour = kategorie_2014_cz)) +
 #   geom_line(size = 1.9) +
 #   geom_point(colour = "black", size = 1.9) +
 #   theme_minimal(base_family = uni_font, base_size = 14) +
 #   theme_urednici +
 #   scale_color_manual(values = color_map, name = NULL, limits = force) +
-#   scale_x_continuous(breaks = seq(2003, 2024, 2)) +
-#   labs(title = "Graf 5. Průměrné platy státních úředníků (2004–2024) v cenách roku 2024",
+#   scale_x_continuous(breaks = seq(2003, this_year, 2)) +
+#   labs(title = paste0("Graf 5. Průměrné platy státních úředníků (2004–", this_year, ") v cenách roku ", this_year),
 #        x = "Rok",
-#        y = "Reálné průměrné hrubé měsíční mzdy (tis. Kč) v cenách roku 2024",
-#        caption = "Pozn.: reálné hrubé měsíční platy, uvedené v cenách roku 2024")
+#        y = paste0("Reálné průměrné hrubé měsíční mzdy (tis. Kč) v cenách roku ", this_year),
+#        caption = paste0("Pozn.: reálné hrubé měsíční platy, uvedené v cenách roku ", this_year))
 # graf_5_static
 
 # ggsave("graphs-static/graf-5.png", plot = graf_5_static, width = 8, height = 5, scale = 1.5, bg = "white")
 
-## ----mean_wage_pct_change_2024-----------------------------------------------------------------------------------
+## ----mean_wage_pct_change_thisyr-----------------------------------------------------------------------------------
 graf_A7_dt <- dta %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
                                "Ostatni ustredni"),
@@ -1095,17 +1106,17 @@ graf_A7_dt <- dta %>%
   group_by(kategorie_2014_cz, rok) %>%
   summarise(
     prumerny_plat_agg = (sum(prostredky_na_platy) / sum(pocet_zamestnancu)) / 12,
-    base_2024 = mean(base_2024),
+    base_thisyr = mean(base_thisyr),
     max_change_kap = kap_name[which.max(mzda_prumer_skut_ke_skut)],
-    max_change = round(max(mzda_prumer_skut_ke_skut, na.rm = T), 4),
+    max_change = round(max(mzda_prumer_skut_ke_skut, na.rm = TRUE), 4),
     min_change_kap = kap_name[which.min(mzda_prumer_skut_ke_skut)],
-    min_change = round(min(mzda_prumer_skut_ke_skut, na.rm = T), 4)
+    min_change = round(min(mzda_prumer_skut_ke_skut, na.rm = TRUE), 4)
   ) %>%
-  mutate(wage_in_2024 = prumerny_plat_agg * base_2024) %>%
+  mutate(wage_in_thisyr = prumerny_plat_agg * base_thisyr) %>%
   group_by(kategorie_2014_cz) %>%
   arrange(rok) %>%
-  mutate(wage_base = wage_in_2024[1]) %>%
-  mutate(cum_pct_wage_change = (wage_in_2024 - wage_base) / wage_base) %>%
+  mutate(wage_base = wage_in_thisyr[1]) %>%
+  mutate(cum_pct_wage_change = (wage_in_thisyr - wage_base) / wage_base) %>%
   mutate(kategorie_2014_cz = as.factor(kategorie_2014_cz) %>%
            fct_relevel("Ministerstva", "Ostatní ústřední",
                        "Neústřední st. správa","Státní úředníci (celkem)"))
@@ -1115,12 +1126,12 @@ graf_A7 <- plot_ly(graf_A7_dt,
                    color = ~kategorie_2014_cz, colors = color_map, mode = "line",
                    line = list(width = 7),
                    marker = list(size=5,symbol = "circle",line = list(width = 3,color="black")),
-                   text = ~ paste(
-                     " Rok:", rok, "<br>", "Kategorie:", kategorie_2014_cz, "<br>", "Hodnota:",
-                     round(cum_pct_wage_change * 100,2), "%","<br>",
-                     "Nejv\u011Bt\u0161\u00ED nárůst:", "<br>", max_change_kap, ": ",
-                     max_change * 100, " %", "<br>",
-                     ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst:","Nejv\u011Bt\u0161\u00ED pokles:"), "<br>",
+                   text = ~ paste0(
+                     " Rok: ", rok, " <br> ", "Kategorie: ", kategorie_2014_cz, " <br> ", "Hodnota: ",
+                     round(cum_pct_wage_change * 100,2), " %"," <br> ",
+                     "Nejv\u011Bt\u0161\u00ED nárůst: ", " <br> ", max_change_kap, ": ",
+                     max_change * 100, " %", " <br> ",
+                     ifelse(min_change>0,"Nejmen\u0161\u00ED nárůst: ","Nejv\u011Bt\u0161\u00ED pokles: "), "<br>",
                      min_change_kap, ": ", min_change * 100, " %", "<br>"
                    ),
                    hoverlabel = list(font=list(size=hover_size,family=uni_font)),
@@ -1135,7 +1146,7 @@ graf_A7 <- plot_ly(graf_A7_dt,
     #                      font = pozn_font_small),annot_below),
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),
                                      titlefont = axis_font),
-              list(tickvals = x_ticks(graf_A7_dt))),
+              list(tickvals = x_ticks(graf_A7_dt, step=3))),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Změna reálného průměrného platu oproti roku 2004 \n (v % základny roku 2004)</b>",
                                      # tickprefix = "+",
                                      # showtickprefix = "last",
@@ -1175,7 +1186,7 @@ graf_6_dt <- dta %>%
     max_change_kap = kap_name[which.max(mzda_k_nh)],
     phasal_all = mean(phasal_all),
     czsal_all = mean(czsal_all),
-    max_change = round(max(mzda_k_nh, na.rm = T), 4),
+    max_change = round(max(mzda_k_nh, na.rm = TRUE), 4),
     min_change_kap = kap_name[which.min(mzda_k_nh)],
     min_change = round(min(mzda_k_nh, na.rm = T), 4)
   ) %>%
@@ -1193,12 +1204,12 @@ graf_6 <- plot_ly(graf_6_dt,
                   colors = color_map,mode = "line",
                   marker = list(size=5,symbol="circle-dot",
                                 line = list(color="Black",width=3)),
-                  text = ~ paste(
-                    " Rok:", rok, "<br>", "Kategorie:", kategorie_2014_cz, "<br>",
-                    "Nejv\u011Bt\u0161\u00ED nárůst:", "<br>", max_change_kap, ": ",
+                  text = ~ paste0(
+                    " Rok: ", rok, " <br> ", "Kategorie: ", kategorie_2014_cz, " <br> ",
+                    "Nejv\u011Bt\u0161\u00ED nárůst: ", "<br>", max_change_kap, ": ",
                     max_change * 100, " %", "<br>",
-                    ifelse(min_change > 0, "Nejmen\u0161\u00ED nárůst:","Nejv\u011Bt\u0161\u00ED pokles:"),
-                    "<br>", min_change_kap, ": ", min_change * 100, " %", "<br>"
+                    ifelse(min_change > 0, "Nejmen\u0161\u00ED nárůst: ","Nejv\u011Bt\u0161\u00ED pokles: "),
+                    " <br> ", min_change_kap, ": ", min_change * 100, " %", " <br>"
                   ),
                   hoverlabel = list(font=list(size=hover_size,family=uni_font)),
                   hoverinfo = "text",
@@ -1210,7 +1221,7 @@ graf_6 <- plot_ly(graf_6_dt,
   # annotations = c(annot_6,list(text = str_wrap("<i>Pozn.: Pro ministerstva a ostatní ústřední orgány použité hodnoty průměrné mzdy v Praze. V ostatních případech je jako reference použitý průměrný plat v národním hospodářství. Hodnota 100% znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství.</i>",wrap_len),
   #                              font = pozn_font_small)),
   xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
-            list(tickvals = x_ticks(graf_6_dt))),
+            list(tickvals = x_ticks(graf_6_dt, step=3))),
   yaxis = c(num_ticks,frame_y,list(title = "<b>Poměr platů státních úředníku a prům. mzdy (v %)</b>",
                                    # ticksuffix = "%",
                                    titlefont = axis_font)),
@@ -1228,9 +1239,9 @@ graf_6
 #   theme_minimal(base_family = uni_font, base_size = 14) +
 #   theme_urednici +
 #   scale_color_manual(values = color_map, name = NULL, limits = force) +
-#   scale_x_continuous(breaks = seq(2003, 2024, 2)) +
+#   scale_x_continuous(breaks = seq(2003, this_year, 2)) +
 #   ptrr::scale_y_percent_cz() +
-#   labs(title = "Graf 6. Průměrný plat státních úředníků \nvůči průměrné mzdě v národním hospodářství (2004–2024)",
+#   labs(title = paste0("Graf 6. Průměrný plat státních úředníků \nvůči průměrné mzdě v národním hospodářství (2004–", this_year, ")"),
 #        y = "Poměr platů státních úředníku a prům. mzdy (v %)",
 #        x = "Rok",
 #        caption = str_wrap("Pozn.: pro ministerstva a ostatní ústřední orgány použité hodnoty průměrné mzdy v Praze. V ostatních případech je jako reference použitý průměrný plat v národním hospodářství. Hodnota 100% znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství.",
@@ -1241,7 +1252,7 @@ graf_6
 # ggsave("graphs-static/graf-6.png", plot = graf_6_static, width = 8, height = 5, scale = 1.5, bg = "white")
 
 
-## ----2024_effect-------------------------------------------------------------------------------------------------
+## ----thisyr_effect-------------------------------------------------------------------------------------------------
 
 line <- list(
   type = "line",
@@ -1254,24 +1265,24 @@ line <- list(
   "x1" = 1
 )
 
-infl <- dta %>% filter(rok == 2004) %>% select(base_2024) %>% first() %>% pull()
+infl <- dta %>% filter(rok == 2004) %>% select(base_thisyr) %>% first() %>% pull()
 
 graf_A8_dt <- dta %>%
   filter(!is.na(kategorie_2014_cz), typ_rozpoctu == "SKUT",
          !kategorie_2014 %in% c("Statni sprava", "Statni urednici")) %>%
-  filter(rok %in% c(2004, 2024)) %>%
+  filter(rok %in% c(2004, this_year)) %>%
   filter(!kap_num %in% c(314, 306)) %>%
   group_by(kategorie_2014_cz, rok) %>%
   summarise(
-    base_2024 = base_2024[1],
+    base_thisyr = base_thisyr[1],
     zam_skutecnost = sum(pocet_zamestnancu),
     plat_skutecnost = (sum(prostredky_na_platy) / sum(pocet_zamestnancu)) / 12
   ) %>%
   as.data.table() %>%
   dcast(kategorie_2014_cz ~ rok, value.var = c("zam_skutecnost", "plat_skutecnost")) %>%
   mutate(
-    zam_change = (zam_skutecnost_2024/zam_skutecnost_2004 - 1),
-    plat_change = (plat_skutecnost_2024/(plat_skutecnost_2004*infl) - 1)
+    zam_change = (.data[[paste0("zam_skutecnost_", this_year)]] / .data[["zam_skutecnost_2004"]] - 1),
+    plat_change = (.data[[paste0("plat_skutecnost_", this_year)]] / (.data[["plat_skutecnost_2004"]] * infl) - 1)
   )
 
 graf_A8 <- graf_A8_dt %>%
@@ -1288,7 +1299,7 @@ graf_A8 <- graf_A8_dt %>%
   ) %>%
   layout(
     title = list(font=title_font,
-                 text = "<b>Graf 6. Celkové změny platů a počtu zaměstnanců v období 2004–2024</b>", y = 0.98),
+           text = paste0("<b>Graf 6. Celkové změny platů a počtu zaměstnanců v období 2004–", this_year_chr, "</b>"), y = 0.98),
     # annotations = c(annot_below,list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
     #                                  font = pozn_font_small)),
     showlegend = FALSE,
@@ -1359,16 +1370,16 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
       "<extra></extra>",
       "Rok:", rok, "<br>",
       "Kapitola:", cz_kap_name, "<br>",
-      "Schválený po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Schválený po\u010Det zam\u011Bstnanc\u016F: ",
       format(UPRAV, big.mark = " "), "<br>",
-      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F: ",
       format(SKUT, big.mark = " ")
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
   ) %>%
     add_annotations(
       text =~paste("<b>",unique(kap_name),"</b>"),
-      x = .5,
+      x = 0.5,
       y = 1.05,
       yref = "paper",
       xref = "paper",
@@ -1379,7 +1390,7 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
     ) %>%
     layout(margin=c(t=5),
            xaxis = c(list(title= "<b>Rok</b>",titlefont = axis_font,tickangle = -90),
-                     list(tickvals = x_ticks(dta))),
+                     list(tickvals = x_ticks(dta, step=4))),
            yaxis = c(list(title = "",titlefont = axis_font,range = c(-30, 10),
                           ticktext = lapply(seq(-30, 0, 10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
                           tickvals = seq(-30, 0, 10),
@@ -1400,7 +1411,7 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
 
 
 ## ----platy_skut_rozp_kap-----------------------------------------------------------------------------------------
-kap_order <- ifelse(substr(kaps,1,1) == "M",1,2)
+kap_order <- ifelse(startsWith(kaps, "M"),1,2)
 names(kap_order) <- kaps
 kap_order <- sort(kap_order)
 
@@ -1425,9 +1436,9 @@ graf_A10 <- dta %>%filter(!is.na(kap_name)) %>%
       "<extra></extra>",
       "Rok:", rok, "<br>",
       "Kapitola:", cz_kap_name, "<br>",
-      "Schválený pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Schválený pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(UPRAV, 0), big.mark = " "), "K\u010D", "<br>",
-      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(SKUT, 0), big.mark = " "), "K\u010D"
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
@@ -1445,7 +1456,7 @@ graf_A10 <- dta %>%filter(!is.na(kap_name)) %>%
     ) %>%
     layout(margin = mrg7,
            xaxis = list(title = "<b>Rok</b>",titlefont = axis_font,
-                        tickangle = -90,tickvals = x_ticks(dta)),
+                        tickangle = -90,tickvals = x_ticks(dta, step=4)),
            # yaxis = c(list(title = "",titlefont = axis_font,range = c(-30, 10),
            #                ticktext = lapply(seq(-30, 10, 10), function(x) ifelse(x > 0, paste0("+", x), as.character(x))),
            #                tickvals = seq(-30, 10, 10),
@@ -1490,9 +1501,9 @@ graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     hovertemplate = ~ paste(
       "<extra></extra>",
       "Rok:", rok, "<br>",
-      "Schválený po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Schválený po\u010Det zam\u011Bstnanc\u016F: ",
       format(UPRAV, big.mark = " "), "<br>",
-      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F", ": ",
+      "Skute\u010Dn\u00FD po\u010Det zam\u011Bstnanc\u016F: ",
       format(SKUT, big.mark = " ")
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
@@ -1510,7 +1521,7 @@ graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     ) %>%
     layout(bargap=0.5,margin = list(t = 100,b=0,l=70),
            xaxis = c(num_ticks,frame_y,title="<b>Rok</b>",titlefont = axis_font,
-                     list(tickvals = x_ticks(dta))),
+                     list(tickvals = x_ticks(dta, step=4))),
            yaxis = c(num_ticks,frame_y,list(title = "<b></b>",titlefont = axis_font,
                                             range = c(-18, 1))),showlegend = F),keep = TRUE) %>%
   subplot(nrows = 2, shareY = F, margin = c(0.07,0.07,0.15,0.15),titleY =T) %>%
@@ -1550,9 +1561,9 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     hovertemplate = ~ paste(
       "<extra></extra>",
       "Rok:", rok, "<br>",
-      "Schválený pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Schválený pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(UPRAV, 0), big.mark = " "), "K\u010D", "<br>",
-      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat", ": ",
+      "Skute\u010Dn\u00FD pr\u016Fm\u011Brn\u00FD plat: ",
       format(round(SKUT, 0), big.mark = " "), "K\u010D"
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
@@ -1570,7 +1581,7 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
     ) %>%
     layout(bargap=0.5,margin = list(t = 120,b=0,l=70),
            xaxis = c(num_ticks,frame_y,list(title="<b>Rok</b>",titlefont = axis_font),
-                     list(tickvals = x_ticks(dta))),
+                     list(tickvals = x_ticks(dta, step=4))),
            yaxis = c(frame_y,list(title = "",
                                   titlefont = axis_font,
                                   # tickprefix = "+",
@@ -1596,17 +1607,17 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
 
 ## ----Scatter plat narust-----------------------------------------------------------------------------------------
 
-infl <- dta %>% filter(rok == 2003) %>% select(base_2024) %>% first() %>% pull()
+infl <- dta %>% filter(rok == 2003) %>% select(base_thisyr) %>% first() %>% pull()
 graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
                                "Ostatni ustredni", "Statni urednici")) %>%
   filter(typ_rozpoctu == "SKUT") %>%
-  filter(rok %in% c(2003,2024)) %>%
+  filter(rok %in% c(2003,this_year)) %>%
   select(rok, kategorie_2014_cz, cz_kap_name,kap_name, prumerny_plat, pocet_zamestnancu) %>%
   pivot_wider(names_from = c("rok"),values_from = c("prumerny_plat","pocet_zamestnancu")) %>%
   mutate( #wont be used
-    zam_change = (pocet_zamestnancu_2024/pocet_zamestnancu_2003 - 1),
-    plat_change = (prumerny_plat_2024/(prumerny_plat_2003*infl) - 1)
+    zam_change = (.data[[paste0("pocet_zamestnancu_", this_year)]] / .data[["pocet_zamestnancu_2003"]] - 1),
+    plat_change = (.data[[paste0("prumerny_plat_", this_year)]] / (.data[["prumerny_plat_2003"]] * infl) - 1)
   ) %>%
   mutate(kategorie_2014_cz = as.factor(kategorie_2014_cz) %>%
            fct_relevel("Ministerstva", "Ostatní ústřední",
@@ -1616,14 +1627,14 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
     data = ., x = ~prumerny_plat_2003, y = ~ plat_change*100,
     type = "scatter" , mode = "markers",marker=list(size=mrk_min_size),
     color = ~kategorie_2014_cz, colors = color_map,
-    hovertemplate = ~ paste(
+    hovertemplate = ~ paste0(
       "<extra></extra>",
-      "Kapitola: ", cz_kap_name, "<br>",
-      "Pr\u016Fm\u011Brn\u00FD plat 2003 ", ": ",
+      "Kapitola: ", cz_kap_name, " <br> ",
+      "Pr\u016Fm\u011Brn\u00FD plat 2003: ",
       format(round(prumerny_plat_2003, 0), big.mark = " "), "K\u010D", "<br>",
-      "Pr\u016Fm\u011Brn\u00FD plat 2024", ": ",
-      format(round(prumerny_plat_2024, 0), big.mark = " "), "K\u010D", "<br>",
-      "Zm\u011Bna", ": ", format(round(plat_change*100, 1),big.mark = " "), "%"
+      paste0("Pr\u016Fm\u011Brn\u00FD plat ", this_year_chr), ": ",
+      format(round(.data[[paste0("prumerny_plat_", this_year)]], 0), big.mark = " "), "K\u010D", "<br>",
+      "Zm\u011Bna: ", format(round(plat_change*100, 1),big.mark = " "), " %"
     ),
     hoverlabel = list(font=list(size=hover_size,family=uni_font))
   ) %>%
@@ -1716,7 +1727,7 @@ graf_A14 <- graf_A14_dta_shares %>%
   ) %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
-                      text = "<b>Graf 4b. Počet státních úředníků, včetně MV a MZV (2003–2024)</b>",
+                      text = paste0("<b>Graf 4b. Počet státních úředníků, včetně MV a MZV (2003–", this_year_chr, ")</b>"),
                       y = 0.98),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
@@ -1751,8 +1762,8 @@ graf_A16 <- plot_ly(graf_A16_dt, type = "scatter", mode = "lines+markers",
             name = "Počet zaměstnanců veřejného sektoru") %>%
   layout(
     yaxis = c(num_ticks,frame_y,list(title = "<b>Počet zaměstnanců (v tisících přepočtených osob)</b>",titlefont = axis_font, range = c(0, 1800))),
-    xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),titlefont = axis_font)
-              # list(tickvals = seq(1993,2024,3))
+    xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),titlefont = axis_font),
+              list(tickvals = seq(1993, max(graf_A16_dt$rok, na.rm=TRUE), 2))
               ),showlegend=FALSE,
     # annotations = c(list(text ='<i>Pozn.:Kategorie: Statistické ročenky České republiky za jednotlivé roky, zde například údaje za rok 2020:</i><br><a href="https://www.czso.cz/csu/czso/10-trh-prace-o73cun42om" target="_blank"><i>https://www.czso.cz/csu/czso/10-trh-prace-o73cun42om</i></a>',
     #                      font = pozn_font_small),annot_below),
@@ -1813,7 +1824,7 @@ names(graf_list)<-c(
 saveRDS(graf_list,"data-interim/graf_list.rds")
 saveRDS(tree_data,"data-interim/tree_data.rds")
 
-for (i in 1:length(graf_list)){
+for (i in seq_along(graf_list)){
   htmlwidgets::saveWidget(as_widget(graf_list[[i]]), paste0("graphs/",names(graf_list)[i],".html"), libdir = "js", selfcontained = FALSE)
 }
 
