@@ -346,8 +346,8 @@ wages_later <- czso_get_table("110080", force_redownload = TRUE) %>%
 
 wages_lastyr <- wages_later |> 
   filter(rok == max(rok)) |> 
-  mutate(czsal_all = czsal_all * 1.072, 
-    phasal_all = phasal_all * 1.096,
+  mutate(czsal_all = 52197, 
+    phasal_all = 65782,
     rok = "2025")
 
 wages_early <- chapters_old %>%
