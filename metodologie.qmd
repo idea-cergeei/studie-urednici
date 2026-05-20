@@ -17,11 +17,11 @@ Následují tři metodologické poznámky k našemu využití těchto dat:
 - jak se liší využití termínu „zaměstnanci státu" v naší studii od kategorie „státní zaměstnanci" v zákoně o státní službě.
 
 Pokračujeme pak diskuzí dalších dat (o mzdách, inflaci a zaměstnancích veřejného sektoru), která všechna získáváme od Českého statistického úřadu.
-Závěrem této přílohy stručně popisujeme, že pro analýzu v této studii využíváme programovací jazyk R, určený ke statistické analýze dat.\
+Závěrem této přílohy stručně popisujeme, že pro analýzu v této studii využíváme programovací jazyk R, určený ke statistické analýze dat.
 
 # Hlavní zdroj dat
 
-Hlavním zdrojem této studie jsou data poskytovaná Ministerstvem financí ze státních závěrečných účtů.
+Hlavním zdrojem této studie jsou data poskytovaná Ministerstvem financí ze [státních závěrečných účtů](https://mf.gov.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu/2025/vladni-navrh-statniho-zaverecneho-uctu-ceske-repub-63848).
 Jedná se o data, která odpovídají státnímu výkaznictví zaměstnanců a výdajů na platy hrazených ze státního rozpočtů a tím i rozpočtové skladbě obecně (viz níže).
 Ministerstvo financí předkládá vždy do konce dubna Státní závěrečný účet za předešlý rok Poslanecké sněmovně, která jej bere na vědomí.
 Státní závěrečný účet obsahuje údaje o výsledcích rozpočtového hospodaření minulého roku.
@@ -87,14 +87,21 @@ Zvláštní pozornost zasluhují následující kapitoly:
 ## Úprava pro časové řady
 
 Pro časové řady, kde se počítá s absolutními metrikami (počty zaměstnanců, prostředky na platy), jsme odebrali kapitoly Ministerstev vnitra a zahraničních věcí, aby byly výsledky srovnatelné v čase.
+
 Počty zaměstnanců pro kapitolu Ministerstva vnitra se mezi roky 2011 a 2012 zvýšily vzhledem ke změně organizační struktury o 321 % a pro kapitolu Ministerstva zahraničí je to pak 157 %.
 Ponecháním těchto kapitol v grafech časových řad by došlo ke značnému zkreslení zejména Grafu 4e.
 Kumulovaná změna reálných výdajů na platy státních úředníků.
-Celkové reálné změny platů a počtu zaměstnanců.
+
+
+### Celkové reálné změny platů a počtu zaměstnanců
+
 Graf 4a ukazuje vývoj počtu státních úředníků se zahrnutím ministerstev vnitra a zahraničních věcí.
 U časových řad průměrných platů jsme ministerstva vnitra a zahraničních věcí nechali zahrnutá, i když i u nich může dojít k mírnému zkreslení (například pokud došlo k přesunu zaměstnanců s vysokými platy).
+
 Podobně jako u těchto dvou ministerstev mohlo dojít k výrazným změnám v počtech zaměstnanců kvůli změnám organizačních struktur, o kterých nevíme.
+
 Zároveň upozorňujeme, že pohyby v časových řadách mohou být způsobené i přesuny agend a útvarů mezi úřady, které v analýze nemůžeme zohlednit.
+
 Podobné změny nejsou konzistentně a veřejně dokumentovány.
 
 ## Výdaje na platy
@@ -108,14 +115,11 @@ Stejně tak naše data nezahrnují odvody zaměstnavatele a další náklady na 
 
 Ve vztahu k platům zaměstnanců škol (příspěvkové organizace v kapitole Ministerstva školství, mládeže a tělovýchovy) také platí, že skutečné platy těchto zaměstnanců mohou být jiné, např.
 protože na ně z vlastních zdrojů přispívá samospráva, která zřizuje školy.
-Máme za to, že pokud například některé obce doplácejí na platy svých učitelů, výsledný vyšší průměrný plat (ani dodatečné výdaje na platy) nejsou zahrnuty v datech, která využíváme, protože nejde o výdaj státního rozpočtu.
+Máme za to, že pokud například některé obce doplácejí na platy svých učitelů, výsledný vyšší průměrný plat (ani dodatečné výdaje na platy) není zahrnut v datech, která využíváme, protože nejde o výdaj státního rozpočtu.
 
-A konečně pracujeme pouze s platy zaměstnanců, kteří podléhají rozpočtové regulaci a jako takové je stát sleduje, tj.
-nejde o veškeré platy hrazené z prostředků státního rozpočtu (nejsou zde např.
-platy vysokoškolských učitelů či zaměstnanců organizací, které jsou např.
-příjemci dotací, prostředků na výzkum a vývoj či dodavateli veřejných zakázek.)
-Naopak zde jsou zahrnuty výdaje platy, které sice hradí státní rozpočet, ale jsou kryty rozpočtem evropským -- jde např.
-o platy státních zaměstnanců pracujících na projektech hrazených z evropských strukturálních a investičních fondů, kde je příjemcem stát.
+A konečně pracujeme pouze s platy zaměstnanců, kteří podléhají rozpočtové regulaci a jako takové je stát sleduje, tj. nejde o veškeré platy hrazené z prostředků státního rozpočtu (nejsou zde např.
+platy vysokoškolských učitelů či zaměstnanců organizací, které jsou např. příjemci dotací, prostředků na výzkum a vývoj či dodavateli veřejných zakázek.)
+Naopak zde jsou zahrnuty výdaje platy, které sice hradí státní rozpočet, ale jsou kryty rozpočtem evropským -- jde např. o platy státních zaměstnanců pracujících na projektech hrazených z evropských strukturálních a investičních fondů, kde je příjemcem stát.
 
 ## „Státní zaměstnanci“ a zákon o státní službě
 
@@ -123,37 +127,30 @@ Pracujeme s pojmem „zaměstnanci státu", abychom jej odlišili od spojení �
 Ve služebních úřadech ale pracují i zaměstnanci v běžném zaměstnaneckém poměru.
 V datech, se kterými pracujeme, nejsou zaměstnanci ve služebním poměru zvlášť sledováni.
 Proto v této studii jako zaměstnance státu označujeme všechny, kteří spadají do výše zmíněných kategorií regulace zaměstnanosti.
-Část informací o zaměstnancích ve služebním poměru poskytuje Monitor Státní pokladny (výdaje na platy zaměstnanců ve služebním poměru podle příslušné položky druhového členění, ale bez informací o počtech a průměrných platech), další informace pak obsahuje i Výroční zpráva o státní službě .
+
+Část informací o zaměstnancích ve služebním poměru poskytuje Monitor Státní pokladny (výdaje na platy zaměstnanců ve služebním poměru podle příslušné položky druhového členění, ale bez informací o počtech a průměrných platech), další informace pak obsahuje i [Výroční zpráva o státní službě](https://vlada.gov.cz/cz/statni_sluzba/o_statni_sluzbe/vyrocni_zpravy/vyrocni-zpravy--222923/).
 
 # Data o mzdách v ekonomice a inflaci
 
 Dodatečná data používáme od Českého statistického úřadu o mzdách v ekonomice a inflaci.
-Při porovnávání platů používáme průměrnou pražskou mzdu pro ústřední orgány a průměrnou celorepublikovou mzdu pro ostatní, vše z datové sady ČSÚ Průměrná hrubá měsíční mzda a medián mezd v krajích (kód 11080) od roku 2011, dřívější roky z dalších srovnatelných tabulek z produkce ČSÚ.
+Při porovnávání platů používáme průměrnou pražskou mzdu pro ústřední orgány a průměrnou celorepublikovou mzdu pro ostatní, vše z datové sady ČSÚ [Průměrná hrubá měsíční mzda a medián mezd v krajích](https://csu.gov.cz/produkty/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich) (kód 110080) od roku 2011, dřívější roky z dalších srovnatelných tabulek z produkce ČSÚ.
 Pro srovnatelnost s rozpočtovými daty používáme průměr (nikoli medián) mezd.
-Pro údaje o cenových hladinách a inflaci (například pro výpočet reálného průměrného hrubé měsíčního platu) používáme [datovou sadu ČSÚ s indexy spotřebitelských cen]() (kód 010022).
+Pro údaje o cenových hladinách a inflaci (například pro výpočet reálného průměrného hrubé měsíčního platu) používáme [datovou sadu ČSÚ s indexy spotřebitelských cen](https://csu.gov.cz/produkty/indexy-spotrebitelskych-cen) (kód 010022).
 
 # Data o počtech zaměstnanců veřejného sektoru
 
-Nejlepší data o státních zaměstnancích od Ministerstva financí využíváme v této studii, ale pro celou množinu zaměstnanců veřejného sektoru poskytují jediné systematické údaje Statistické ročenky Českého statistického úřadu pro jednotlivé roky.
+Nejlepší data o státních zaměstnancích od Ministerstva financí využíváme v této studii, ale pro celou množinu zaměstnanců veřejného sektoru poskytují jediné systematické údaje [Statistické ročenky Českého statistického úřadu](https://csu.gov.cz/produkty/statisticka-rocenka-ceske-republiky-2025) pro jednotlivé roky.
 Pro tyto účely je veřejný sektor velmi široce definován a zahrnuje, kromě státních zaměstnanců, například obce a kraje nebo i veřejné finanční i nefinanční firmy.
 Podle tohoto zdroje veřejný sektor celkem v posledních letech zaměstnával přes 1 milion zaměstnanců (přepočtených na plné úvazky).
 
 # Technika analýzy dat
 
-Analýza je zaznamenána ve zdrojovém kódu v programovacím jazyce R (R Core Team 2021), zveřejněném včetně zdrojových a zpracovaných dat na platformě Github .
-Otevřená data veřejného sektoru (ČSÚ, Monitor Státní pokladny) zpracováváme pomocí balíků v jazyce R zveřejněných v oficiálním repozitáři CRAN (Bouchal, 2021a, 2021b).
+Analýza je zaznamenána ve zdrojovém kódu v programovacím jazyce R [@R-base], zveřejněném včetně zdrojových a zpracovaných dat na [platformě GitHub](https://github.com/idea-cergeei/studie-urednici/).
+Otevřená data veřejného sektoru [@R-czso; @R-statnipokladna] zpracováváme pomocí balíků v jazyce R zveřejněných v oficiálním repozitáři CRAN.
 Reprodukovatelnost analytického prostředí je zajištěna systémem {renv}.
-Pro analýzu dat v R využíváme vícero dalších rozšíření (Dowle a Srinivasan.
-2021, Firke, 2021, R Core Team.
-2021, Carson, 2020, Carson, Parmer, Hocking, Chamberlain, Ram, Corvellec, a Despouy.
-2021.
-Warnes et al.
-2020, Hadley 2016, 2019, 2021a, 2021b, Hadley a Bryan, 2019, Hadley, François, Henry, a Müller.
-2021, Hadley a Hester, 2020, Hadley et al., 2020.
+Pro analýzu dat v R využíváme vícero dalších rozšíření [@R-data.table; @R-janitor; @R-dplyr; @R-gplots; @R-readr; @R-readxl; @R-stringr; @R-tidyr; @ggplot22016; @plotly2020].
 
 # Literatura a zdroje
-
-## Software {#references}
 
 ::: {#refs}
 :::
@@ -161,4 +158,4 @@ Warnes et al.
 # Detaily
 
 Statistické ročenky České republiky - za jednotlivé roky.
-(Zde například za rok 2024: https://csu.gov.cz/produkty/statisticka-rocenka-ceske-republiky-2024)
+(Zde například ročenka 2025: https://csu.gov.cz/produkty/statisticka-rocenka-ceske-republiky-2025)
