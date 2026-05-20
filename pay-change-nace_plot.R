@@ -84,7 +84,7 @@ make_nace_plot <- function(data, add_years = 5) {
                        # limits = c(-.2, .2),
                        labels = fmt_pct_change_axis,
                        breaks = seq(-0.3, 0.3, 0.05)) +
-    guides(colour = guide_legend(reverse = T, title = "Skupina NACE (odvětví)"), size = "none", fill = "none", segment.color = "none") +
+    guides(colour = guide_legend(reverse = TRUE, title = "Skupina NACE (odvětví)"), size = "none", fill = "none", segment.color = "none") +
     labs(title = "Meziroční změny průměrných reálných mezd (v odvětvích dle NACE), v %",
          x = "Rok", y = "Reálná meziroční změna (očištěno o inflaci)",
          caption = "Zdroj: vlastní výpočet z dat ČSÚ (sady 110079 Mzdy, náklady práce - časové řady a 010022 Indexy spotř. cen)") +
