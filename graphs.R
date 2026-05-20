@@ -1828,5 +1828,6 @@ for (i in seq_along(graf_list)){
   htmlwidgets::saveWidget(as_widget(graf_list[[i]]), paste0("graphs/",names(graf_list)[i],".html"), libdir = "js", selfcontained = FALSE)
 }
 
-source("graf_rocni-zmeny-dekompozice.R")
-source("pay-change-nace_plot.R")
+source("graf_rocni-zmeny-dekompozice.R", local = environment())
+source("pay-change-nace_plot.R", local = environment())
+
