@@ -1,0 +1,18 @@
+---
+title: "Zkratky rozpočtových kapitol"
+format: 
+    html:
+        warning: false
+        message: false
+        echo: false
+---
+
+
+```{r}
+library(readr)
+library(gt)
+
+read_csv("zkratky.csv", show_col_types = FALSE) |>
+  gt() |>
+  fmt_markdown(columns = everything())
+```
