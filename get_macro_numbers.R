@@ -38,7 +38,7 @@ cnb_gdp <- cnbrrr::arad_get_data(
 cnb_gdp_thisyr <- cnb_gdp %>%
   filter(year == rok, indicator_id == "SHDPZDRY1B1GMMLNA") %>%
   select(indicator_id, value) %>%
-  mutate(value = value * 1e6) |>
+  mutate(value = value) |>
   pull(value)
 
 macro_numbers$gdp <- cnb_gdp_thisyr
@@ -54,7 +54,7 @@ vydaje_sr_thisyr <- vydaje_sr %>%
   filter(year == rok) |>
   pull(vydaje_sr)
 
-macro_numbers$sr_vydaje <- vydaje_sr_thisyr * 1e6
+macro_numbers$sr_vydaje <- vydaje_sr_thisyr
 
 macro_numbers
 
