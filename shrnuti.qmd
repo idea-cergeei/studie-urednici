@@ -35,6 +35,18 @@ kde pracují a za kolik?[^1]
 - **Interaktivní [on-line aplikaci](https://ideaapps.cerge-ei.cz/zamestnancistatu/)** každoročně aktualizujeme o nejnovější údaje o počtech zaměstnanců státu, jejich platech a nákladech na ně, a to na základě údajů z každoročního [Státního závěrečného účtu](https://www.mfcr.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu).
   Níže uvádíme přehled klíčových zjištění.
 
+## Vývoj v roce 2025 ve stručnosti
+
+- Počet zaměstnanců státu za poslední rok narostl o cca 4 000 (0,8 %), přibylo především zaměstnanců škol a vojáků.
+- Naopak státních úředníků cca 300 ubylo (0,4 %).
+- Průměrné platy ve skupině *státních úředníků* poprvé od roku 2020 vzrostly v reálném vyjádření.
+- Vývoj platů úředníků zhruba kopíroval ekonomiku, tj. téměř se zastavil pokles platové konkurenceschopnosti státních úřadů vyjádřené relativními platy vůči ekonomice.
+- V širším sektoru státních zaměstnanců pak vzrostla platová konkurenceschopst vojáků i příslušníků bezpečnostních sborů, mírně klesla u zaměstnanců regionálního školství.
+
+Aplikace nově obsahuje interaktivní prohlížečku, kde je možné vybrat kategorie institucí a skupiny zaměstnanců pro srovnání a nastavit, co, zda a s čím se srovnává - ať už jde o platy, náklady nebo počty zaměstnanců.
+
+## Kdo jsou zaměstnanci státu
+
 - **Za zaměstnance státu považujeme** ty, jejichž zaměstnanost reguluje a financuje státní rozpočet (SR), a je jich téměř půl milionu.
   To představuje necelých 10 % české pracovní síly.
   Zdaleka největší podíl představují zaměstnanci v regionálním školství (cca 290 tisíc), bezpečnostních sborů (cca 80 tisíc) jako jsou policie, hasiči, celní správa, vězeňská služba a v armádě.
@@ -47,22 +59,21 @@ kde pracují a za kolik?[^1]
 
 ## Počty zaměstnanců státu
 
-- **Celkový počet zaměstnanců státu v roce 2024** vzrostl o cca 3 000 osob (0,6 %)
+- **Celkový počet zaměstnanců státu v roce 2025** vzrostl o cca 4 000 osob (0,6 %)
 
   ::: {custom-style="nospacepara"}
   [Graf 10. Změny počtu zaměstnanců ve sféře rozpočtové regulace, podle kategorií](https://ideaapps.cerge-ei.cz/zamestnancistatu/#10.Zm%C4%9Bnypo%C4%8Dtuzam.podlekategori%C3%AD)
   :::
 
-  - Státních úředníků mírně ubylo (o cca 2 000), především v tzv.
-    neústřední státní správě, což jsou typicky velké úřady poskytující přímé služby občanům mimo Prahu (finanční úřady, správa sociálního zabezpečení, úřad práce).
+  - Počet státních úředníků velmi mírně klesl (o 300 osob, 0.3 %); mírné nárůsty na ústředních úřadech více než kompenzovaly úbytky zaměstnanců velkých neústředních úřadů.
 
-  - Počet zaměstnanců ministerstev se téměř nezměnil.
+  - Počet zaměstnanců ministerstev vzrostl o zhruba 300.
 
-  - Počet zaměstnanců ostatních ústředních orgánů vzrostl o zhruba 100 (+2 %).
+  - Počet zaměstnanců ostatních ústředních orgánů vzrostl o zhruba 50 (+1 %).
 
-  - Výrazně přibylo zaměstnanců regionálního školství zhruba o 5 000 (+3 %).
+  - Výrazně přibylo zaměstnanců regionálního školství zhruba o 3 800 (+1,4 %).
 
-- **Sektor školství spadající pod MŠMT (příspěvkové organizace) za poslední dekádu přispěl k celkovému nárůstu počtu zaměstnanců státu nejvíce.** Od roku 2017 se meziroční nárůsty pohybovaly mezi 4,6 až 14,9 tisíci zaměstnanců, což ale s ohledem na vysoké počty zaměstnanců znamená růsty pouze v řádu 1 až 3 %.
+- **Sektor školství spadající pod MŠMT (příspěvkové organizace) za poslední dekádu přispěl k celkovému nárůstu počtu zaměstnanců státu nejvíce.** Od roku 2017 se meziroční nárůsty pohybovaly mezi 3,8 až 14,9 tisíci zaměstnanců, což ale s ohledem na vysoké počty zaměstnanců znamená růsty pouze v řádu 1 % až 3 %.
   Souviselo to jak s demograficky taženým růstem počtu dětí školního věku v tomto období, tak se zaváděním inkluze, která dříve v českém školství absentovala.
 
   ::: {custom-style="nospacepara"}
@@ -70,36 +81,31 @@ kde pracují a za kolik?[^1]
   :::
 
 - **Státních úředníků je mezi zaměstnanci státu cca 75 tisíc (15 % zaměstnanců státu)**.
-  Většina z nich pracuje v ‚Neústřední státní správě', tj.
-  v organizacích, jako jsou finanční úřady či správa sociálního zabezpečení, úřady práce, tedy často na pobočkách mimo Prahu.
-  Na ministerstvech pak pracuje necelých 23 tis.
-  osob, představují necelých 5 % zaměstnanců státu a necelého půl procenta pracovní síly v ekonomice (toto číslo zahrnuje i příslušníky a zaměstnance bezpečnostních sborů evidované na Ministerstvu vnitra (MV ČR), které nelze v těchto datech odlišit).
+  Většina z nich pracuje v ‚Neústřední státní správě', tj. v organizacích, jako jsou finanční úřady či správa sociálního zabezpečení, úřady práce, tedy často na pobočkách mimo Prahu.
+  Na ministerstvech pak pracuje necelých 23 tis. osob, představují necelých 5 % zaměstnanců státu a necelého půl procenta pracovní síly v ekonomice (toto číslo zahrnuje i příslušníky a zaměstnance bezpečnostních sborů evidované na Ministerstvu vnitra (MV ČR), které nelze v těchto datech odlišit).
   Státních úředníků je tedy mnohem méně, než jaké jsou laické představy a případná očekávání ohledně rozsahu možných úspor v této oblasti.
 
   ::: {custom-style="nospacepara"}
   [Graf 1a. Počet zaměstnanců státu dle regulace zaměstnanosti](https://ideaapps.cerge-ei.cz/zamestnancistatu/#1a.Po%C4%8Dtyzam%C4%9Bstnanc%C5%AF)
 
-  [Graf 4a. Počet státních úředníků 2003--2024](https://ideaapps.cerge-ei.cz/zamestnancistatu/#4a.Po%C4%8Dtyzam%C4%9Bstnanc%C5%AF)
+  [Graf 4a. Počet státních úředníků 2003--2025](https://ideaapps.cerge-ei.cz/zamestnancistatu/#4a.Po%C4%8Dtyzam%C4%9Bstnanc%C5%AF)
 
-  [Graf 4b. Počet státních úředníků 2003--2024, včetně MV a MZV](https://ideaapps.cerge-ei.cz/zamestnancistatu/#4b.Po%C4%8Dtyzam.,v%C4%8Detn%C4%9BMVaMZV)
+  [Graf 4b. Počet státních úředníků 2003--2025, včetně MV a MZV](https://ideaapps.cerge-ei.cz/zamestnancistatu/#4b.Po%C4%8Dtyzam.,v%C4%8Detn%C4%9BMVaMZV)
   :::
 
-- **Počty státních úředníků** se poslední dvě dekády pohybovaly v rozmezí 71 tis.
-  (rok 2012) a 79 tis.
-  (rok 2019).
+- **Počty státních úředníků** se poslední dvě dekády pohybovaly v rozmezí 71 tis. (rok 2012) a 79 tis. (rok 2019).
   Do dlouhodobých trendů se promítly snahy o konsolidaci veřejných rozpočtů po roce 2010 a po roce 2021.
   Za mírným poklesem počtu státních úředníků po roce 2021 o zhruba 3 000 stály hlavně poklesy v sektoru ‚Neústřední státní správy', která zahrnuje organizace podřízené ministerstvům jako např.
   finanční správa nebo úřady práce.
-  ‚Neústřední státní správa' zaměstnává většinu státních úředníků (64 %).
-  Naopak počet státních úředníků přímo na ministerstvech po roce 2021 mírně narostl z 22 729 na 22 883 (toto číslo zahrnuje i příslušníky a zaměstnance bezpečnostních sborů evidované pod IČO Ministerstva vnitra, které nelze v těchto datech odlišit).
+  ‚Neústřední státní správa' zaměstnává většinu státních úředníků (63 %).
+  Naopak počet státních úředníků přímo na ministerstvech po roce 2021 mírně narostl z 22 729 na 23 130 v roce 2025 (toto číslo zahrnuje i příslušníky a zaměstnance bezpečnostních sborů evidované pod IČO Ministerstva vnitra, které nelze v těchto datech odlišit).
 
   ::: {custom-style="nospacepara"}
-  [Graf 4b. Počet státních úředníků 2003--2024, včetně MV a MZV](https://ideaapps.cerge-ei.cz/zamestnancistatu/#4b.Po%C4%8Dtyzam.,v%C4%8Detn%C4%9BMVaMZV)
+  [Graf 4b. Počet státních úředníků 2003--2025, včetně MV a MZV](https://ideaapps.cerge-ei.cz/zamestnancistatu/#4b.Po%C4%8Dtyzam.,v%C4%8Detn%C4%9BMVaMZV)
   :::
 
-- **Veřejný sektor, uváděný v některých statistikách ČSÚ**, představuje širší skupinu než jsou zaměstnanci státu, a navíc zahrnuje např.
-  instituce veřejného zdravotnictví, veřejných vysokých škol a státní firmy.
-  Zaměstnanost v takto definovaném sektoru dlouhodobě představuje zhruba 1 milion osob, tedy necelou pětinu pracovní síly v české ekonomice.
+- **Veřejný sektor, uváděný v některých statistikách ČSÚ**, představuje širší skupinu než jsou zaměstnanci státu, a navíc zahrnuje např. instituce veřejného zdravotnictví, veřejných vysokých škol a státní firmy.
+  Zaměstnanost v takto definovaném sektoru dlouhodobě představuje zhruba 1 milion osob, tedy necelou pětinu pracovní síly v české ekonomice. Tento počet dlouhodobě mírně roste; v roce 2025 narostl o 14 tisíc (1,6 %) a za zhruba dvěma třetinami tohoto nárůstu stojí samosprávy, kde jsou započteny i nárůsty počtu zaměstnanců v regionálním školství. K nárůstu v ústředním státu přispívá i mírný setrvalý růst počtu vojáků.
 
   ::: {custom-style="nospacepara"}
   [Graf 9a. Počet zaměstnanců veřejného sektoru](https://ideaapps.cerge-ei.cz/zamestnancistatu/#9a.Po%C4%8Detzam.ve%C5%99.sektoru)
@@ -107,18 +113,17 @@ kde pracují a za kolik?[^1]
 
 ## Platy zaměstnanců státu
 
-- **Průměrné reálné platy státních úředníků v roce 2024 stagnovaly** (ministerstva, ostatní ústřední orgány, neústřední úřady).
-  Reálné platy na ministerstvech ale poklesly již pátý rok v řadě.
-  Platy úředníků ministerstev tak doklesaly na úroveň průměrné mzdy v Praze -- ačkoli mezi zaměstnanci ministerstev je více osob s vysokoškolským vzděláním než v celkové pracovní síle v Praze.
+- **Průměrné reálné platy státních úředníků v roce 2025 poprvé od roku 2020 zaznamenaly nárůst** (ministerstva, ostatní ústřední orgány, neústřední úřady).
+  Platy na neministerských ústředních orgánech rostly (4,5 %) o něco rychleji než na neústředních úřadech (3,4 %) a ministerstvech (3,2 %). K tomuto relativně rychlejším nárůstu v početně malé skupině zaměstnanců ostatních ústředních orgánů přispěl růst průměrného platu na Digitální a informační agentuře, spojený s nárůstem počtu jejích zaměstnanců.
+  Průměrné platy státních úředníků ale stále klesaly -- byť mírněji než v minulých letech -- vůči průměrné mzdě v ekonomice, protože v jiných částech ekonomiky platy rostly rychleji. Nejvíce se vůči konkurenčním mzdám propadla ministerstva a naopak mírně se zlepšila pozice ústředních orgánů, které je třeba srovnávat s platy v Praze. Platová úroveň ministerstev a ústředních úřadů nyní dosahuje cca 95 % resp. 87 % pražského průměru, a to i přesto, že v těchto úřadech pracuje vyšší podíl např. vysokoškolsky vzdělaných lidí, než na celém trhu práce v Praze.
 
   ::: {custom-style="nospacepara"}
-  [Graf 5a. Reálné průměrné platy státních úředníků 2004--2024](https://ideaapps.cerge-ei.cz/zamestnancistatu/#5a.Vre%C3%A1ln%C3%A9mvyj%C3%A1d%C5%99en%C3%AD)
+  [Graf 5a. Reálné průměrné platy státních úředníků 2004--2025](https://ideaapps.cerge-ei.cz/zamestnancistatu/#5a.Vre%C3%A1ln%C3%A9mvyj%C3%A1d%C5%99en%C3%AD)
   :::
 
 - **Průměrné relativní platy státních úředníků**, tedy v poměru k průměrným platům v ekonomice, se poslední dvě dekády vyvíjely velmi cyklicky.
   Minima dosáhly v letech 2011--2012, maxima kolem roku 2018 a od té doby klesají.
-  Rok 2024 byl pro ministerstva již pátým rokem v řadě, kdy relativní platy klesaly a klesly pod minimum roku 2021.
-  Relativní platy ‚Neústřední státní správy' a ‚Ostatních ústředních orgánů' klesly v roce 2024 pod minimum roku 2012 ještě výrazněji.
+  Letošní poklesy relativních platů ústředních úřadů a ministerstev přichází po ještě strmějších propadech v roce 2024 a následují dlouhodobý pokles, který začal v roce 2019.
 
   ::: {custom-style="nospacepara"}
   [Graf 5b. Průměrné platy státních úředníků v poměru k průměrné mzdě v ekonomice](https://ideaapps.cerge-ei.cz/zamestnancistatu/#5b.V%C5%AF%C4%8Dipr%C5%AFm%C4%9Brn%C3%A9mzd%C4%9B)
@@ -128,10 +133,10 @@ kde pracují a za kolik?[^1]
   To přispělo k růstu relativních platů ve státní správě, a tedy i nákladů na tyto platy.
   V roce 2021 došlo k velkému propadu reálných platů ve státní správě, zatímco reálné mzdy v ekonomice ještě rostly.
   V letech 2022 a 2023 potom došlo k vysokým a podobným propadům reálných platů i mezd v ekonomice.
-  V roce 2024 veřejná správa téměř kopírovala vývoj v ekonomice.
+  V roce 2024 státní správa na ekonomiku dále ztrácela, v roce 2025 se tento propad téměř zastavil. Výjimkou jsou bezpečnostní sbory a skupina zahrnující Armádu ČR, kde relativní platy v roce 2025 stouply.
 
   ::: {custom-style="nospacepara"}
-  [Graf 5a. Reálné průměrné platy státních úředníků 2004--2024](https://ideaapps.cerge-ei.cz/zamestnancistatu/#5a.Vre%C3%A1ln%C3%A9mvyj%C3%A1d%C5%99en%C3%AD)
+  [Graf 5a. Reálné průměrné platy státních úředníků 2004--2025](https://ideaapps.cerge-ei.cz/zamestnancistatu/#5a.Vre%C3%A1ln%C3%A9mvyj%C3%A1d%C5%99en%C3%AD)
   :::
 
 - **Průměrné platy** se výrazně liší jak mezi kategoriemi organizací, tak mezi organizacemi uvnitř těchto kategorií.
@@ -139,42 +144,36 @@ kde pracují a za kolik?[^1]
   Srovnání platů a mezd, které zohledňuje rozdíly vykonávaných profesí, úrovně vzdělání, věku, pohlaví a regionu nabízí [studie IDEA (2025)](https://idea.cerge-ei.cz/studies/srovnani-platu-a-mezd-v-ceske-republice-vetsi-problem-nez-se-zda).
 
   ::: {custom-style="nospacepara"}
-  [Graf 3a. Průměrné platy zaměstnanců státu dle rozp. kapitoly (2024)](https://ideaapps.cerge-ei.cz/zamestnancistatu/#3a.Absolutn%C3%ADhodnoty)
+  [Graf 3a. Průměrné platy zaměstnanců státu dle rozp. kapitoly (2025)](https://ideaapps.cerge-ei.cz/zamestnancistatu/#3a.Absolutn%C3%ADhodnoty)
   :::
 
-- **Nejvyšší průměrné měsíční platy** měli v roce 2024 zaměstnanci ministerstev (58 tis.
-  Kč), dále pak zaměstnanci ‚Ostatních ústředních orgánů' (51 tis.
-  Kč).
+- **Nejvyšší průměrné měsíční platy** měli v roce 2025 zaměstnanci ministerstev (62 tis. Kč), dále pak zaměstnanci ‚Ostatních ústředních orgánů' (56 tis. Kč).
   Široký rozptyl měly průměrné platy organizací zařazených do kategorie ‚Ostatní organizační složky státu', což odráží velkou rozmanitost funkcí a personálního složení těchto organizací.
   Nejnižší platy pak mají zaměstnanci ‚Neústřední státní správy', tedy převážně organizací poskytujících přímé služby občanům.
 
   ::: {custom-style="nospacepara"}
-  [Graf 3a. Průměrné platy zaměstnanců státu dle rozp. kapitoly (2024)](https://ideaapps.cerge-ei.cz/zamestnancistatu/#3a.Absolutn%C3%ADhodnoty)
+  [Graf 3a. Průměrné platy zaměstnanců státu dle rozp. kapitoly (2025)](https://ideaapps.cerge-ei.cz/zamestnancistatu/#3a.Absolutn%C3%ADhodnoty)
   :::
 
-- **Průměrné platy zaměstnanců ministerstev** (sídlících většinou v Praze) se liší od průměrné mzdy v Praze v rozpětí +/-15 %.
+- **Průměrné platy zaměstnanců ministerstev** (sídlících většinou v Praze) se liší od průměrné mzdy v Praze v rozpětí +5/-15 % (vyšší je rozdíl u MZV, kde je systém odměňování specifický).
   Přesné důvody této platové nerovnosti nelze z dostupných dat vysledovat.
   Obecně ale hraje roli rozdílné personální složení co do odbornosti i věkové struktury a také zřejmě historicky dané rozdíly, které systém rozpočtování a platové politiky jednotlivých úřadů v průběhu času zachovávají.
 
   ::: {custom-style="nospacepara"}
-  [Graf 3a. Průměrné platy zaměstnanců státu dle rozp. kapitoly (2024)](https://ideaapps.cerge-ei.cz/zamestnancistatu/#3a.Absolutn%C3%ADhodnoty)
+  [Graf 3a. Průměrné platy zaměstnanců státu dle rozp. kapitoly (2025)](https://ideaapps.cerge-ei.cz/zamestnancistatu/#3a.Absolutn%C3%ADhodnoty)
   :::
 
 ## Výdaje na platy zaměstnanců státu
 
-- **Výdaje na platy zaměstnanců státu** regulované státním rozpočtem (SR) v roce 2024 činily 265 miliard Kč, což představuje 11,8 % výdajů SR a 3,3 % HDP.
+- **Výdaje na platy zaměstnanců státu** regulované státním rozpočtem (SR) v roce 2025 činily 284 miliard Kč, což představuje 12 % výdajů státního rozpočtu a 3,3 % HDP.
   Rozložení nákladů mezi jednotlivé oblasti zaměstnanosti zhruba odpovídá počtům tam pracujících zaměstnanců státu.
 
   ::: {custom-style="nospacepara"}
   [Graf 1b. Výdaje na platy zaměstnanců státu dle regulace zaměstnanosti](https://ideaapps.cerge-ei.cz/zamestnancistatu/#1b.V%C3%BDdajenaplaty)
   :::
 
-- **Výdaje na platy státních úředníků** v roce 2024 činily zhruba 43,5 mld.
-  Kč, což představuje 1,9 % státního rozpočtu a 0,54 % HDP.
-  Náklady na platy úředníků ministerstev (opět včetně všech osob na MV ČR) představovaly 16 mld.
-  Kč, tedy 36 % celkových nákladů na úředníky státu (bez bezpečnostních sborů uvnitř MV ČR odhadem 10 mld., tedy 23 % nákladů na státní úředníky).
-  Laická očekávání, že úspory v těchto segmentech se mohou výrazně propsat do konsolidace veřejných výdajů, jsou tedy přehnaně optimistická.
-  To však nesnižuje potřebu zvyšování efektivity státní správy včetně jejího úředního aparátu.
+- **Výdaje na platy státních úředníků** v roce 2025 činily zhruba 43,5 mld. Kč, což představuje 1,8 % státního rozpočtu a 0,51 % HDP.
+  Náklady na platy úředníků ministerstev (opět včetně všech osob na MV ČR) představovaly 17,3 mld. Kč, tedy 38 % celkových nákladů na úředníky státu (bez bezpečnostních sborů uvnitř MV ČR odhadem 10 mld., tedy 22 % nákladů na státní úředníky).
 
   ::: {custom-style="nospacepara"}
   [Graf 1b. Výdaje na platy zaměstnanců státu dle regulace zaměstnanosti](https://ideaapps.cerge-ei.cz/zamestnancistatu/#1b.V%C3%BDdajenaplaty)
@@ -191,19 +190,14 @@ kde pracují a za kolik?[^1]
 
 - **Reálné výdaje na platy státních úředníků,** tedy ve stálých cenách, poslední dvě dekády výrazně fluktuovaly.
   K nejrychlejšímu poklesu došlo po roce 2021 v důsledku inflační vlny a snahy o konsolidaci výdajů SR.
-  V roce 2024 tak byly reálné výdaje na podobné úrovni jako v roce 2009, tedy před světovou finanční krizí.
+  V roce 2025 tak byly výdaje v reálném vyjádření na platy cca o 2 mld. vyšší než v roce 2009, tedy před světovou finanční krizí.
   V mezidobí však výrazně narostla reálná hodnota HDP i příjmů a výdajů SR.
 
   ::: {custom-style="nospacepara"}
-  [Graf 5a. Reálné průměrné platy státních úředníků 2004--2024](https://ideaapps.cerge-ei.cz/zamestnancistatu/#5a.Vre%C3%A1ln%C3%A9mvyj%C3%A1d%C5%99en%C3%AD)
+  [Graf 5a. Reálné průměrné platy státních úředníků 2004--2025](https://ideaapps.cerge-ei.cz/zamestnancistatu/#5a.Vre%C3%A1ln%C3%A9mvyj%C3%A1d%C5%99en%C3%AD)
   :::
 
 [^1]: Interaktivní aplikace/studie think-tanku IDEA při Ekonomickém ústavu Akademie věd ČR nabízí podrobné analytické vhledy do struktury a dlouhodobých trendů počtu zaměstnanců státu, výše jejich platů a výdajů na ně.
-    Aplikace je veřejně dostupná na adrese: <https://ideaapps.cerge-ei.cz/zamestnancistatu> a reprezentuje pouze názor autorů, nikoli oficiální stanovisko Ekonomického ústavu AV ČR, v.
-    v.
-    i.
-    či Centra pro ekonomický výzkum a doktorské studium UK (CERGE).
+    Aplikace je veřejně dostupná na adrese: <https://ideaapps.cerge-ei.cz/zamestnancistatu> a reprezentuje pouze názor autorů, nikoli oficiální stanovisko Ekonomického ústavu AV ČR, v.v.i. či Centra pro ekonomický výzkum a doktorské studium UK (CERGE).
 
-    \* CERGE-EI, společné pracoviště UK a EKÚ AV ČR, v.
-    v.
-    i.
+    \* CERGE-EI, společné pracoviště UK a EKÚ AV ČR, v.v.i.

@@ -1,10 +1,9 @@
 ---
 title: "Zaměstnanci státu a státní úředníci 2025: Data a metodologie "
 format: docx
-bibliography: report-files/references.json
+bibliography: report-files/references-merged.json
 csl: report-files/chicago-author-date.csl
 lang: cs
-nocite: "@*"
 ---
 
 V této příloze popisujeme datové zdroje a detaily našeho metodologického přístupu.

@@ -346,8 +346,11 @@ wages_later <- czso_get_table("110080", force_redownload = TRUE) %>%
 
 wages_lastyr <- wages_later |> 
   filter(rok == max(rok)) |> 
-  mutate(czsal_all = 52197, 
-    phasal_all = 65782,
+  # https://csu.gov.cz/produkty/struktura-mezd-zamestnancu-2025
+  # https://csu.gov.cz/docs/107508/8d81711d-6a62-48e4-cab7-ddeff5a10a8d/11002626a01.pdf?version=1.0
+  mutate(czsal_all = 52202, 
+    # B2 https://csu.gov.cz/docs/107508/336b10c5-2b70-2c81-fd81-0eb76f81c45f/11002626b01.pdf?version=1.0
+    phasal_all = 65594,
     rok = "2025")
 
 wages_early <- chapters_old %>%

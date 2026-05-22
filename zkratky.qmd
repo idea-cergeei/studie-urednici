@@ -1,7 +1,7 @@
 ---
 title: "Zkratky rozpočtových kapitol"
 format: 
-    html:
+    docx:
         warning: false
         message: false
         echo: false
