@@ -62,7 +62,7 @@ if (nrow(text_par) > 0 && "text" %in% names(text_par)) {
 
 script_template <- readLines("www/template_script.js")
 
-title_modal <- readLines("www/img/title_v3.svg")
+title_modal <- readLines("www/img/title_v3_paths.svg")
 title_modal <- gsub("a xlink:href",'a target="_blank" xlink:href',title_modal)
 template <- gsub("title\\_svg",paste(title_modal,collapse="\n"),template)
 

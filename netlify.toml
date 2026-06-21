@@ -1,2 +1,3 @@
 [build]
+  command = ""
   publish = "graphs_mod/"

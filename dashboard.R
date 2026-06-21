@@ -210,7 +210,7 @@ h4   { color: #c90239; margin-bottom: 14px; font-size: 1.1rem; }
 }
 .chk-label input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: #c90239; }
 .chk-label.disabled { opacity: 0.35; pointer-events: none; }
-.shapelayer path { cursor: ew-resize !important; }
+.shapelayer path { cursor: pointer !important; }
 #pct-hint   { display: none; color: #666; font-size: 12px; margin: 2px 0 4px; }
 #mzda-note  { display: none; color: #888; font-size: 11px; margin: 2px 0 4px; }
 #chart { flex: 1 1 auto; min-height: 300px; }
@@ -442,7 +442,7 @@ function buildLayout() {
       xanchor: "center", yanchor: "top",
       font: { size: 13, family: "Arial" }
     },
-    hovermode:  "x unified",
+    hovermode:  "closest",
     hoverlabel: { font: { size: 13, family: "Arial" } },
     margin:     { t: 30, b: 130, l: 80, r: 20 },
     paper_bgcolor: "white", plot_bgcolor: "white"
@@ -595,10 +595,29 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPlot();
   });
 
+  // Reset button
+  document.getElementById("reset-btn").addEventListener("click", () => {
+    selKaps  = [CELKEM_VAL];
+    selCats  = null;
+    mode     = "sal_level";
+    baseYear = 2019;
+    isNom    = false;
+    realChk.checked = true;
+    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+    document.querySelector(".mode-btn[data-mode=\'sal_level\']").classList.add("active");
+    document.getElementById("pct-hint").style.display  = "none";
+    document.getElementById("mzda-note").style.display = "none";
+    setRealChkEnabled();
+    document.getElementById("kap-input").value = "";
+    hideDropdown();
+    renderKapTags(); updateCatPills(); renderPlot();
+  });
+
   // Kapitola type-ahead
   const inp = document.getElementById("kap-input");
   inp.addEventListener("input",  e => showDropdown(e.target.value));
   inp.addEventListener("focus",  e => showDropdown(e.target.value));
+  inp.addEventListener("click",  e => showDropdown(e.target.value));
   inp.addEventListener("blur",   () => setTimeout(hideDropdown, 160));
   inp.addEventListener("keydown", e => {
     const visible = ALL_KAPS.filter(k => !selKaps.includes(k.val) &&
@@ -611,6 +630,8 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault(); if (visible[ddFocusIdx]) addKap(visible[ddFocusIdx].val);
     } else if (e.key === "Escape") {
       hideDropdown();
+    } else if (e.key === "Backspace" && inp.value === "" && selKaps.length > 0) {
+      e.preventDefault(); removeKap(selKaps[selKaps.length - 1]);
     }
   });
   document.getElementById("kap-box").addEventListener("click", e => {
@@ -659,10 +680,11 @@ src_note  <- paste0(
 pct_hint  <- "☜ Přetáhněte svislou čáru v grafu pro výběr základního roku."
 mzda_note <- "Ministerstva jsou porovnávána s průměrnou mzdou v Praze, ostatní s průměrnou mzdou v ČR."
 
-btn_sal <- "Průměrný plat"
-btn_cst <- "Platové náklady"
-btn_avg <- "Průměr vs. trh práce"
-btn_stf <- "Počty zaměstnanců"
+btn_sal   <- "Průměrný plat"
+btn_cst   <- "Platové náklady"
+btn_avg   <- "Průměr vs. trh práce"
+btn_stf   <- "Počty zaměstnanců"
+btn_reset <- "Obnovit výchozí"
 
 # ── Assemble HTML ─────────────────────────────────────────────────────────────
 html <- paste0(
@@ -693,7 +715,7 @@ html <- paste0(
 
 <div class="mode-row">
   <p class="lbl">', metrika_lbl, ' <span style="font-weight:400;color:#999">', metrika_hint, '</span></p>
-  <div class="mode-controls">
+  <div class="mode-controls" style="width:100%;">
     <div class="metric-col">
       <span class="metric-col-lbl">', btn_sal, '</span>
       <div class="btn-row">
@@ -726,6 +748,9 @@ html <- paste0(
       <label class="chk-label" id="real-chk-wrap" style="align-items:center; padding:6px 0; border:1px solid transparent; border-radius:4px;">
         <input type="checkbox" id="real-chk" checked> ', chk_lbl, '
       </label>
+    </div>
+    <div style="display:flex; align-self:stretch;">
+      <button id="reset-btn" style="width:100%; padding:7px 18px; font-size:14px; font-weight:700; background:#fff; color:#c90239; border:2px solid #c90239; border-radius:4px; cursor:pointer; white-space:nowrap;">', btn_reset, '</button>
     </div>
   </div>
   <p id="pct-hint">',   pct_hint,  '</p>
