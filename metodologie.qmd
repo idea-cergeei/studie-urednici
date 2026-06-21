@@ -1,6 +1,8 @@
 ---
-title: "Zaměstnanci státu a státní úředníci 2025: Data a metodologie "
-format: docx
+title: "Zaměstnanci státu a státní úředníci 2025: Data a metodologie"
+format:
+  docx:
+    reference-doc: word-templates/shrnuti-template.docx
 bibliography: report-files/references-merged.json
 csl: report-files/chicago-author-date.csl
 lang: cs
@@ -30,8 +32,7 @@ Veřejně dostupná verze Státního závěrečného účtu ale v Sešitu G, tab
 Nelze z nich tedy vypočíst průměrný plat, proto v této studii vycházíme z tabulek poskytnutých Ministerstvem financí.
 
 Pracujeme především se skutečnými výdaji, a tedy i s reálně obsazenými zaměstnaneckými místy.
-Výjimkou je analýza tzv.
-neobsazených míst, pro jejíž účely porovnáváme schválený rozpočet se skutečností.
+Výjimkou je analýza tzv. neobsazených míst, pro jejíž účely porovnáváme schválený rozpočet se skutečností.
 Neobsazená místa ukazujeme v Grafech 7a a 7b a podobným způsobem porovnáváme rozdíly v průměrných platech mezi schváleným rozpočtem a skutečností v Grafech 7c a 7d.
 
 Zaměstnance státu pro účely této studie definujeme jako ty, placené ze státního rozpočtu.
@@ -41,21 +42,16 @@ Tato členění shrnujeme níže.
 
 ## Regulace zaměstnanosti
 
-Zaměstnanci státu jsou podle tzv.
-regulace zaměstnanosti, kterou využívá Ministerstvo financí pro data o státních zaměstnancích, rozděleni do šesti skupin.
-Ministerstva (1.
-skupina) a ostatní ústřední úřady (2.
-skupina) spolu dávají ústřední orgány státní správy.
+Zaměstnanci státu jsou podle tzv. regulace zaměstnanosti, kterou využívá Ministerstvo financí pro data o státních zaměstnancích, rozděleni do šesti skupin.
+Ministerstva (1. skupina) a ostatní ústřední úřady (2. skupina) spolu dávají ústřední orgány státní správy.
 Kategorii ústředních orgánů jsme na ministerstva a jiné rozdělili, přestože toto dělení ve vstupních datech Ministerstva financí není.
-Když k nim přidáme neústřední státní správu (3.
-skupina) a správu ve složkách obrany, bezpečnostní, celní a právní ochrany (4.
-skupina), mluvíme dohromady o státní správě.
-Když k nim dále přidáme ostatní organizační složky státu (5.
-skupina), včetně Armády ČR, máme organizační složky státu nebo také rozpočtové organizace.
-Konečně, přidáním příspěvkových organizací (6.
-skupina), získáváme rozpočtové organizace a příspěvkové organizace, které souhrnně označujeme jako státní zaměstnance.
+Když k nim přidáme neústřední státní správu (3. skupina) a správu ve složkách obrany, bezpečnostní, celní a právní ochrany (4. skupina), mluvíme dohromady o státní správě.
+Když k nim dále přidáme ostatní organizační složky státu (5. skupina), včetně Armády ČR (zahrnuje vojáky i civilní zaměstnance), máme organizační složky státu nebo také rozpočtové organizace.
+Konečně, přidáním příspěvkových organizací (6. skupina), získáváme rozpočtové organizace a příspěvkové organizace, které souhrnně označujeme jako státní zaměstnance.
 
 Zaměstnanci ve školství jsou sice vesměs zaměstnanci škol zřizovaných samosprávami, v rozpočtové dokumentaci jsou ale vedeni jako zaměstnanci příspěvkových organizací v kapitole Ministerstva školství, mládeže a tělovýchovy, protože peníze na jejich platy obce dostávají ze státního rozpočtu ve výši stanovené legislativou na centrální úrovni.
+
+Naopak pod regulaci zaměstnanosti nespadají zaměstnanci samospráv ani jejich volení představitelé (zastupitelé, starostové apod.)
 
 ## Rozpočtové kapitoly
 
@@ -67,21 +63,18 @@ Rozpočtové kapitoly a jejich zkratky uvádíme v tabulce, jelikož v některý
 
 Zvláštní pozornost zasluhují následující kapitoly:
 
-- Ministerstvo vnitra, jehož ústřední orgán (uvádíme v kategorii „Ministerstva") zahrnuje všechny zaměstnance vyplácené pod IČO MV, tj.
-  i civilní zaměstnance Policejního prezidia, Generálního ředitelství Hasičského záchranného sboru a civilních zaměstnanců celostátních složek Policie ČR.
-  Ve výdajích na platy příslušníků bezpečnostních sborů v této kapitoly také nejsou zahrnuty složky příjmů, které nejsou právně definovány součást služebního příjmu, přestože jsou součástí měsíční výplaty příslušníka -- např.
-  kázeňské odměny.
+- Ministerstvo vnitra, jehož ústřední orgán (uvádíme v kategorii „Ministerstva") zahrnuje všechny zaměstnance vyplácené pod IČO MV, tj. i civilní zaměstnance Policejního prezidia, Generálního ředitelství Hasičského záchranného sboru a civilních zaměstnanců celostátních složek Policie ČR.
+  Ve výdajích na platy příslušníků bezpečnostních sborů v této kapitole také nejsou zahrnuty složky příjmů, které nejsou právně definovány jako součást služebního příjmu, přestože jsou součástí měsíční výplaty příslušníka -- např. kázeňské odměny.
   Tyto složky se pak také neodráží ve vykazovaných průměrných platech příslušníků.
   Také zde nejsou vykázány výdaje na výsluhové náležitosti.
 - V kapitole Ministerstva obrany jsou zahrnuti civilní zaměstnanci i vojáci Armády ČR.
-  Ve výdajích na platy vojáků pak nejsou zahrnuty výdaje, které nehradí právně definovaný plat vojáka, např.
-  kázeňské odměny a stabilizační příplatky.
+  Ve výdajích na platy vojáků pak nejsou zahrnuty výdaje, které nehradí právně definovaný plat vojáka, např. kázeňské odměny a stabilizační příplatky.
   Ty mohou výrazně ovlivnit příjmy vojáků, ale v průměrných platech vykazovaných v SZÚ to není odraženo.
   Také zde nejsou vykázány výdaje na výsluhové náležitosti.
   V platech vojáků nejsou zahrnuty náhrady na zvýšené životní náklady při vyslání do zahraničí, které výrazně zvyšují skutečné příjmy vyslaných vojáků.
-- V kapitole MZV jsou zahrnuti všichni zaměstnanci v zahraniční službě, tj.
-  i čeští zaměstnanci ambasád.
+- V kapitole MZV jsou zahrnuti všichni zaměstnanci v zahraniční službě, tj. i čeští zaměstnanci ambasád.
   V jejich platech nejsou zahrnuty náhrady na zvýšené životní náklady při vyslání do zahraničí, které výrazně zvyšují skutečné příjmy těchto zaměstnanců.
+- V kapitolách Poslanecké sněmovny a Senátu (které pro názornost označujeme ve zkratce KPSP a KSen, jejich kanceláře) nezahrnují poslance ani jejich personál; zahrnují pouze samotnou kancelář dané komory parlamentu.
 
 ## Úprava pro časové řady
 
@@ -90,7 +83,6 @@ Pro časové řady, kde se počítá s absolutními metrikami (počty zaměstnan
 Počty zaměstnanců pro kapitolu Ministerstva vnitra se mezi roky 2011 a 2012 zvýšily vzhledem ke změně organizační struktury o 321 % a pro kapitolu Ministerstva zahraničí je to pak 157 %.
 Ponecháním těchto kapitol v grafech časových řad by došlo ke značnému zkreslení zejména Grafu 4e.
 Kumulovaná změna reálných výdajů na platy státních úředníků.
-
 
 ### Celkové reálné změny platů a počtu zaměstnanců
 
@@ -105,22 +97,18 @@ Podobné změny nejsou konzistentně a veřejně dokumentovány.
 
 ## Výdaje na platy
 
-Pracujeme pouze s výdaji na platy, nezahrnujeme tzv.
-ostatní platby za provedenou práci, které zahrnují např.
-odměny pracovníků zaměstnaných na dohody o provedení práce.
+Pracujeme pouze s výdaji na platy, nezahrnujeme tzv. ostatní platby za provedenou práci, které zahrnují např. odměny pracovníků zaměstnaných na dohody o provedení práce.
 Tato data sice v datové sadě jsou, není je ale možné vztáhnout k počtům těchto osob, které sledovány nejsou.
 
 Stejně tak naše data nezahrnují odvody zaměstnavatele a další náklady na zaměstnance, takže jde opravdu o hrubé platy, nikoli o náklady práce.
 
-Ve vztahu k platům zaměstnanců škol (příspěvkové organizace v kapitole Ministerstva školství, mládeže a tělovýchovy) také platí, že skutečné platy těchto zaměstnanců mohou být jiné, např.
-protože na ně z vlastních zdrojů přispívá samospráva, která zřizuje školy.
+Ve vztahu k platům zaměstnanců škol (příspěvkové organizace v kapitole Ministerstva školství, mládeže a tělovýchovy) také platí, že skutečné platy těchto zaměstnanců mohou být jiné, např. protože na ně z vlastních zdrojů přispívá samospráva, která zřizuje školy.
 Máme za to, že pokud například některé obce doplácejí na platy svých učitelů, výsledný vyšší průměrný plat (ani dodatečné výdaje na platy) není zahrnut v datech, která využíváme, protože nejde o výdaj státního rozpočtu.
 
-A konečně pracujeme pouze s platy zaměstnanců, kteří podléhají rozpočtové regulaci a jako takové je stát sleduje, tj. nejde o veškeré platy hrazené z prostředků státního rozpočtu (nejsou zde např.
-platy vysokoškolských učitelů či zaměstnanců organizací, které jsou např. příjemci dotací, prostředků na výzkum a vývoj či dodavateli veřejných zakázek.)
+A konečně pracujeme pouze s platy zaměstnanců, kteří podléhají rozpočtové regulaci a jako takové je stát sleduje, tj. nejde o veškeré platy hrazené z prostředků státního rozpočtu (nejsou ze např. platy vysokoškolských učitelů či zaměstnanců organizací, které jsou např. příjemci dotací, prostředků na výzkum a vývoj či dodavateli veřejných zakázek.)
 Naopak zde jsou zahrnuty výdaje platy, které sice hradí státní rozpočet, ale jsou kryty rozpočtem evropským -- jde např. o platy státních zaměstnanců pracujících na projektech hrazených z evropských strukturálních a investičních fondů, kde je příjemcem stát.
 
-## „Státní zaměstnanci“ a zákon o státní službě
+## „Státní zaměstnanci" a zákon o státní službě
 
 Pracujeme s pojmem „zaměstnanci státu", abychom jej odlišili od spojení „státní zaměstnanec", se kterým pracuje zákon o státní službě, který jím označuje zaměstnance ve služebním poměru.
 Ve služebních úřadech ale pracují i zaměstnanci v běžném zaměstnaneckém poměru.
