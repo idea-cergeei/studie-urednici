@@ -33,6 +33,7 @@
     - update years and authors
     - update logos as needed
 - [ ] Update social image: export graph 5a into `www/img/opengraph.png`
+- [ ] update social teaser: `cover.html` (claude design) using `cover-base.png`, then export to `cover.png`
 
 ## Run the whole pipeline to generate the app and other outputs
 
