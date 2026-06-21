@@ -28,7 +28,7 @@
 - Update cover page
   - [ ] `www/index.html` with new year and data references
   - [ ] acknowledgments in (i) modal in `www/index.html`
-  - [ ] `www/img/title_v3.png` with new cover image (edit SVG as needed)
+  - [ ] `www/img/title_v3_paths.svg` with new cover image (edit `www/img/title_v3_source.svg` SVG as needed and export as paths, using e.g. [`svg-text2path`](https://github.com/Emasoft/svg-text2path))
     - update links to previous versions
     - update years and authors
     - update logos as needed
