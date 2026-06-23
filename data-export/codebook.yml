@@ -110,7 +110,7 @@ columns:
     _type: numeric
   plat_base:
     _type: numeric
-  prumerny_plat_real_od2024:
+  prumerny_plat_real_od2003:
     _type: numeric
     info: Změna průměrného platu od roku 2003 očištěná o inflaci
     měřítko: 0 = žádná změna, > 0 = nárůst
@@ -125,7 +125,7 @@ columns:
   prumerny_plat_2003:
     _type: numeric
     info: Průměrný plat roku 2003 (pro výpočet)
-  prumerny_plat_nomi_od2024:
+  prumerny_plat_nomi_od2003:
     _type: numeric
     info: Změna průměrného platu od roku 2003, neočištěno o inflaci
     měřítko: 0 = žádná změna, 1 = nárůst o 100 %

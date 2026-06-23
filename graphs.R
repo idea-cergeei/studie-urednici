@@ -1072,7 +1072,7 @@ graf_5 <- plot_ly(graf_5_dt,
                 font=title_font),
     xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
               list(tickvals = x_ticks(graf_5_dt, step=3))),
-    yaxis = c(num_ticks,frame_y,list(title = paste0("<b>Reálné průměrné mzdy (tis. Kč, ceny roku ", this_year, ")</b>"),titlefont = axis_font)),
+    yaxis = c(num_ticks,frame_y,list(title = paste0("<b>Reálné průměrné platy (tis. Kč, ceny roku ", this_year, ")</b>"),titlefont = axis_font)),
     margin = mrg2
   ) %>% config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)

@@ -17,8 +17,8 @@ fs::file_move("shrnuti.docx", "word-docs/urednici-shrnuti_2026.docx")
 fs::file_move("metodologie.docx", "word-docs/metodologie-redo.docx")
 fs::file_move("zkratky.docx", "word-docs/zkratky.docx")
 
+# create PDFs by hand from Word, put them into www/pdfs
 
-# create PDFs, put them into www/pdfs
 source("graphs.R", local = new.env())
 source("dashboard.R", local = new.env())
 source("graphs_mod.R", local = new.env())

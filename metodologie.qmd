@@ -2,7 +2,7 @@
 title: "Zaměstnanci státu a státní úředníci 2025: Data a metodologie"
 format:
   docx:
-    reference-doc: word-templates/shrnuti-template.docx
+    reference-doc: word-templates/general-template.docx
 bibliography: report-files/references-merged.json
 csl: report-files/chicago-author-date.csl
 lang: cs

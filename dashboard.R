@@ -214,6 +214,7 @@ h4   { color: #c90239; margin-bottom: 14px; font-size: 1.1rem; }
 #pct-hint   { display: none; color: #666; font-size: 12px; margin: 2px 0 4px; }
 #mzda-note  { display: none; color: #888; font-size: 11px; margin: 2px 0 4px; }
 #chart { flex: 1 1 auto; min-height: 300px; }
+#y-title { font-size: 14px; font-family: inherit; color: #000; margin: 0; padding: 0 0 3px 50px; }
 "
 
 # ── JavaScript ────────────────────────────────────────────────────────────────
@@ -343,10 +344,10 @@ function buildTraces() {
 
 # y-axis labels (UTF-8 in R strings, no \u sequences needed in JS)
 lbl_sal_nom  <- paste0("Průměrný plat (tis. Kč/měsíc)")
-lbl_sal_real <- paste0("Průměrný plat (tis. Kč/měsíc, ceny roku ", this_year, ")")
+lbl_sal_real <- paste0("Průměrný plat (tis. Kč/měsíc, v cenách roku ", this_year, ")")
 lbl_sal_chg  <- paste0("Průměrný plat – změna od roku BASE (%)")
 lbl_cst_nom  <- paste0("Náklady na platy (mld. Kč)")
-lbl_cst_real <- paste0("Náklady na platy (mld. Kč, ceny roku ", this_year, ")")
+lbl_cst_real <- paste0("Náklady na platy (mld. Kč, v cenách roku ", this_year, ")")
 lbl_cst_chg  <- paste0("Náklady – změna od roku BASE (%)")
 lbl_vsavg    <- paste0("Odchylka průměrného platu od průměrné mzdy v ekonomice (%)")
 lbl_staff    <- paste0("Počet zaměstnanců (FTE)")
@@ -444,7 +445,7 @@ function buildLayout() {
     },
     hovermode:  "closest",
     hoverlabel: { font: { size: 13, family: "Arial" } },
-    margin:     { t: 30, b: 130, l: 80, r: 20 },
+    margin:     { t: 10, b: 130, l: 50, r: 20 },
     paper_bgcolor: "white", plot_bgcolor: "white"
   };
 }
@@ -454,7 +455,10 @@ const PLOT_CFG = {
   displaylogo: false
 };
 function renderPlot() {
-  return Plotly.react("chart", buildTraces(), buildLayout(), PLOT_CFG);
+  const layout = buildLayout();
+  document.getElementById("y-title").textContent = layout.yaxis.title.text;
+  delete layout.yaxis.title;
+  return Plotly.react("chart", buildTraces(), layout, PLOT_CFG);
 }
 ')
 
@@ -757,6 +761,7 @@ html <- paste0(
   <p id="mzda-note">', mzda_note, '</p>
 </div>
 
+<div id="y-title"></div>
 <div id="chart"></div>
 
 <script>

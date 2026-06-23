@@ -81,6 +81,7 @@ h4   { color: #c90239; margin-bottom: 14px; font-size: 1.1rem; }
 #pct-hint   { display: none; color: #666; font-size: 12px; margin: 2px 0 4px; }
 #mzda-note  { display: none; color: #888; font-size: 11px; margin: 2px 0 4px; }
 #chart { flex: 1 1 auto; min-height: 300px; }
+#y-title { font-size: 14px; font-family: inherit; color: #000; margin: 0; padding: 0 0 3px 50px; }
 </style>
 </head>
 <body>
@@ -143,6 +144,7 @@ h4   { color: #c90239; margin-bottom: 14px; font-size: 1.1rem; }
   <p id="mzda-note">Ministerstva jsou porovnávána s průměrnou mzdou v Praze, ostatní s průměrnou mzdou v ČR.</p>
 </div>
 
+<div id="y-title"></div>
 <div id="chart"></div>
 
 <script>
@@ -281,9 +283,9 @@ function buildLayout() {
   const isRelPct = isPct || mode === "sal_vs_avg";
   const by       = effectiveBase();
   let yTitle;
-  if      (mode === "sal_level")   yTitle = isNom ? "Průměrný plat (tis. Kč/měsíc)" : "Průměrný plat (tis. Kč/měsíc, ceny roku 2025)";
+  if      (mode === "sal_level")   yTitle = isNom ? "Průměrný plat (tis. Kč/měsíc)" : "Průměrný plat (tis. Kč/měsíc, v cenách roku 2025)";
   else if (mode === "sal_change")  yTitle = "Průměrný plat – změna od roku BASE (%)".replace("BASE", by);
-  else if (mode === "cost_level")  yTitle = isNom ? "Náklady na platy (mld. Kč)" : "Náklady na platy (mld. Kč, ceny roku 2025)";
+  else if (mode === "cost_level")  yTitle = isNom ? "Náklady na platy (mld. Kč)" : "Náklady na platy (mld. Kč, v cenách roku 2025)";
   else if (mode === "cost_change") yTitle = "Náklady – změna od roku BASE (%)".replace("BASE", by);
   else if (mode === "sal_vs_avg")    yTitle = "Odchylka průměrného platu od průměrné mzdy v ekonomice (%)";
   else if (mode === "staff_change")  yTitle = "Počet zam. – změna od roku BASE (%)".replace("BASE", by);
@@ -351,7 +353,7 @@ function buildLayout() {
     },
     hovermode:  "closest",
     hoverlabel: { font: { size: 13, family: "Arial" } },
-    margin:     { t: 30, b: 130, l: 80, r: 20 },
+    margin:     { t: 10, b: 130, l: 50, r: 20 },
     paper_bgcolor: "white", plot_bgcolor: "white"
   };
 }
@@ -361,7 +363,10 @@ const PLOT_CFG = {
   displaylogo: false
 };
 function renderPlot() {
-  return Plotly.react("chart", buildTraces(), buildLayout(), PLOT_CFG);
+  const layout = buildLayout();
+  document.getElementById("y-title").textContent = layout.yaxis.title.text;
+  delete layout.yaxis.title;
+  return Plotly.react("chart", buildTraces(), layout, PLOT_CFG);
 }
 
 function updateCatPills() {

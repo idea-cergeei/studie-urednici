@@ -16,8 +16,8 @@ format:
 :::
 
 ::: {custom-style="IDEA title"}
-Zaměstnanci státu a státní úředníci:\
-kde pracují a za kolik?[^1]
+Zaměstnanci státu a jejich platy v roce 2025:\
+Pád relativních platů se zastavil.[^1]
 :::
 
 ::: {custom-style="IDEA tiráž"}
