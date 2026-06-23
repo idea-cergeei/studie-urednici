@@ -51,9 +51,6 @@ if (nrow(annotations) > 0 && "annotation_text" %in% names(annotations)) {
   annotations[, annotation_text := gsub("\\{YEAR\\}", this_year_chr, annotation_text)]
 }
 
-annotations <- data.table::fread("annotations.csv")
-annotations_template <- readLines("www/annotation_template.html")
-
 text_par <- data.table::fread("text.csv")
 text_template <- readLines("www/text_template.html")
 if (nrow(text_par) > 0 && "text" %in% names(text_par)) {
