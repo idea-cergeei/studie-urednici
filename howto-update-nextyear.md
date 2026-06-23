@@ -21,7 +21,7 @@
 ## Output Updates
 
 - Update static PDF documents:
-  - use source word docx: `word-docs/urednici-shrnuti_YYYY.docx`, `word-docs/urednici-metodologie_YYYY.docx`
+  - use source word docx: `word-docs/urednici-shrnuti_YYYY.docx`, `word-docs/urednici-metodologie_YYYY.docx` (the two templates in word-templates only differ in that "general" has header also on first page)
   - [ ] `www/pdf/shrnuti.pdf`, will show up in `graphs_mod/pdf/shrnuti.pdf`
   - [ ] `www/pdf/metodologie.pdf` will show up in `graphs_mod/pdf/metodologie.pdf`
   - [ ] commit new docx files: `word-docs/urednici-shrnuti_YYYY.docx`, `word-docs/urednici-metodologie_YYYY.docx`
