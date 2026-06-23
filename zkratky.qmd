@@ -20,8 +20,8 @@ read_csv("zkratky.csv", show_col_types = FALSE) |>
   flextable() |>
   width(j = 1, width = 120, unit = "mm") |>
   width(j = 2, width = 30, unit = "mm") |>
-  hrule(rule = "exact") |>
-  height_all(height = 3, unit = "mm") |>
+  hrule(rule = "auto") |>
+  # height_all(height = 30, unit = "mm") |>
   align(align = "left", part = "all")
 ```
 

@@ -3,8 +3,9 @@ title: "Zaměstnanci státu a státní úředníci 2025: Data a metodologie"
 format:
   docx:
     reference-doc: word-templates/general-template.docx
-bibliography: report-files/references-merged.json
+bibliography: [report-files/packages.bib, report-files/references.json]
 csl: report-files/chicago-author-date.csl
+link-citations: true
 lang: cs
 ---
 
@@ -22,7 +23,7 @@ Závěrem této přílohy stručně popisujeme, že pro analýzu v této studii 
 
 # Hlavní zdroj dat
 
-Hlavním zdrojem této studie jsou data poskytovaná Ministerstvem financí ze [státních závěrečných účtů](https://mf.gov.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu/2025/vladni-navrh-statniho-zaverecneho-uctu-ceske-repub-63848).
+Hlavním zdrojem této studie jsou data poskytovaná Ministerstvem financí ze [státních závěrečných účtů](https://mf.gov.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu/2025/vladni-navrh-statniho-zaverecneho-uctu-ceske-repub-63848) [@ministerstvofinancicrVladniNavrhStatniho2026].
 Jedná se o data, která odpovídají státnímu výkaznictví zaměstnanců a výdajů na platy hrazených ze státního rozpočtů a tím i rozpočtové skladbě obecně (viz níže).
 Ministerstvo financí předkládá vždy do konce dubna Státní závěrečný účet za předešlý rok Poslanecké sněmovně, která jej bere na vědomí.
 Státní závěrečný účet obsahuje údaje o výsledcích rozpočtového hospodaření minulého roku.
@@ -115,25 +116,32 @@ Ve služebních úřadech ale pracují i zaměstnanci v běžném zaměstnaneck�
 V datech, se kterými pracujeme, nejsou zaměstnanci ve služebním poměru zvlášť sledováni.
 Proto v této studii jako zaměstnance státu označujeme všechny, kteří spadají do výše zmíněných kategorií regulace zaměstnanosti.
 
-Část informací o zaměstnancích ve služebním poměru poskytuje Monitor Státní pokladny (výdaje na platy zaměstnanců ve služebním poměru podle příslušné položky druhového členění, ale bez informací o počtech a průměrných platech), další informace pak obsahuje i [Výroční zpráva o státní službě](https://vlada.gov.cz/cz/statni_sluzba/o_statni_sluzbe/vyrocni_zpravy/vyrocni-zpravy--222923/).
+Část informací o zaměstnancích ve služebním poměru poskytuje Monitor Státní pokladny (výdaje na platy zaměstnanců ve služebním poměru podle příslušné položky druhového členění, ale bez informací o počtech a průměrných platech), další informace pak obsahuje i [Výroční zpráva o státní službě](https://vlada.gov.cz/cz/statni_sluzba/o_statni_sluzbe/vyrocni_zpravy/vyrocni-zpravy--222923/) [@ministerstvovnitracrVyrocniZpravaStatni2025].
 
 # Data o mzdách v ekonomice a inflaci
 
 Dodatečná data používáme od Českého statistického úřadu o mzdách v ekonomice a inflaci.
-Při porovnávání platů používáme průměrnou pražskou mzdu pro ústřední orgány a průměrnou celorepublikovou mzdu pro ostatní, vše z datové sady ČSÚ [Průměrná hrubá měsíční mzda a medián mezd v krajích](https://csu.gov.cz/produkty/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich) (kód 110080) od roku 2011, dřívější roky z dalších srovnatelných tabulek z produkce ČSÚ.
+
+Při porovnávání platů používáme průměrnou pražskou mzdu pro ústřední orgány a průměrnou celorepublikovou mzdu pro ostatní, vše z datové sady ČSÚ [Průměrná hrubá měsíční mzda a medián mezd v krajích](https://csu.gov.cz/produkty/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich) -- kód 110080  [@ceskystatistickyuradPrumernaHrubaMesicni2025], později kód MZDRT8 [@ceskystatistickyuradDataStatTabulkaPrumerny2026; @ceskystatistickyuradStrukturaMezdZamestnancu2026a], tabulka B1, dřívější roky z dalších srovnatelných tabulek z produkce ČSÚ. 
+
+Všude jde o údaje z tzv. strukturálních statistik (statistiky o struktuře výdělků), tj. Informační systém o průměrném výdělku (ISPV), nikoli Výběrové šetření pracovních sil (VŠPS/LFS) ani podnikové výkaznictví. Důvodem je jednak dostupnost dat, jednak to, že personální a organizační záběr ISPV lépe odpovídá struktuře zaměstnanců a organizací ve veřejném sektoru. Stejné údaje, které  organizace v platové sféře poskytují Ministerstvu financi pro sestavování závěrečného účtu a další účely pak vstupují do Informačního systému o platech (ISP) a následně ISPV za platovou sféru.
+
 Pro srovnatelnost s rozpočtovými daty používáme průměr (nikoli medián) mezd.
-Pro údaje o cenových hladinách a inflaci (například pro výpočet reálného průměrného hrubé měsíčního platu) používáme [datovou sadu ČSÚ s indexy spotřebitelských cen](https://csu.gov.cz/produkty/indexy-spotrebitelskych-cen) (kód 010022).
+
+Pro údaje o cenových hladinách a inflaci (například pro výpočet reálného průměrného hrubé měsíčního platu) používáme [datovou sadu ČSÚ s indexy spotřebitelských cen](https://csu.gov.cz/produkty/indexy-spotrebitelskych-cen) -- kód 010022  [@ceskystatistickyuradIndexySpotrebitelskychCen2025], pro pozdější roky sada s kódem CEN0101H [@ceskystatistickyuradDataStatDatovaSada2026]
+
+Údaje o HDP a výdajích státního rozpočtu přebíráme z databáze [ČNB ARAD](https://www.cnb.cz/arad/), indikátory `SHDPVYDY1B1GNMLSA` a `SHDPZDRY1B1GMMLNA` (HDP) a `SRUMD08402C` (výdaje SR).
 
 # Data o počtech zaměstnanců veřejného sektoru
 
-Nejlepší data o státních zaměstnancích od Ministerstva financí využíváme v této studii, ale pro celou množinu zaměstnanců veřejného sektoru poskytují jediné systematické údaje [Statistické ročenky Českého statistického úřadu](https://csu.gov.cz/produkty/statisticka-rocenka-ceske-republiky-2025) pro jednotlivé roky.
+Nejlepší data o státních zaměstnancích od Ministerstva financí využíváme v této studii, ale pro celou množinu zaměstnanců veřejného sektoru poskytují jediné systematické údaje [Statistické ročenky Českého statistického úřadu](https://csu.gov.cz/produkty/statisticka-rocenka-ceske-republiky-2025), [@ceskystatistickyuradStatistickaRocenkaCR2025] pro jednotlivé roky.
 Pro tyto účely je veřejný sektor velmi široce definován a zahrnuje, kromě státních zaměstnanců, například obce a kraje nebo i veřejné finanční i nefinanční firmy.
 Podle tohoto zdroje veřejný sektor celkem v posledních letech zaměstnával přes 1 milion zaměstnanců (přepočtených na plné úvazky).
 
 # Technika analýzy dat
 
 Analýza je zaznamenána ve zdrojovém kódu v programovacím jazyce R [@R-base], zveřejněném včetně zdrojových a zpracovaných dat na [platformě GitHub](https://github.com/idea-cergeei/studie-urednici/).
-Otevřená data veřejného sektoru [@R-czso; @R-statnipokladna] zpracováváme pomocí balíků v jazyce R zveřejněných v oficiálním repozitáři CRAN.
+Otevřená data veřejného sektoru zpracováváme pomocí balíků v jazyce R zveřejněných v oficiálním repozitáři CRAN [@R-czso; @R-statnipokladna].
 Reprodukovatelnost analytického prostředí je zajištěna systémem {renv}.
 Pro analýzu dat v R využíváme vícero dalších rozšíření [@R-data.table; @R-janitor; @R-dplyr; @R-gplots; @R-readr; @R-readxl; @R-stringr; @R-tidyr; @ggplot22016; @plotly2020].
 

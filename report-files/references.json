@@ -1,107 +1,19 @@
 [
-    {
-        "URL": "https://www.mfcr.cz/cs/verejny-sektor/statni-rozpocet/plneni-statniho-rozpoctu/2020/statni-zaverecny-ucet-za-rok-2020-41689",
-        "accessed": {
-            "date-parts": []
-        },
-        "author": [
-            {
-                "family": "Ministerstvo financí ČR"
-            }
-        ],
-        "id": "ministerstvofinancícr2021",
-        "issued": {
-            "date-parts": [
-                [
-                    2021
-                ]
-            ]
-        },
-        "key": "GH3RZBV6",
-        "language": "cs",
-        "libraryid": "1",
-        "providerkey": "Zotero",
-        "title": "Státní závěrečný účet ČR za rok 2020",
-        "type": "report"
-    },
-    {
-        "URL": "https://www.mvcr.cz/sluzba/soubor/vyrocni-zprava-o-statni-sluzbe-za-rok-2019.aspx",
-        "accessed": {
-            "date-parts": []
-        },
-        "author": [
-            {
-                "family": "MInisterstvo vnitra ČR"
-            }
-        ],
-        "id": "ministerstvovnitracr2020",
-        "issued": {
-            "date-parts": [
-                [
-                    2020
-                ]
-            ]
-        },
-        "key": "XV83HBZM",
-        "language": "cs",
-        "libraryid": "1",
-        "providerkey": "Zotero",
-        "title": "Výroční zpráva o státní službě - Státní služba",
-        "type": "report"
-    },
-    {
-        "URL": "https://www.czso.cz/csu/czso/statisticka-rocenka-ceske-republiky-2020",
-        "accessed": {
-            "date-parts": []
-        },
-        "author": [
-            {
-                "family": "Český statistický úřad"
-            }
-        ],
-        "id": "ceskýstatistickýúrad2021",
-        "issued": {
-            "date-parts": [
-                [
-                    2021
-                ]
-            ]
-        },
-        "key": "9NHSNVSP",
-        "language": "cs-CZ",
-        "libraryid": "1",
-        "providerkey": "Zotero",
-        "title": "Statistická ročenka České republiky - 2020",
-        "type": "report"
-    },
-    {
-        "URL": "https://idea.cerge-ei.cz/files/IDEA_studie_4_2014.pdf",
-        "author": [
-            {
-                "family": "Bouchal",
-                "given": "Petr"
-            },
-            {
-                "family": "Janský",
-                "given": "Petr"
-            }
-        ],
-        "id": "bouchal2014",
-        "issued": {
-            "date-parts": [
-                [
-                    2014
-                ]
-            ]
-        },
-        "key": "6WY5IAY3",
-        "libraryid": "1",
-        "page": "2014",
-        "providerkey": "Zotero",
-        "rights": "All rights reserved",
-        "source": "Google Scholar",
-        "title": "Státní úředníci: Kolik jich vlastně je, kde a za jaké platy pracují",
-        "title-short": "Státní úředníci",
-        "type": "report"
-    }
+  {"id":"bartusekdanielStatniZamestnanciUrednici2022","abstract":"V českém veřejném sektoru je zaměstnána (přepočteno na plné úvazky) téměř pětina\npracovních sil země. Téměř polovina (464 tisíc) z tohoto téměř milionu zaměstnanců byla\nv roce 2020 placena ze státního rozpočtu a nazýváme je státními zaměstnanci.\n• Nadpoloviční část státních zaměstnanců připadá na příspěvkové organizace (265 tisíc), kde\ndominují zaměstnanci regionálního školství. Menší část ostatních státních zaměstnanců\n(198 tisíc) spadá pod řadu různorodých organizací, od armády a policii až po ministerstva\na úřady práce.\n• Jen malou část státních zaměstnanců lze označit za státní úředníky. Těch v roce bylo zhruba\n78 tisíc, což představuje 8 % zaměstnanců veřejného sektoru a 17 % státních zaměstnanců.\nS ohledem na to, jak velká je často věnována pozornost tématu počtu státních úředníků\nve veřejných debatách, jsou jejich počty i podíly poměrně nízké.\n• Počet státních úředníků poslední dvě dekády kolísal. Mezi roky 2003 a 2010 jejich počet\nmírně narostl o necelé dva tisíce (3 %). Mezi roky 2010 a 2011 během ekonomické krize v době\nFischerovy a Nečasovy vlády došlo k jejich poklesu o tři tisíce (5 %). Dále pak mezi lety 2011\na 2015 došlo za vlády Nečasovy, Rusnokovy a Sobotkovy k nárůstu o pět tisíc (10 %) a poté\nza Sobotkovy a Babišovy vlády do roku 2020 jejich počet již významnějších změn nedoznal.\n• Ačkoliv nominální i reálné průměrné platy státních úředníků od roku 2013 soustavně rostly,\nod roku 2018 již jejich růst zaostával za růstem mezd v celé ekonomice, takže jejich relativní\núroveň v roce 2020 byla výrazně nižší než v roce 2018 (-3 až -6 procentních bodů podle typu\norganizace).","accessed":{"date-parts":[["2022",1,26]]},"author":[{"literal":"Bartušek, Daniel"},{"literal":"Bouchal, Petr"},{"literal":"Janský, Petr"}],"citation-key":"bartusekdanielStatniZamestnanciUrednici2022","issued":{"date-parts":[["2022",1]]},"license":"All rights reserved","note":"https://idea.cerge-ei.cz/zpravy/statni-zamestnanci-a-urednici-kde-pracuji-a-za-kolik\n\nhttps://idea.cerge-ei.cz/files/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.html\n\nhttps://ideaapps.cerge-ei.cz/urednici_2021/graf_1.html","publisher":"IDEA","title":"Státní zaměstnanci a úředníci: kde pracují a za kolik?","type":"report","URL":"https://idea.cerge-ei.cz/files/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.html#p=2"},
+  {"id":"bouchalCzsoUseOpen2020","abstract":"Get programmatic access to the open data provided by the Czech Statistical Office (CZSO, <https://czso.cz>).","accessed":{"date-parts":[["2020",10,21]]},"author":[{"family":"Bouchal","given":"Petr"}],"citation-key":"bouchalCzsoUseOpen2020","issued":{"date-parts":[["2020",4,7]]},"license":"MIT + file LICENSE","source":"R-Packages","title":"czso: Use Open Data from the Czech Statistical Office in R","title-short":"czso","type":"software","URL":"https://CRAN.R-project.org/package=czso","version":"0.2.3"},
+  {"id":"bouchalStatnipokladnaUseData2020","abstract":"Get programmatic access to data from the Czech public budgeting and accounting database, Státní pokladna <https://monitor.statnipokladna.cz/>.","accessed":{"date-parts":[["2020",10,21]]},"author":[{"family":"Bouchal","given":"Petr"}],"citation-key":"bouchalStatnipokladnaUseData2020","issued":{"date-parts":[["2020",4,12]]},"license":"MIT + file LICENSE","source":"R-Packages","title":"statnipokladna: Use Data from the Czech Public Finance Database","title-short":"statnipokladna","type":"software","URL":"https://CRAN.R-project.org/package=statnipokladna","version":"0.5.7"},
+  {"id":"bouchalZamestnanciStatuUrednici2024","accessed":{"date-parts":[["2024",12,4]]},"author":[{"family":"Bouchal","given":"Petr"},{"family":"Hrendash","given":"Taras"},{"family":"Bartušek","given":"Daniel"}],"citation-key":"bouchalZamestnanciStatuUrednici2024","collection-title":"Aplikace IDEA","issued":{"date-parts":[["2024"]]},"publisher":"IDEA","title":"Zaměstnanci státu a úředníci: kde pracují a za kolik?","title-short":"Zaměstnanci státu a úředníci","type":"software","URL":"https://ideaapps.cerge-ei.cz/urednici_2024"},
+  {"id":"ceskystatistickyuradDataStatDatovaSada2026","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradDataStatDatovaSada2026","issued":{"date-parts":[["2026"]]},"number":"CEN0101H","title":"DataStat: Datová sada Míra inflace","type":"dataset","URL":"https://data.csu.gov.cz/datastat/info/VYBER/CEN0101HT01?vSel=1"},
+  {"id":"ceskystatistickyuradDataStatTabulkaPrumerna2026","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradDataStatTabulkaPrumerna2026","issued":{"date-parts":[["2026"]]},"number":"CEN0101HT01","title":"DataStat: Tabulka Průměrná roční míra inflace","type":"dataset","URL":"https://data.csu.gov.cz/datastat/info/VYBER/CEN0101HT01?vSel=1"},
+  {"id":"ceskystatistickyuradDataStatTabulkaPrumerny2026","accessed":{"date-parts":[["2026",5,22]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradDataStatTabulkaPrumerny2026","issued":{"date-parts":[["2026"]]},"number":"MZDRT8","title":"DataStat: Tabulka Průměrný evidenční počet zaměstnanců a průměrné hrubé měsíční mzdy z čtvrtletního zjišťování - dle institucionálních sektorů","type":"dataset","URL":"https://data.csu.gov.cz/datastat/data/VYBER/MZDRT8?vSel=1"},
+  {"id":"ceskystatistickyuradIndexySpotrebitelskychCen2025","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradIndexySpotrebitelskychCen2025","issued":{"date-parts":[["2025"]]},"language":"cs-cz","number":"010022-25","title":"Indexy spotřebitelských cen","type":"dataset","URL":"https://csu.gov.cz/produkty/indexy-spotrebitelskych-cen"},
+  {"id":"ceskystatistickyuradIndexySpotrebitelskychCen2026","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradIndexySpotrebitelskychCen2026","issued":{"date-parts":[["2026"]]},"language":"cs-cz","number":"CEN0101E","title":"Indexy spotřebitelských cen - inflace - časové řady","type":"dataset","URL":"https://csu.gov.cz/produkty/isc_cr"},
+  {"id":"ceskystatistickyuradPrumernaHrubaMesicni2025","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradPrumernaHrubaMesicni2025","issued":{"date-parts":[["2025"]]},"language":"cs-cz","title":"Průměrná hrubá měsíční mzda a medián mezd v krajích","type":"dataset","URL":"https://csu.gov.cz/produkty/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich"},
+  {"id":"ceskystatistickyuradStatistickaRocenkaCR2025","author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradStatistickaRocenkaCR2025","ISBN":"978-80-250-3645-7","issued":{"date-parts":[["2025"]]},"note":"Kód: 320198-25","publisher-place":"Praha","title":"Statistická ročenka ČR 2025","type":"report","URL":"https://csu.gov.cz/produkty/statisticka-rocenka-ceske-republiky-2025"},
+  {"id":"ceskystatistickyuradStrukturaMezdZamestnancu2024","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradStrukturaMezdZamestnancu2024","issued":{"date-parts":[["2025"]]},"language":"cs-cz","note":"Kód: 110026-25","number":"110026-25","title":"Struktura mezd zaměstnanců - data za rok 2024","type":"dataset","URL":"https://csu.gov.cz/produkty/struktura-mezd-zamestnancu-2024"},
+  {"id":"ceskystatistickyuradStrukturaMezdZamestnancu2026","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradStrukturaMezdZamestnancu2026","issued":{"date-parts":[["2026"]]},"language":"cs-cz","note":"Kód: 110026-26","number":"110026-24","title":"Struktura mezd zaměstnanců - data za rok 2025","type":"dataset","URL":"https://csu.gov.cz/produkty/struktura-mezd-zamestnancu-2025"},
+  {"id":"ceskystatistickyuradStrukturaMezdZamestnancu2026a","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Český statistický úřad"}],"citation-key":"ceskystatistickyuradStrukturaMezdZamestnancu2026a","issued":{"date-parts":[["2026"]]},"language":"cs-cz","title":"Struktura mezd zaměstnanců - Kraje","type":"dataset","URL":"https://csu.gov.cz/kraje-spolecne/struktura-mezd-zamestnancu"},
+  {"id":"ministerstvofinancicrMonitorInformacniPortal","accessed":{"date-parts":[["2026",5,20]]},"author":[{"literal":"Ministerstvo financí ČR"}],"citation-key":"ministerstvofinancicrMonitorInformacniPortal","title":"Monitor - informační portál Ministerstva financí","type":"webpage","URL":"https://monitor.statnipokladna.gov.cz/"},
+  {"id":"ministerstvofinancicrVladniNavrhStatniho2026","abstract":"Státní závěrečný účet obsahuje údaje o výsledcích rozpočtového hospodaření minulého roku.","accessed":{"date-parts":[["2026",5,19]]},"author":[{"literal":"Ministerstvo financí ČR"}],"citation-key":"ministerstvofinancicrVladniNavrhStatniho2026","issued":{"date-parts":[["2026"]]},"language":"cs","title":"Vládní návrh Státního závěrečného účtu České republiky za rok 2025","type":"report","URL":"https://mf.gov.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu/2025/vladni-navrh-statniho-zaverecneho-uctu-ceske-repub-63848"},
+  {"id":"ministerstvovnitracrVyrocniZpravaStatni2025","author":[{"literal":"Ministerstvo vnitra ČR"}],"citation-key":"ministerstvovnitracrVyrocniZpravaStatni2025","issued":{"date-parts":[["2025"]]},"publisher-place":"Praha","title":"Výroční zpráva o státní službě za rok 2024","type":"report","URL":"https://vlada.gov.cz/assets/Statni_sluzba/o_statni_sluzbe/vyrocni_zpravy/Vyrocni_zprava_o_statni_sluzbe_za_rok_2024.pdf"}
 ]

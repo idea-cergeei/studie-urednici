@@ -40,10 +40,10 @@ Note z VDB to vypadá https://data.csu.gov.cz/datastat/data/VYBER/MZDRT8?vSel=1
 
 - [x] vyřešit menu
 - [x] vyřešit název
-- [ ] XXX v popisech
+- [x] XXX v popisech
 - [x] zkratky: layout and template
-- [ ] metodologie: obsah + citace
-- [ ] shrnutí rework
+- [x] metodologie: obsah + citace
+- [x] shrnutí rework
 
 menu
 - Obecne je uzivatelsky strasne matouci to automaticke srolovavavi a odrolovani menu, protoze clovek ztraci prehled kde se nachazi. Navrhuji to nechat cele otevreno natrvalo vcetne sekce DOPLNKOVE GRAFY a SROVNEJTE SI SAMI
@@ -63,7 +63,7 @@ Sekce Srovnejte si sami
 - [x] Přidal bych výrazný knoflík "Zpět do počátečního nastavení" nebo "Počátečního nastavení"
 
 Shrnutí v PDF
-- [ ] V příloze najdeš tvou verzi mnou poladenou v Track Changes. Prosim schval nebo dolad podle sebe.
+- [x] V příloze najdeš tvou verzi mnou poladenou v Track Changes. Prosim schval nebo dolad podle sebe.
 - [ ] Navrhuji odkazy na grafy ve finale (grafik David) nedelat celym nazvem, ale pouze (Graf 5 >), kde ta sipka bude stejna modra v kolecku jako mam odkazy v jinych studiich IDEA
 - [ ] Navrhuji hyperlinky udelat tak, aby se to oteviralo v jinem okne, tedy jinem nez kde je otevreno PDF shrnuti
 
@@ -72,6 +72,6 @@ Dalsi
 - [x] Mame tam nekde vysvetleno, ze vydaje na zamestnance zahrnuji vsechny slozky platu vcetne pojistnych odvodu zamestnavatele?
 - [x] Kdyz se nekde v apce ci Shrnuti zminuje armada, jde o osoby vojaky nebo celkove vcetne civilni zamestnance v armade? Melo by to byt jasne.
 - [x] Zkratku AV pro Akademie věd psát celou, tedy AV ČR. Opravit nejen v grafech, ale i v seznamu zkratek.
-- [ ] Seznam zkratek má na cover stránce jen pár řádků. Nechť tabulka začne hned na cover stránce, Vše větším fontem a graficky vylepšit.
-- [ ] Bylo by dobre, aby PDF studie-urednici.netlify.app/pdf/metodologie.pdf a Seznam zkratek mely graficky layout stejny jako PDF shrnuti, tedy stejne fonty, hlavicku s nazvem studie (Grafik David?).
-- [ ] Grafy v ZIP: To tam fakt bude? V PDF ci JPG ci GIF. Pokud ano, bylo by dobré, aby v každém grafu bylo logo IDEA, název  letošní studie a link na on-line verzi.
+- [x] Seznam zkratek má na cover stránce jen pár řádků. Nechť tabulka začne hned na cover stránce, Vše větším fontem a graficky vylepšit.
+- [x] Bylo by dobre, aby PDF studie-urednici.netlify.app/pdf/metodologie.pdf a Seznam zkratek mely graficky layout stejny jako PDF shrnuti, tedy stejne fonty, hlavicku s nazvem studie (Grafik David?).
+- [x] Grafy v ZIP: To tam fakt bude? V PDF ci JPG ci GIF. Pokud ano, bylo by dobré, aby v každém grafu bylo logo IDEA, název  letošní studie a link na on-line verzi.
