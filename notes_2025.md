@@ -53,8 +53,8 @@ menu
 Grafy
 - [x] Graf 5a má na ose slovo mzdy, ale má jít o platy 
 - [x] Sekci 4 bych zkracene nazval 'Trendy'
-- [ ] Polozku menu 5. Prumerne platy dle kategorii bych prepsal ma "Platy podle kategorií"
-- [ ] Polozku menu 5.c Zmena realnych prumernych platu bych prepsal ma "Zmena realnych platu"
+- [x] Polozku menu 5. Prumerne platy dle kategorii bych prepsal ma "Platy podle kategorií"
+- [x] Polozku menu 5.c Zmena realnych prumernych platu bych prepsal ma "Zmena realnych platu"
 
 Sekce Srovnejte si sami
 - [x] Pop up legenda by byla mnihem lepsi, kdyby ukazovala pouze jednu legendu, nad kterou kursor prave je a ne legendy vsechny, ktere uz jsou stejne pod grafem napevno
