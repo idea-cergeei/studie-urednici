@@ -1616,6 +1616,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var vw      = window.innerWidth;
     var left    = document.querySelector('div.left');
     var sidebar = document.getElementById('sidebar-inner');
+    var toc     = document.getElementById('toc');
     var right   = document.querySelector('div.right');
     if (!left || !right) return;
 
@@ -1638,6 +1639,10 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar.style.setProperty('width',     '230px', 'important');
         sidebar.style.setProperty('max-width', '230px', 'important');
       }
+      if (toc) {
+        toc.style.setProperty('width',     '230px', 'important');
+        toc.style.setProperty('max-width', '230px', 'important');
+      }
       right.style.removeProperty('padding-left');
     } else {
       left.style.removeProperty('width');
@@ -1647,6 +1652,10 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar.style.removeProperty('display');
         sidebar.style.setProperty('width',     '310px', 'important');
         sidebar.style.setProperty('max-width', '310px', 'important');
+      }
+      if (toc) {
+        toc.style.setProperty('width',     '310px', 'important');
+        toc.style.setProperty('max-width', '310px', 'important');
       }
       right.style.removeProperty('padding-left');
     }
