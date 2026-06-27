@@ -71,7 +71,7 @@ pád relativních platů se zastavil.[^1]
   Souviselo to jak s demograficky taženým růstem počtu dětí školního věku v tomto období, tak se zaváděním inkluze, která dříve v českém školství absentovala.
 
   ::: {custom-style="nospacepara"}
-  [Graf 10. Změny počtu zaměstnanců ve sféře rozpočtové regulace, podle kategorií](https://ideaapps.cerge-ei.cz/zamestnancistatu/#10.Zm%C4%9Bnypo%C4%8Dtuzam.podlekategori%C3%AD)
+  [Graf 10](https://ideaapps.cerge-ei.cz/zamestnancistatu/#10.Zm%C4%9Bnypo%C4%8Dtuzam.podlekategori%C3%AD) ![](report-files/sipka.svg)
   :::
 
 - **Státních úředníků je mezi zaměstnanci státu cca 75 tisíc (15 % zaměstnanců státu)**.
