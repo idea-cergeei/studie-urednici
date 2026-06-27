@@ -33,3 +33,5 @@ vignettes/*.pdf
 .~lock.annotations.csv#
 data-input/budget_data/**
 data-input/ispv/** */
+data-export/szu2021-ustredni-pro-sv.xlsx
+data-export/szu2022-ustredni-pro-sv.xlsx

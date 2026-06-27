@@ -31,19 +31,17 @@
         </g>
     </g>
     <path d="M1800.3,670.8L920.9,670.8C913.1,670.8 906.7,664.5 906.7,656.6L906.7,380.3C906.7,372.5 913,366.1 920.9,366.1L1800.3,366.1C1808.1,366.1 1814.5,372.4 1814.5,380.3L1814.5,656.7C1814.4,664.5 1808.1,670.8 1800.3,670.8Z" style="fill:rgb(220,221,222);fill-rule:nonzero;"/>
-    <g transform="matrix(1,0,0,1,-4.26326e-14,3)">
-        <g transform="matrix(1,0,0,1,990,480)">
-            <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Najetím myší na bod či sloupec zobrazíte přesné údaje</text>
-        </g>
-        <g transform="matrix(1,0,0,1,990,528)">
-            <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Kliknutím na položku legendy vypnete / zapnete kategorii</text>
-        </g>
-        <g transform="matrix(1,0,0,1,990,576)">
-            <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Dvojklikem na položku legendy zobrazíte jen danou kategorii</text>
-        </g>
-        <g transform="matrix(1,0,0,1,990,624)">
-            <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Dvojklikem na graf vše vrátíte do výchozího nastavení</text>
-        </g>
+    <g transform="matrix(1,0,0,1,990,491)">
+        <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Najetím myší na bod či sloupec zobrazíte přesné údaje</text>
+    </g>
+    <g transform="matrix(1,0,0,1,990,536)">
+        <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Kliknutím na položku legendy vypnete / zapnete kategorii</text>
+    </g>
+    <g transform="matrix(1,0,0,1,990,581)">
+        <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Dvojklikem na položku legendy zobrazíte jen danou kategorii</text>
+    </g>
+    <g transform="matrix(1,0,0,1,990,627)">
+        <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:29px;">Dvojklikem na graf vše vrátíte do výchozího nastavení</text>
     </g>
     <path d="M968.5,408.7C968.5,398.5 960.3,390.3 950.1,390.3C939.9,390.3 931.7,398.5 931.7,408.7C931.7,418.9 939.9,427.1 950.1,427.1C960.2,427.1 968.5,418.9 968.5,408.7ZM927.4,408.7C927.4,396.2 937.6,386 950.1,386C962.6,386 972.8,396.2 972.8,408.7C972.8,421.2 962.6,431.4 950.1,431.4C937.5,431.4 927.4,421.2 927.4,408.7ZM942.4,400.7C943.1,398.7 945,397.4 947.1,397.4L952.3,397.4C955.4,397.4 957.9,399.9 957.9,403C957.9,405 956.8,406.9 955.1,407.9L952.2,409.5C952.2,410.7 951.2,411.6 950.1,411.6C948.9,411.6 948,410.7 948,409.5L948,408.3C948,407.5 948.4,406.8 949.1,406.5L953,404.3C953.4,404.1 953.7,403.6 953.7,403.1C953.7,402.4 953.1,401.8 952.4,401.8L947.2,401.8C946.9,401.8 946.6,402 946.5,402.3L946.5,402.4C946.1,403.5 944.9,404.1 943.8,403.7C942.7,403.3 942.1,402.1 942.5,401L942.4,400.7ZM947.2,417.2C947.2,415.6 948.5,414.4 950,414.4C951.6,414.4 952.8,415.7 952.8,417.2C952.8,418.7 951.5,420 950,420C948.5,420.1 947.2,418.8 947.2,417.2Z" style="fill-rule:nonzero;"/>
     <path d="M969.2,482.1C970.1,481.2 970.1,479.6 969.2,478.7L957,466.5C956.1,465.6 954.5,465.6 953.6,466.5C952.7,467.4 952.7,469 953.6,469.9L961.6,477.9L938.3,477.9C937,477.9 935.9,479 935.9,480.3C935.9,481.6 937,482.7 938.3,482.7L961.6,482.7L953.6,490.7C952.7,491.6 952.7,493.2 953.6,494.1C954.5,495 956.1,495 957,494.1L969.2,482.1Z" style="fill-rule:nonzero;"/>
