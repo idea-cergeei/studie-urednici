@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html style="height:100%;margin:0;">
+<head>
+<meta charset="utf-8">
+<style>
+html, body { height: 100%; margin: 0; overflow-y: auto; overflow-x: hidden; background: #525659; }
+.page { position: relative; margin: 8px auto; background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.35); line-height: 0; }
+.page canvas { display: block; width: 100%; height: auto; }
+.annot-link { position: absolute; cursor: pointer; }
+.annot-link:hover { background: rgba(0, 80, 200, 0.12); }
+#msg { color: #ccc; text-align: center; margin-top: 40vh; font: 16px/1.4 sans-serif; }
+#dl { position: fixed; top: 12px; right: 20px; z-index: 10; width: 36px; height: 36px; border-radius: 6px; background: rgba(50,50,50,0.7); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+#dl:hover { background: rgba(50,50,50,0.95); }
+#dl svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<a id="dl" title="Stáhnout PDF"><svg viewBox="0 0 24 24"><path d="M12 3v13m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg></a>
+<div id="viewer"><p id="msg">Načítání…</p></div>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script>
+(function() {
+  var file = new URLSearchParams(location.search).get('file');
+  if (!file || !/^[\w\-. ]+\.pdf$/i.test(file)) return;
+
+  var dl = document.getElementById('dl');
+  dl.href = file;
+  dl.download = file;
+
+  var appRe = /ideaapps\.cerge-ei\.cz\/(zamestnancistatu|urednici)/;
+  function routeUrl(url) {
+    if (appRe.test(url)) {
+      var w = window.opener;
+      if (w && !w.closed) {
+        var hash = '';
+        try { hash = new URL(url).hash; } catch(e) {}
+        if (hash) {
+          w.location.hash = hash;
+        } else {
+          w.location.href = url;
+        }
+        w.focus();
+      } else {
+        window.open(url, 'main');
+      }
+    } else {
+      window.open(url, '_blank');
+    }
+  }
+
+  var viewer = document.getElementById('viewer');
+
+  function fallbackToNative() {
+    viewer.innerHTML = '';
+    var f = document.createElement('iframe');
+    f.src = file;
+    f.style.cssText = 'width:100%;height:100%;border:none;position:fixed;top:0;left:0;';
+    viewer.appendChild(f);
+  }
+
+  var pdfjsLib = window['pdfjs-dist/build/pdf'];
+  if (!pdfjsLib) { fallbackToNative(); return; }
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+  pdfjsLib.getDocument(file).promise.then(function(pdf) {
+    viewer.innerHTML = '';
+
+    pdf.getPage(1).then(function(first) {
+      var baseW = first.getViewport({ scale: 1 }).width;
+      var fitW = Math.min(viewer.clientWidth - 16, 900);
+      var cssScale = fitW / baseW;
+      var dpr = window.devicePixelRatio || 1;
+      var renderScale = cssScale * dpr;
+
+      var slots = [];
+      for (var i = 0; i < pdf.numPages; i++) {
+        var d = document.createElement('div');
+        d.className = 'page';
+        viewer.appendChild(d);
+        slots.push(d);
+      }
+
+      for (var n = 1; n <= pdf.numPages; n++) {
+        (function(num, slot) {
+          pdf.getPage(num).then(function(page) {
+            var vp = page.getViewport({ scale: renderScale });
+            slot.style.width = (vp.width / dpr) + 'px';
+
+            var c = document.createElement('canvas');
+            c.width = vp.width;
+            c.height = vp.height;
+            slot.appendChild(c);
+            page.render({ canvasContext: c.getContext('2d'), viewport: vp });
+
+            var cssVp = page.getViewport({ scale: cssScale });
+            page.getAnnotations().then(function(annots) {
+              annots.forEach(function(a) {
+                if (a.subtype !== 'Link' || !a.url) return;
+                var r = cssVp.convertToViewportRectangle(a.rect);
+                var el = document.createElement('a');
+                el.href = a.url;
+                el.title = a.url;
+                el.className = 'annot-link';
+                el.style.left   = Math.min(r[0], r[2]) + 'px';
+                el.style.top    = Math.min(r[1], r[3]) + 'px';
+                el.style.width  = Math.abs(r[2] - r[0]) + 'px';
+                el.style.height = Math.abs(r[3] - r[1]) + 'px';
+                el.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  routeUrl(a.url);
+                });
+                slot.appendChild(el);
+              });
+            });
+          });
+        })(n, slots[n - 1]);
+      }
+    });
+  }).catch(function(err) {
+    console.error('pdf.js render failed, falling back to native viewer:', err);
+    fallbackToNative();
+  });
+})();
+</script>
+</body>
+</html>
