@@ -104,6 +104,7 @@ uni_font <- "Arial"
 title_font <- list(color = cap_col,size=cap_size,
                    # family="Georgia,Times,Times New Roman,serif")
                    family=uni_font)
+title_left_pos <- list(x = 0, xanchor = "left", xref = "paper")
 pozn_font <- list(size = pozn_size)
 pozn_font_small <- list(size = pozn_long_size)
 axis_font <- list(color = "#000000",size=axis_size,
@@ -386,7 +387,7 @@ graf_A1 <- graf_A1 |>
   layout(title = list(font=title_font,
                       text = paste0("<b>Graf 1b. Výdaje na zaměstnance státu dle regulace zaměstnanosti (", this_year, ")</b>",
                                     "<br>","<sup>","Velikost obdélníků je úměrná podílu dané skupiny na celkových výdajích","</sup>"),
-                      y = 0.97),
+                      y = 0.97, x = 0, xanchor = "left", xref = "paper"),
          margin = mrg8) %>%
   # layout(annotations = list(text = "<i>Pozn.: Pro bližší detail lze kategorie rozkliknout.</i>",
   #                           x = 1, y = -0.05, showarrow = FALSE, font = pozn_font_small)) %>%
@@ -443,7 +444,7 @@ graf_1 <- graf_1 |>
   layout(title = list(font = title_font,
                       text = paste0("<b>Graf 1a. Počet zaměstnanců státu dle regulace zaměstnanosti (", this_year, ")</b>",
                                     "<br>","<sup>","Velikost obdélníků je úměrná podílu dané skupiny na celkovém počtu zaměstnanců státu","</sup>"),
-                      y = 0.97),
+                      y = 0.97, x = 0, xanchor = "left", xref = "paper"),
          margin = mrg8) %>%
   # layout(annotations = list(text = "<i>Pozn.: Pro bližší detail lze kategorie rozkliknout.</i>", x = 1,
   #                           y = -0.05, showarrow = FALSE, font = pozn_font_small)) %>%
@@ -475,7 +476,7 @@ graf_2 <- bar_dt %>% group_by(kategorie_2014_cz)%>%
     #                      font = pozn_font_small),
     #                 annot_below),
     title = list(font=title_font,
-           text = paste0("<b>Graf 2a. Počet zaměstnanců státu dle rozpo\u010Dtov\u00FDch kapitol (", this_year, ")</b>"), y = 0.97),
+           text = paste0("<b>Graf 2a. Počet zaměstnanců státu dle rozpo\u010Dtov\u00FDch kapitol (", this_year, ")</b>"), y = 0.97, x = 0, xanchor = "left", xref = "paper"),
     xaxis = c(kat_ticks_rotated,frame_x,
               list(title = "<b>Kapitoly státního rozpočtu (seznam zkratek)</b>",categoryorder = "array",categoryarray = arrange(bar_dt, desc(pocet_zamestnancu_agg))$kap_name,
                    titlefont = axis_font)),
@@ -520,7 +521,7 @@ graf_A2 <- plot_ly(bar_dt,
     #                      font = pozn_font_small),
     #                 annot_below_A2),
     title = list(font=title_font,
-           text = str_wrap(paste0("<b>Graf 2b. Výdaje na  zaměstnance státu dle rozpo\u010Dtov\u00FDch kapitol (rok ", this_year, ", mld. K\u010D)</b>"),100), y = 0.96),
+           text = str_wrap(paste0("<b>Graf 2b. Výdaje na  zaměstnance státu dle rozpo\u010Dtov\u00FDch kapitol (rok ", this_year, ", mld. K\u010D)</b>"),100), y = 0.96, x = 0, xanchor = "left", xref = "paper"),
     xaxis = c(kat_ticks_rotated,frame_x, list(title="<b>Kapitoly státního rozpočtu (seznam zkratek)</b>",titlefont = axis_font,categoryorder = "array", categoryarray = arrange(bar_dt, desc(prostredky_na_platy_agg))$kap_name)),
     yaxis = c(num_ticks,frame_y,list(title = "<b>Platy (mld. Kč)</b>",titlefont = axis_font)),
     barmode = "stack",
@@ -599,7 +600,7 @@ graf_3 <- bar_dt %>%
             colors = color_map) %>%
     layout(hovermode = "closest",
       title = list(font=title_font,
-         text = paste0("<b>Graf 3a. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu dle rozp. kapitoly (", this_year, ")</b>"), y = 1.1),
+         text = paste0("<b>Graf 3a. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu dle rozp. kapitoly (", this_year, ")</b>"), y = 1.1, x = 0, xanchor = "left", xref = "paper"),
          # annotations = list(align='left',
          #                    xref='paper',
          #                    yref="paper",
@@ -664,7 +665,7 @@ graf_A3 <- bar_dt %>%
                      titlefont = axis_font),
            title = list(font=title_font,
                         text = str_wrap(paste0("<b>Graf 3b. Pr\u016Fm\u011Brn\u00E9 platy zaměstnanců státu v poměru k průměrné mzdě v ekonomice dle rozp. kapitoly (", this_year, ")</b>"),70),
-                        x = 50, y = 0.95), legend = list(x = 50, y = 0.5),
+                        x = 50, y = 0.95, x = 0, xanchor = "left", xref = "paper"), legend = list(x = 50, y = 0.5),
            showlegend = TRUE
     ), keep = TRUE) %>%
   subplot(nrows = 2, shareY = FALSE, margin = c(0.07,0.07,0.15,0.15),titleY =TRUE) %>%
@@ -720,7 +721,7 @@ graf_4 <- graf_4_dta %>%
   layout(barmode="stack",bargap=0.5,
          title = list(font=title_font,
                       text = paste0("<b>Graf 4a. Počet státních úředníků, bez MV a MZV (2003–", this_year, ")</b>"),
-                      y = 0.98),
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          # annotations = c(annot_below,list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. Graf A14 s kapitolami ministerstev vnitra a zahraničních věcí je v příloze.</i>",wrap_len),
          #                                  font = pozn_font_small)),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",
@@ -762,7 +763,7 @@ graf_4 <- graf_4_dta_shares %>%
     layout(barmode="stack",bargap=0.5,
       title = list(font=title_font,
          text = paste0("<b>Graf 4a. Počet státních úředníků (2003–", this_year, ")</b>"),
-         y = 0.98),
+         y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
                    list(tickvals = x_ticks(graf_4_dta_shares))),
@@ -814,7 +815,7 @@ graf_A4 <- vyvoj_bar %>%
     layout(barmode='stack',bargap=0.5,
       title = list(font=title_font,
          text = paste0("<b>Graf 4c. Výdaje na platy státních úředníků, bez MV a MZV (2003–", this_year, ")</b>"),
-         y = 0.98),
+         y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          # annotations = c(list(text =str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
          #                      font = pozn_font_small),
          #                 annot_below),
@@ -869,7 +870,7 @@ graf_A4 <- vyvoj_bar_shares %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
                       text = paste0("<b>Graf 4c. Výdaje na platy státních úředníků (2003–", this_year_chr, ")</b>"),
-                      y = 0.98),
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
                    list(tickvals = x_ticks(vyvoj_bar_shares))),
@@ -906,7 +907,7 @@ graf_A5 <- vyvoj_bar %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
                       text = paste0("<b>Graf 4d. Reálné výdaje na platy státních úředníků, bez MV a MZV (2003–", this_year_chr, ")</b>"),
-                      y = 0.98),
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          # annotations = c(list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
          #                      font = pozn_font_small),
          #                 annot_below),
@@ -955,7 +956,7 @@ graf_A5 <- vyvoj_bar_shares %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
                       text = paste0("<b>Graf 4d. Reálné výdaje na platy státních úředníků (2003–", this_year_chr, ")</b>"),
-                      y = 0.98),
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
                    list(tickvals = x_ticks(vyvoj_bar_shares))),
@@ -1010,7 +1011,7 @@ graf_A6 <- aux2 %>%
   ) %>%
   layout(
     title = list(font=title_font,
-                 text = str_wrap("<b>Graf 4e. Změna reálných výdajů na platy státních úředníků, bez MV a MZV</b>",100)),
+                 text = str_wrap("<b>Graf 4e. Změna reálných výdajů na platy státních úředníků, bez MV a MZV</b>",100), x = 0, xanchor = "left", xref = "paper"),
     # annotations = c(annot_below,list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie.</i>",200),
     #                                  font = pozn_font_small)),
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),
@@ -1069,7 +1070,7 @@ graf_5 <- plot_ly(graf_5_dt,
     #                      font = pozn_font_small),annot_below),
     title =list(text = paste0("<b>Graf 5a. Reálné průměrné platy státních úředníků 2004–", this_year, " (v cenách roku ", this_year, ")</b>"),
                 y =0.98,
-                font=title_font),
+                font=title_font, x = 0, xanchor = "left", xref = "paper"),
     xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
               list(tickvals = x_ticks(graf_5_dt, step=3))),
     yaxis = c(num_ticks,frame_y,list(title = paste0("<b>Reálné průměrné platy (tis. Kč, ceny roku ", this_year, ")</b>"),titlefont = axis_font)),
@@ -1141,7 +1142,7 @@ graf_A7 <- plot_ly(graf_A7_dt,
   layout(
     title = list(font=title_font,
                  text="<b>Graf 5c. Změna reálných platů státních úředníků</b>",
-                 y = 0.96),
+                 y = 0.96, x = 0, xanchor = "left", xref = "paper"),
     # annotations = c(list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
     #                      font = pozn_font_small),annot_below),
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),
@@ -1217,7 +1218,7 @@ graf_6 <- plot_ly(graf_6_dt,
 ) %>%layout(
   shapes = list(hline(100)),
   title = list(font=title_font,
-               text = "<b>Graf 5b. Průměrné platy státních úředníků v poměru k průměrné mzdě v ekonomice</b>"),
+               text = "<b>Graf 5b. Průměrné platy státních úředníků v poměru k průměrné mzdě v ekonomice</b>", x = 0, xanchor = "left", xref = "paper"),
   # annotations = c(annot_6,list(text = str_wrap("<i>Pozn.: Pro ministerstva a ostatní ústřední orgány použité hodnoty průměrné mzdy v Praze. V ostatních případech je jako reference použitý průměrný plat v národním hospodářství. Hodnota 100% znamená, že průměrný plat v kategorii je stejný jako průměrný plat v národním hospodářství.</i>",wrap_len),
   #                              font = pozn_font_small)),
   xaxis = c(num_ticks,frame_y,list(title = "<b>Rok</b>",titlefont = axis_font),
@@ -1299,7 +1300,7 @@ graf_A8 <- graf_A8_dt %>%
   ) %>%
   layout(
     title = list(font=title_font,
-           text = paste0("<b>Graf 6. Celkové změny platů a počtu zaměstnanců v období 2004–", this_year_chr, "</b>"), y = 0.98),
+           text = paste0("<b>Graf 6. Celkové změny platů a počtu zaměstnanců v období 2004–", this_year_chr, "</b>"), y = 0.98, x = 0, xanchor = "left", xref = "paper"),
     # annotations = c(annot_below,list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
     #                                  font = pozn_font_small)),
     showlegend = FALSE,
@@ -1399,7 +1400,7 @@ graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
   subplot(nrows = 5,shareX = TRUE,shareY = TRUE,titleY = FALSE,titleX=TRUE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7a. Rozdíl mezi schváleným a skutečným počtem zaměstnanců (v %)</b>",
-                      y = 0.98),
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          showlegend = FALSE,
          annotations = list(x = 0 , y = 0.5, text = "<b>Záporné = méně skutečných než schválených</b>",
                             font = list(size = axis_size),
@@ -1467,7 +1468,7 @@ graf_A10 <- dta %>%filter(!is.na(kap_name)) %>%
           titleY = FALSE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7c. Rozdíl v průměrných platech mezi schváleným rozpočtem a skutečností (v %)</b>",
-                      y = 0.98), showlegend = FALSE,
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"), showlegend = FALSE,
          annotations = list(x = 0 , y = 0.5, text = "<b>Kladné = skutečný průměrný plat vyšší než schválený</b>",
                             font = list(size = axis_size),
                             xshift = -65, textangle = 270, showarrow = FALSE,
@@ -1527,7 +1528,7 @@ graf_A11 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
   subplot(nrows = 2, shareY = FALSE, margin = c(0.07,0.07,0.15,0.15),titleY =TRUE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7b. Rozdíl mezi schváleným a skutečným počtem zaměstnanců (%)</b>",
-                      y = 0.98),
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          annotations = list(x = 0 , y = 0.5, text = "<b>Záporné = skutečný počet nižší než schválený</b>",
                             font = list(size = axis_size),
                             xshift = -70, textangle = 270, showarrow = FALSE,
@@ -1596,7 +1597,7 @@ graf_A12 <- dta %>% filter(!is.na(kategorie_2014_cz)) %>%
   subplot(nrows = 2, shareY = FALSE, margin = c(0.07,0.07,0.15,0.15),titleY =TRUE) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 7d. Rozdíl v průměrných platech mezi schváleným rozpočtem a skutečností</b>",
-                      y = 0.98), annotations = list(x = 0 , y = 0.5, text = "<b>Kladné = skutečný průměrný plat vyšší než schválený</b>",
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"), annotations = list(x = 0 , y = 0.5, text = "<b>Kladné = skutečný průměrný plat vyšší než schválený</b>",
                                                     font = list(size = axis_size),
                                                     xshift = -70, textangle = 270,
                                                     showarrow = FALSE,
@@ -1663,7 +1664,7 @@ graf_A13 <- dta %>%filter(!is.na(kategorie_2014_cz))%>%
   subplot(nrows = 2, titleY = FALSE, titleX = FALSE,margin=c(0.05,0.05,0.1,0.1)) %>%
   layout(title = list(font=title_font,
                       text = "<b>Graf 8. Nárůst průměrných platů od roku 2003 (v %)</b>",
-                      xaxis = list(title = "",titlefont = axis_font), y = 0.98), margin=c(t=50,l=90,b=80),
+                      xaxis = list(title = "",titlefont = axis_font), y = 0.98, x = 0, xanchor = "left", xref = "paper"), margin=c(t=50,l=90,b=80),
          annotations = list(list(x = 0 , y = 0.5, text = "<b>Nárůst průměrného platu od roku 2003</b>",
                                  font = axis_font,
                                  xshift = -80, textangle = 270, showarrow = FALSE,
@@ -1728,7 +1729,7 @@ graf_A14 <- graf_A14_dta_shares %>%
   layout(barmode='stack',bargap=0.5,
          title = list(font=title_font,
                       text = paste0("<b>Graf 4b. Počet státních úředníků, včetně MV a MZV (2003–", this_year_chr, ")</b>"),
-                      y = 0.98),
+                      y = 0.98, x = 0, xanchor = "left", xref = "paper"),
          xaxis = c(num_ticks,frame_x,list(title = list(text="<b>Rok</b>",standoff=10),
                                           dtick=2,titlefont = axis_font),
                    list(tickvals = x_ticks(graf_A14_dta_shares))),
@@ -1765,11 +1766,11 @@ graf_A16 <- plot_ly(graf_A16_dt, type = "scatter", mode = "lines+markers",
     xaxis = c(num_ticks,frame_y,list(title = list(text="<b>Rok</b>",standoff=10),titlefont = axis_font),
               list(tickvals = seq(1993, max(graf_A16_dt$rok, na.rm=TRUE), 2))
               ),showlegend=FALSE,
-    # annotations = c(list(text ='<i>Pozn.:Kategorie: Statistické ročenky České republiky za jednotlivé roky, zde například údaje za rok 2020:</i><br><a href="https://www.czso.cz/csu/czso/10-trh-prace-o73cun42om" target="_blank"><i>https://www.czso.cz/csu/czso/10-trh-prace-o73cun42om</i></a>',
+    # annotations = c(list(text ='<i>Pozn.:Kategorie: Statistické ročenky České republiky za jednotlivé roky, zde například údaje za rok 2020:</i><br><a href="https://www.csu.gov.cz/csu/czso/10-trh-prace-o73cun42om" target="_blank"><i>https://www.csu.gov.cz/csu/czso/10-trh-prace-o73cun42om</i></a>',
     #                      font = pozn_font_small),annot_below),
     title = list(font=list(color = cap_col,size=cap_size,family=uni_font),
                  text = "<b>Graf 9a. Počet zaměstnanců veřejného sektoru</b>",
-                 y = 0.98), margin = mrg3) %>%
+                 y = 0.98, x = 0, xanchor = "left", xref = "paper"), margin = mrg3) %>%
   config(modeBarButtonsToRemove = btnrm, displaylogo = FALSE,displayModeBar = TRUE) %>%
   onRender(js)
 graf_A16
