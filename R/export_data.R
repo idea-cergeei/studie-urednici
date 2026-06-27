@@ -97,7 +97,7 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
   info_columns("ceny_index",
                info = "Inflace (deflátor)",
                upřesnění = "index spotřebitelských cen, meziroční změna vypočtena jako průměr měsíčních indexů proti stejnému měsíci předchozího roku",
-               zdroj = "ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen",
+               zdroj = "ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.csu.gov.cz/csu/czso/indexy-spotrebitelskych-cen",
                měřítko = "1 = nulová inflace") |>
   info_columns("ceny_inflace",
                info = "Inflace v procentním vyjádření",
@@ -112,11 +112,11 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
   info_columns("prumerna_mzda_cr",
                info = "Průměrná mzda v národním hospodářství",
                upřesnění = "průměrná hrubá měsíční mzda",
-               zdroj = "ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
+               zdroj = "ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
   info_columns("prumerna_mzda_pha",
                info = "Průměrná mzda v Praze",
                upřesnění = "průměrná hrubá měsíční mzda za Prahu",
-               zdroj = "ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
+               zdroj = "ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
   info_columns("prumerny_plat_skut_skut",
                info = "Index změny průměrného platu oproti předchozímu roku",
                měřítko = "1 = žádná změna, > 1 = nárůst") |>

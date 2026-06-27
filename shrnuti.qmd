@@ -33,7 +33,7 @@ pád relativních platů se zastavil.[^1]
 # Shrnutí klíčových poznatků
 
 
-- Srovnávací analýza představuje každoroční aktualizaci vývoje počtu zaměstnanců státu, jejich platů a nákladů na ně v roce 2025 a to na základě údajů [Státního závěrečného účtu](https://www.mfcr.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu)^[https://www.mfcr.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu].
+- Srovnávací analýza představuje každoroční aktualizaci vývoje počtu zaměstnanců státu, jejich platů a nákladů na ně v roce 2025 a to na základě údajů [Státního závěrečného účtu](https://www.mf.gov.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu)^[https://www.mf.gov.cz/cs/rozpoctova-politika/statni-rozpocet/plneni-statniho-rozpoctu].
 - Počet zaměstnanců státu vzrostl o zhruba 4 000 (+0,8 %), přibylo především zaměstnanců ve školství a v armádě. Státních úředníků naopak zhruba o 300 ubylo (-0,4 %).
 - Průměrné platy v reálém vyjádření ve skupině *státních úředníků* poprvé od roku 2020 vzrostly. Vývoj platů zhruba kopíroval vývoj mezd v celé ekonomice a tedy se zastavilo delší období oslabování platové konkurenceschopnosti státních úřadů.
 - V širším sektoru zaměstnanců státu pak vzrostla platová konkurenceschopnost v oblasti armády a příslušníků bezpečnostních sborů. Mírně naopak opět poklesla u zaměstnanců v regionálním školství.

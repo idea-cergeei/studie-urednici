@@ -7,7 +7,7 @@ locale: en
 table:
   name: tabulka
   _columns: 35
-  _rows: 15108.0
+  _rows: 1.5108e+04
   _type: tbl_df
   info: Pokud není uvedeno jinak, zdrojem jsou data MF odpovídající Státnímu závěrečnému
     účtu
@@ -77,7 +77,7 @@ columns:
     info: Inflace (deflátor)
     upřesnění: index spotřebitelských cen, meziroční změna vypočtena jako průměr měsíčních
       indexů proti stejnému měsíci předchozího roku
-    zdroj: ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen
+    zdroj: ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.csu.gov.cz/csu/czso/indexy-spotrebitelskych-cen
     měřítko: 1 = nulová inflace
   ceny_inflace:
     _type: numeric
@@ -96,12 +96,12 @@ columns:
     _type: numeric
     info: Průměrná mzda v národním hospodářství
     upřesnění: průměrná hrubá měsíční mzda
-    zdroj: ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
+    zdroj: ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
   prumerna_mzda_pha:
     _type: numeric
     info: Průměrná mzda v Praze
     upřesnění: průměrná hrubá měsíční mzda za Prahu
-    zdroj: ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
+    zdroj: ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
   prumerny_plat_skut_skut:
     _type: numeric
     info: Index změny průměrného platu oproti předchozímu roku
