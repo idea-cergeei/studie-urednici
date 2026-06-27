@@ -1140,7 +1140,7 @@ graf_A7 <- plot_ly(graf_A7_dt,
 ) %>%
   layout(
     title = list(font=title_font,
-                 text="<b>Graf 5c. Změna reálných výdajů na platy státních úředníků</b>",
+                 text="<b>Graf 5c. Změna reálných platů státních úředníků</b>",
                  y = 0.96),
     # annotations = c(list(text = str_wrap("<i>Pozn.: Pro srovnatelnost v čase graf nezahrnuje zaměstnance ministerstev vnitra a zahraničních věcí, viz Příloha 1: Data a metodologie. </i>",wrap_len),
     #                      font = pozn_font_small),annot_below),
