@@ -1,0 +1,8 @@
+{
+  "[quarto]": {
+    "editor.defaultFormatter": "jolars.panache"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "jolars.panache"
+  }
+}
