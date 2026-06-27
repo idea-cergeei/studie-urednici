@@ -49,6 +49,17 @@
 #sidebar-top .tocify { margin-bottom: 0 !important; }
 #toc.tocify { max-height: calc(100vh - 380px) !important; overflow-y: auto !important; }
 #sidebar-bottom .tocify-item a { font-size: 13px !important; padding-top: 3px !important; padding-bottom: 3px !important; line-height: 1.3 !important; }
+/* Ensure the active plot (and its Plotly tooltips) sit above fixed/positioned page elements
+   such as #scrollToNextBtn (z-index:99) and keyword popups (position:absolute).
+   z-index only takes effect on positioned elements, so we pair it with position:relative. */
+.htmlwidget_container:hover { position: relative; z-index: 100; }
+/* Plotly injects "overflow:hidden" on .svg-container and SVG elements, which clips the
+   treemap pathbar hover tooltip when it extends near the SVG edge. Override on hover so
+   the tooltip can paint outside the SVG clip rectangle (z-index:100 above keeps it on top). */
+.htmlwidget_container:hover .js-plotly-plot,
+.htmlwidget_container:hover .plot-container.plotly,
+.htmlwidget_container:hover .svg-container,
+.htmlwidget_container:hover .svg-container svg { overflow: visible !important; }
 </style>
 </head>
 
