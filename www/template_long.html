@@ -136,7 +136,17 @@
 
 <ul class="tocify-header nav nav-list" style="display: block;">
   <li class="tocify-item" style="cursor: pointer;"><a href="#TitleModal" data-toggle="modal" data-target="#TitleModal">Jak aplikaci použít</a></li>
-  <li class="tocify-item" style="cursor: pointer;"><a href="pdf/shrnuti.pdf" target="_blank">Shrnutí hlavních poznatků</a></li>
+  <li class="tocify-item" style="cursor: pointer;"><a href="pdf/shrnuti.pdf"
+    onclick="window.open(this.href,'targetWindow',
+    `toolbar=no,
+    location=no,
+    status=no,
+    menubar=no,
+    scrollbars=yes,
+    resizable=yes,
+    width=800,
+    height=1000`);
+    return false;">Shrnutí hlavních poznatků</a></li>
 </ul>
 
 </div>
@@ -220,15 +230,11 @@ legend_width = leg.find("rect").outerWidth();
 title = $("#" + id + " > div > div > div > svg.main-svg > g.infolayer > g > text.gtitle");
 
 if (title.length == 1){
-
 	if(id == "graf_6"){
-		title_tranform_y = -10;
+		title.css('transform','translate(0px,-10px)');
 	} else if(id == "graf_A17"){
-		title_tranform_y = 10;
-	} else {
-		title_tranform_y = 0;
+		title.css('transform','translate(0px,10px)');
 	}
-	title.css('transform','translate(0px,'+title_tranform_y+'px)');
 };
 
 if (leg.length == 1){
@@ -471,6 +477,9 @@ $(document).ready(function() {
 })
 
 adjustLogosPosition();
+
+// Name this window so links in PDF popups can navigate back here via target="main"
+window.name = 'main';
 
 });
 </script>
