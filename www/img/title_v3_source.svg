@@ -427,9 +427,9 @@
     </g>
     <g transform="matrix(1,0,0,1,30,-10)">
         <g>
-            <text x="60px" y="439.305px" style="font-family:'Georgia-Bold', 'Georgia', serif;font-weight:700;font-size:52px;">Zaměstnanci státu</text>
-            <text x="60px" y="501.305px" style="font-family:'Georgia-Bold', 'Georgia', serif;font-weight:700;font-size:52px;">a státní úředníci:</text>
-            <text x="60px" y="563.305px" style="font-family:'Georgia-Bold', 'Georgia', serif;font-weight:700;font-size:52px;">kde pracují a za kolik?</text>
+            <text x="60px" y="518.305px" style="font-family:'Georgia-Bold', 'Georgia', serif;font-weight:700;font-size:52px;">Zaměstnanci státu</text>
+            <text x="60px" y="580.305px" style="font-family:'Georgia-Bold', 'Georgia', serif;font-weight:700;font-size:52px;">a státní úředníci:</text>
+            <text x="60px" y="642.305px" style="font-family:'Georgia-Bold', 'Georgia', serif;font-weight:700;font-size:52px;">kde pracují a za kolik?</text>
         </g>
     </g>
     <path d="M1800.3,670.8L920.9,670.8C913.1,670.8 906.7,664.5 906.7,656.6L906.7,380.3C906.7,372.5 913,366.1 920.9,366.1L1800.3,366.1C1808.1,366.1 1814.5,372.4 1814.5,380.3L1814.5,656.7C1814.4,664.5 1808.1,670.8 1800.3,670.8Z" style="fill:rgb(220,221,222);fill-rule:nonzero;"/>
@@ -486,16 +486,16 @@
         <path d="M1589.1,135C1589.1,135.1 1589.2,135.2 1589.2,135.2C1589.2,135.3 1589.1,135.5 1588.9,135.8C1588.7,136.2 1588.4,136.5 1588.1,136.7C1587.9,136.8 1587.7,136.9 1587.3,136.9C1586.7,136.9 1586.3,136.7 1586,136.4C1585.8,136.2 1585.7,135.8 1585.6,135.3L1584.3,136.2C1583.8,136.5 1583.5,136.6 1583.2,136.7C1582.8,136.8 1582.3,136.9 1581.8,136.9C1581.4,136.9 1581.1,136.8 1580.9,136.5C1580.7,136.3 1580.6,136 1580.6,135.6C1580.6,135.1 1580.9,134.4 1581.6,133.7C1582.3,132.9 1583.2,132.3 1584.3,131.9C1585.1,131.6 1585.6,131.3 1585.8,131.3L1585.8,130.5C1585.8,129.5 1585.7,128.8 1585.4,128.5C1585.1,128.1 1584.7,128 1584.2,128C1583.7,128 1583.2,128.2 1582.7,128.6C1582.4,128.9 1582.2,129.4 1582,130.1C1582,130.3 1581.9,130.5 1581.7,130.8C1581.4,131 1581.1,131.1 1580.9,131.1C1580.7,131.1 1580.6,131 1580.4,130.9C1580.3,130.8 1580.3,130.8 1580.3,130.7C1580.3,130.5 1580.5,130 1581,129.3C1581.4,128.6 1582,128 1582.6,127.7C1583.2,127.4 1583.8,127.2 1584.3,127.2C1585,127.2 1585.5,127.3 1585.8,127.4C1586.1,127.5 1586.4,127.7 1586.7,128C1587,128.3 1587.1,128.6 1587.2,129L1587.2,135.1C1587.2,135.4 1587.3,135.6 1587.4,135.7C1587.5,135.9 1587.7,135.9 1587.9,135.9C1588.2,135.9 1588.5,135.8 1588.7,135.5L1588.8,135.3C1588.9,135.1 1589,135.1 1589.1,135ZM1585.7,134.7C1585.8,133.7 1585.8,133 1585.8,132.6L1585.8,131.7C1585.3,131.9 1584.7,132.2 1584.1,132.6C1583.5,133 1583,133.4 1582.7,133.9C1582.4,134.3 1582.3,134.6 1582.3,134.9C1582.3,135.2 1582.4,135.5 1582.6,135.7C1582.8,135.9 1583.1,136 1583.4,136C1583.6,136 1583.9,135.9 1584.3,135.7C1584.7,135.5 1585.2,135.2 1585.7,134.7Z" style="fill-rule:nonzero;"/>
         <path d="M1588.9,127.3C1589.8,127.3 1590.5,127.3 1591.2,127.4L1593.8,127.4C1594,127.4 1594.1,127.5 1594.2,127.5L1594.3,127.6C1594.3,127.7 1594.3,127.8 1594.2,127.8C1594.1,127.8 1593.9,127.9 1593.8,127.9C1593.2,128 1592.7,128.1 1592.3,128.2C1592.2,128.2 1592.2,128.3 1592.2,128.3C1592.2,128.4 1592.2,128.5 1592.3,128.7C1592.3,128.7 1592.4,128.8 1592.4,129L1593.6,131.8C1594.1,133.1 1594.6,134.2 1595.1,135.1C1595.4,134.5 1595.7,133.9 1595.9,133.3C1596.2,132.7 1596.5,131.7 1597,130.4C1597.1,130 1597.3,129.6 1597.4,129L1597.4,128.7C1597.4,128.6 1597.3,128.5 1597.2,128.4C1597.1,128.3 1596.9,128.2 1596.7,128.1C1596.6,128.1 1596.3,128 1595.6,127.9C1595.5,127.9 1595.5,127.8 1595.4,127.8L1595.4,127.5L1600.1,127.5L1600.2,127.6C1600.2,127.7 1600.2,127.7 1600.1,127.8L1599.7,127.9L1599.5,127.9C1598.8,128 1598.4,128.1 1598.3,128.2C1598.2,128.3 1598,128.7 1597.7,129.4C1597.6,129.8 1597.4,130.2 1597.2,130.7L1596.6,132.2C1596.5,132.4 1596.4,132.6 1596.3,132.9L1594.5,137.1L1594.1,137.1C1594,136.9 1593.9,136.7 1593.8,136.5L1592.9,134.6L1590.8,129.7C1590.4,128.7 1590.1,128.2 1590,128.1C1589.9,128 1589.4,127.9 1588.5,127.6C1588.5,127.5 1588.4,127.4 1588.4,127.3L1588.9,127.3Z" style="fill-rule:nonzero;"/>
         <path d="M1600.4,127.4L1603.7,127.4L1603.7,131.8C1603.7,133.2 1603.7,134 1603.8,134.4C1603.9,134.7 1604.1,135 1604.4,135.2C1604.7,135.4 1605.1,135.5 1605.6,135.5C1606.2,135.5 1606.7,135.4 1607.2,135.1C1607.7,134.9 1608.2,134.6 1608.5,134.2C1608.5,133.9 1608.6,133.6 1608.6,133.2L1608.6,130.2C1608.6,128.9 1608.5,128.2 1608.4,128C1608.3,127.8 1607.8,127.7 1607,127.6C1606.7,127.6 1606.5,127.5 1606.4,127.5C1606.3,127.4 1606.3,127.3 1606.3,127.3L1606.3,127.2L1610.1,127.2L1610.1,128.1C1610,129.3 1610,130.8 1610,132.5L1610,135.1C1610.1,135.2 1610.1,135.3 1610.2,135.3C1610.3,135.3 1610.5,135.4 1610.8,135.4L1610.9,135.4C1611,135.4 1611.3,135.4 1611.8,135.5L1611.8,135.8C1610.8,136 1609.9,136.3 1609.3,136.5C1609,136.6 1608.8,136.6 1608.6,136.7C1608.6,136.4 1608.5,136.3 1608.5,136.2L1608.5,134.9C1608.4,135 1608.3,135.1 1608.1,135.2C1607.5,135.7 1606.8,136.1 1606.1,136.4C1605.6,136.6 1605.2,136.7 1604.8,136.7C1604,136.7 1603.3,136.4 1602.8,135.8C1602.3,135.2 1602,134.1 1602,132.7L1602,128.4C1602,128.3 1601.9,128.2 1601.8,128.1C1601.3,128 1601,127.9 1600.8,127.9C1600.6,127.9 1600.5,127.8 1600.4,127.8L1600.4,127.4Z" style="fill-rule:nonzero;"/>
-        <text x="90px" y="640.234px" style="font-family:'Georgia-Italic', 'Georgia', serif;font-style:italic;font-size:40px;">Aktualizace 2026</text>
+        <text x="90px" y="719.234px" style="font-family:'Georgia-Italic', 'Georgia', serif;font-style:italic;font-size:40px;">Aktualizace 2026</text>
     </g>
     <g id="href2022">
     </g>
     <g id="href2024">
         <g transform="matrix(1,0,0,1,-10,0)">
-            <text x="100px" y="722.676px" style="font-family:'Georgia', serif;font-size:30px;">Autor: Petr Bouchal</text>
-            <text x="100px" y="764.676px" style="font-family:'Georgia', serif;font-size:30px;">Aplikace: Taras Hrendaš</text>
-            <text x="100px" y="848.676px" style="font-family:'Georgia', serif;font-size:30px;">Vizualizace na tomto webu aktualizují studii</text>
-            <text x="100px" y="878.676px" style="font-family:'Georgia', serif;font-size:30px;">a aplikaci z roku <a xlink:href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" target="_blank"><tspan fill="#BB1F40">2022</tspan></a>, <a xlink:href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2024/" href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2024/" target="_blank"><tspan fill="#BB1F40">2024</tspan></a> a <a xlink:href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2025/" href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2025/" target="_blank"><tspan fill="#BB1F40">2025</tspan></a>.</text>
+            <text x="100px" y="801.676px" style="font-family:'Georgia', serif;font-size:30px;">Autor: Petr Bouchal</text>
+            <text x="100px" y="843.676px" style="font-family:'Georgia', serif;font-size:30px;">Aplikace: Taras Hrendaš</text>
+            <text x="100px" y="927.676px" style="font-family:'Georgia', serif;font-size:30px;">Vizualizace na tomto webu aktualizují studii</text>
+            <text x="100px" y="957.676px" style="font-family:'Georgia', serif;font-size:30px;">a aplikaci z roku <a xlink:href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" target="_blank"><tspan fill="#BB1F40">2022</tspan></a>, <a xlink:href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2024/" href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2024/" target="_blank"><tspan fill="#BB1F40">2024</tspan></a> a <a xlink:href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2025/" href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2025/" target="_blank"><tspan fill="#BB1F40">2025</tspan></a>.</text>
         </g>
         <g id="IDEA_logo_CZ_RGB" transform="matrix(0.341667,0,0,0.341667,90,76.8053)">
             <use xlink:href="#_Image1" x="0" y="0" width="1200px" height="320px"/>
@@ -503,9 +503,13 @@
         <g id="av_logo_wide" transform="matrix(0.193579,0,0,0.193579,90,220)">
             <use xlink:href="#_Image2" x="0" y="0" width="2118px" height="568px"/>
         </g>
+        <g id="iocb_tech_logo" transform="matrix(1.62377,0,0,1.62377,90,360)">
+            <use xlink:href="#_Image3" x="0" y="0" width="252.497px" height="30px"/>
+        </g>
     </g>
     <defs>
         <image id="_Image1" width="1200px" height="320px" xlink:href="img/IDEA_logo_CZ_RGB.png"/>
         <image id="_Image2" width="2118px" height="568px" xlink:href="img/av_logo_wide.png"/>
+        <image id="_Image3" width="252.497px" height="30px" xlink:href="img/iocb-tech.svg"/>
     </defs>
 </svg>
