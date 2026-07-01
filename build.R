@@ -28,7 +28,7 @@ source("graphs_mod_long.r", local = new.env())
 
 # Convert individual numbered graphs to PDF using Chrome headless
 chrome <- "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-graf_htmls <- list.files("graphs_mod", pattern = "^graf_[A-Z0-9]+\\.html$", full.names = TRUE)
+graf_htmls <- list.files("graphs", pattern = "^graf_[A-Z0-9]+\\.html$", full.names = TRUE)
 pdf_dir <- "graphs_mod/pdf/grafy"
 dir.create(pdf_dir, showWarnings = FALSE, recursive = TRUE)
 walk(graf_htmls, \(html) {
