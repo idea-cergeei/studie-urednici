@@ -8,6 +8,9 @@ library(ggokabeito)
 library(jsonlite)
 library(htmltools)
 
+setWidgetIdSeed(123, kind = NULL, normal.kind = NULL)
+set.seed(123)
+
 # ── Config ────────────────────────────────────────────────────────────────────
 cfg       <- config::get()
 this_year <- if (!is.null(cfg$rok)) as.integer(cfg$rok) else 2024L
