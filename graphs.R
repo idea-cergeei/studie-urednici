@@ -30,6 +30,17 @@ cfg <- config::get()
 this_year <- if (!is.null(cfg$rok)) as.integer(cfg$rok) else 2024
 this_year_chr <- as.character(this_year)
 
+setWidgetIdSeed(123, kind = NULL, normal.kind = NULL)
+set.seed(123)
+
+local({
+  counter <- 0L
+  assignInNamespace("new_id", function() {
+    counter <<- counter + 1L
+    sprintf("plotly_visdat_%04d", counter)
+  }, ns = "plotly")
+})
+
 dta <- readRDS("./data-interim/sections.rds")
 # write_parquet(dta, "dashboard/dta.parquet")
 dta_sum <- readRDS("./data-interim/summary.rds")
