@@ -25,7 +25,7 @@ employed_total <- lfs_data %>%
   arrange(desc(rok), desc(ctvrtleti))
 
 employed_total_thisyr <- employed_total %>%
-  filter(.data$rok == .env$rok, ctvrtleti == 4) |>
+  filter(.data$rok == .env$rok, ctvrtleti == 3) |>
   pull(hodnota)
 
 macro_numbers$employed_total <- employed_total_thisyr * 1000
@@ -38,7 +38,7 @@ cnb_gdp <- cnbrrr::arad_get_data(
 cnb_gdp_thisyr <- cnb_gdp %>%
   filter(year == rok, indicator_id == "SHDPZDRY1B1GMMLNA") %>%
   select(indicator_id, value) %>%
-  mutate(value = value * 1e6) |>
+  mutate(value = value) |>
   pull(value)
 
 macro_numbers$gdp <- cnb_gdp_thisyr
@@ -54,7 +54,7 @@ vydaje_sr_thisyr <- vydaje_sr %>%
   filter(year == rok) |>
   pull(vydaje_sr)
 
-macro_numbers$sr_vydaje <- vydaje_sr_thisyr * 1e6
+macro_numbers$sr_vydaje <- vydaje_sr_thisyr
 
 macro_numbers
 

@@ -7,7 +7,7 @@ locale: en
 table:
   name: tabulka
   _columns: 35
-  _rows: 14401.0
+  _rows: 1.5108e+04
   _type: tbl_df
   info: Pokud není uvedeno jinak, zdrojem jsou data MF odpovídající Státnímu závěrečnému
     účtu
@@ -47,7 +47,7 @@ columns:
     upřesnění: Hrubý, bez odvodů zaměstnavatele a dalších nákladů práce
     jednotka: Kč za měsíc
   poradi_prumerneho_platu:
-    _type: integer
+    _type: numeric
   platy_schv_schv:
     _type: numeric
     info: Index změny schválených rozpočtů mezi lety R a R-1
@@ -77,7 +77,7 @@ columns:
     info: Inflace (deflátor)
     upřesnění: index spotřebitelských cen, meziroční změna vypočtena jako průměr měsíčních
       indexů proti stejnému měsíci předchozího roku
-    zdroj: ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen
+    zdroj: ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.csu.gov.cz/csu/czso/indexy-spotrebitelskych-cen
     měřítko: 1 = nulová inflace
   ceny_inflace:
     _type: numeric
@@ -89,19 +89,19 @@ columns:
     info: Cenový index vůči roku 2003
     měřítko: 1 = nulová inflace
     zdroj: Odvozeno ze sloupce 'ceny_index'
-  ceny_deflator_2024:
+  ceny_deflator_2025:
     _type: numeric
-    info: Cenový index vůči roku 2024
+    info: Cenový index vůči roku 2025
   prumerna_mzda_cr:
     _type: numeric
     info: Průměrná mzda v národním hospodářství
     upřesnění: průměrná hrubá měsíční mzda
-    zdroj: ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
+    zdroj: ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
   prumerna_mzda_pha:
     _type: numeric
     info: Průměrná mzda v Praze
     upřesnění: průměrná hrubá měsíční mzda za Prahu
-    zdroj: ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
+    zdroj: ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich
   prumerny_plat_skut_skut:
     _type: numeric
     info: Index změny průměrného platu oproti předchozímu roku
@@ -110,22 +110,22 @@ columns:
     _type: numeric
   plat_base:
     _type: numeric
-  prumerny_plat_real_od2024:
+  prumerny_plat_real_od2003:
     _type: numeric
     info: Změna průměrného platu od roku 2003 očištěná o inflaci
     měřítko: 0 = žádná změna, > 0 = nárůst
-  prumerny_plat_c2024:
+  prumerny_plat_c2025:
     _type: numeric
-    info: Průměrný plat v cenách roku 2024
-  prumerny_plat_c2024_mezirocne:
+    info: Průměrný plat v cenách roku 2025
+  prumerny_plat_c2025_mezirocne:
     _type: numeric
     info: Meziroční změna platů v reálném vyjádření
-    upřesnění: Podle vyjádření v cenách roku 2024
+    upřesnění: Podle vyjádření v cenách roku 2025
     měřítko: 0 = žádná změna, 0.01 = nárůst o 1 %
   prumerny_plat_2003:
     _type: numeric
     info: Průměrný plat roku 2003 (pro výpočet)
-  prumerny_plat_nomi_od2024:
+  prumerny_plat_nomi_od2003:
     _type: numeric
     info: Změna průměrného platu od roku 2003, neočištěno o inflaci
     měřítko: 0 = žádná změna, 1 = nárůst o 100 %

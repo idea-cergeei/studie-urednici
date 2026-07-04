@@ -3,35 +3,44 @@ library(readr)
 library(dplyr)
 library(lubridate)
 
+# read configuration and derive current year
+cfg <- config::get()
+this_year <- if (!is.null(cfg$rok)) cfg$rok else 2024
+this_year_chr <- as.character(this_year)
+
+year_label <- paste0("roku ", this_year_chr)  # for describing output
+
 options(scipen = 99)
 
 main_df_update <- readRDS("./data-interim/sections.rds") |>
-  rename(faze_rozpoctu = typ_rozpoctu,
-         kap_kod = kap_num,
-         kap_zkr = kap_name,
-         platy_a_oppp = prostredky_na_platy_a_oppp,
-         platy = prostredky_na_platy,
-         platy_schv_schv = schv_ke_schv,
-         platy_skut_rozp = skut_k_rozp,
-         platy_skut_skut = skut_ke_skut,
-         kap_nazev_cc = full_kap_name,
-         kap_nazev = cz_kap_name,
-         kategorie = name,
-         ceny_index = hodnota,
-         ceny_inflace = inflation,
-         ceny_deflator_2003 = base_2003,
-         ceny_deflator_2024 = base_2024,
-         prumerna_mzda_cr = czsal_all,
-         prumerna_mzda_pha = phasal_all,
-         prumerny_plat_skut_skut = platy_skut_ke_skut,
-         prumerny_plat_c2024 = wage_in_2024,
-         prumerny_plat_c2024_mezirocne = wage_in_2024_change,
-         prumerny_plat_real_od2024 = cum_pct_wage_change_real,
-         prumerny_plat_nomi_od2024 = cum_pct_wage_change,
-         prumerny_plat_2003 = wage_base,
-         prumerny_plat_vucinh  = wage_to_general,
-         prumerny_plat_vucinh_mezirocne  = mzda_k_nh
-         ) |>
+  dplyr::rename(
+    faze_rozpoctu = typ_rozpoctu,
+    kap_kod = kap_num,
+    kap_zkr = kap_name,
+    platy_a_oppp = prostredky_na_platy_a_oppp,
+    platy = prostredky_na_platy,
+    platy_schv_schv = schv_ke_schv,
+    platy_skut_rozp = skut_k_rozp,
+    platy_skut_skut = skut_ke_skut,
+    kap_nazev_cc = full_kap_name,
+    kap_nazev = cz_kap_name,
+    kategorie = name,
+    ceny_index = hodnota,
+    ceny_inflace = inflation,
+    ceny_deflator_2003 = base_2003,
+    # dynamic current-year columns (use generic 'thisyr' source names produced earlier)
+    !!paste0("ceny_deflator_", this_year_chr) := base_thisyr,
+    prumerna_mzda_cr = czsal_all,
+    prumerna_mzda_pha = phasal_all,
+    prumerny_plat_skut_skut = platy_skut_ke_skut,
+    !!paste0("prumerny_plat_c", this_year_chr) := wage_in_thisyr,
+    !!paste0("prumerny_plat_c", this_year_chr, "_mezirocne") := wage_in_thisyr_change,
+    prumerny_plat_real_od2003 = cum_pct_wage_change_real,
+    prumerny_plat_nomi_od2003 = cum_pct_wage_change,
+    prumerny_plat_2003 = wage_base,
+    prumerny_plat_vucinh = wage_to_general,
+    prumerny_plat_vucinh_mezirocne = mzda_k_nh
+  ) |>
   mutate(date = make_date(rok))
 
 main_df_update$kap_zkr[main_df_update$kap_zkr == "Ksen"] <- "KSen"
@@ -88,7 +97,7 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
   info_columns("ceny_index",
                info = "Inflace (deflátor)",
                upřesnění = "index spotřebitelských cen, meziroční změna vypočtena jako průměr měsíčních indexů proti stejnému měsíci předchozího roku",
-               zdroj = "ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen",
+               zdroj = "ČSÚ, tabulka 01022, 'Indexy spotřebitelských cen', https://www.csu.gov.cz/csu/czso/indexy-spotrebitelskych-cen",
                měřítko = "1 = nulová inflace") |>
   info_columns("ceny_inflace",
                info = "Inflace v procentním vyjádření",
@@ -98,31 +107,31 @@ cdbk <- create_informant(main_df_update, label = "main export", tbl_name = "tabu
                info = "Cenový index vůči roku 2003",
                měřítko = "1 = nulová inflace",
                zdroj = "Odvozeno ze sloupce 'ceny_index'") |>
-  info_columns("ceny_deflator_2024",
-               info = "Cenový index vůči roku 2024") |>
+  info_columns(glue::glue("ceny_deflator_{this_year_chr}"),
+               info = glue::glue("Cenový index vůči {year_label}")) |>
   info_columns("prumerna_mzda_cr",
                info = "Průměrná mzda v národním hospodářství",
                upřesnění = "průměrná hrubá měsíční mzda",
-               zdroj = "ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
+               zdroj = "ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
   info_columns("prumerna_mzda_pha",
                info = "Průměrná mzda v Praze",
                upřesnění = "průměrná hrubá měsíční mzda za Prahu",
-               zdroj = "ČSÚ, datová sada 11080, https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
+               zdroj = "ČSÚ, datová sada 11080, https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich") |>
   info_columns("prumerny_plat_skut_skut",
                info = "Index změny průměrného platu oproti předchozímu roku",
                měřítko = "1 = žádná změna, > 1 = nárůst") |>
-  info_columns("prumerny_plat_real_od2024",
+  info_columns("prumerny_plat_real_od2003",
                info = "Změna průměrného platu od roku 2003 očištěná o inflaci",
                měřítko = "0 = žádná změna, > 0 = nárůst") |>
-  info_columns("prumerny_plat_c2024",
-               info = "Průměrný plat v cenách roku 2024") |>
-  info_columns("prumerny_plat_c2024_mezirocne",
+  info_columns(glue::glue("prumerny_plat_c{this_year_chr}"),
+               info = glue::glue("Průměrný plat v cenách {year_label}")) |>
+  info_columns(glue::glue("prumerny_plat_c{this_year_chr}_mezirocne"),
                info = "Meziroční změna platů v reálném vyjádření",
-               upřesnění = "Podle vyjádření v cenách roku 2024",
+               upřesnění = glue::glue("Podle vyjádření v cenách {year_label}"),
                měřítko = "0 = žádná změna, 0.01 = nárůst o 1 %") |>
   info_columns("prumerny_plat_2003",
                info = "Průměrný plat roku 2003 (pro výpočet)") |>
-  info_columns("prumerny_plat_nomi_od2024",
+  info_columns("prumerny_plat_nomi_od2003",
                info = "Změna průměrného platu od roku 2003, neočištěno o inflaci",
                měřítko = "0 = žádná změna, 1 = nárůst o 100 %") |>
   info_columns("prumerny_plat_vucinh",

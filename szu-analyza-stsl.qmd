@@ -88,8 +88,8 @@ Pokud není u jednotlivých grafů uvedeno jinak, vycházíme z dat Státního z
 
 Pro vybrané části využítáme [Informační systém o průměrném výdělku](https://www.ispv.cz/), popř. výstupy ČSÚ:
 
-- Inflace: [Indexy spotřebitelských cen (010022-24)](https://www.czso.cz/csu/czso/indexy-spotrebitelskych-cen) - využíváme průměrnou roční hodnotu meziročního růstu cen
-- Mzdy: [Průměrná hrubá měsíční mzda a medián mezd v krajích (110080-23)](https://www.czso.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich) - průměrné mzdy za daný rok (kumulativně) přepočtené na plný úvazek, doplněné o [stejné údaje z Veřejné databáze za rok 2023](https://vdb.czso.cz/vdbvo2/faces/cs/index.jsf?page=vystup-objekt&pvo=MZD01-A&z=T&f=TABULKA&skupId=855&katalog=30852&pvo=MZD01-A&evo=v208_!_MZD-LEG3-MZD01_1#w=). Jde o data na základě strukturálních statistik.
+- Inflace: [Indexy spotřebitelských cen (010022-24)](https://www.csu.gov.cz/csu/czso/indexy-spotrebitelskych-cen) - využíváme průměrnou roční hodnotu meziročního růstu cen
+- Mzdy: [Průměrná hrubá měsíční mzda a medián mezd v krajích (110080-23)](https://www.csu.gov.cz/csu/czso/prumerna-hruba-mesicni-mzda-a-median-mezd-v-krajich) - průměrné mzdy za daný rok (kumulativně) přepočtené na plný úvazek, doplněné o [stejné údaje z Veřejné databáze za rok 2023](https://vdb.csu.gov.cz/vdbvo2/faces/cs/index.jsf?page=vystup-objekt&pvo=MZD01-A&z=T&f=TABULKA&skupId=855&katalog=30852&pvo=MZD01-A&evo=v208_!_MZD-LEG3-MZD01_1#w=). Jde o data na základě strukturálních statistik.
 
 :::
 

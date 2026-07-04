@@ -8,13 +8,13 @@
 
 <meta property="og:url" content="https://ideaapps.cerge-ei.cz/urednici_2024">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Zaměstnanci státu a úředníci: kde pracují a za kolik?">
+<meta property="og:title" content="Zaměstnanci státu a jejich platy">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://ideaapps.cerge-ei.cz/zamestnancistatu/img/opengraph.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="twitter:domain" content="ideaapps.cerge-ei.cz/">
 <meta property="twitter:url" content="https://ideaapps.cerge-ei.cz/zamestnancistatu">
-<meta name="twitter:title" content="Zaměstnanci státu a úředníci: kde pracují a za kolik?">
+<meta name="twitter:title" content="Zaměstnanci státu a jejich platy">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://ideaapps.cerge-ei.cz/zamestnancistatu/img/opengraph.png">
 
@@ -26,6 +26,7 @@
 <script src="js/plotly.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script src="js/jquery.tocify.min.js""></script>
+<script src="js/google-analytics.js""></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -42,11 +43,29 @@
 <link rel="shortcut icon" type="image/x-icon" href="icons/idea-logo-bookmark.ico">
 <link rel="apple-touch-icon" sizes="152x152" href="icons/idea-logo-bookmark-retina.png">
 
+<style>
+/* neutralise the zoom:2 that fires at 16:9 and breaks layout */
+@media (aspect-ratio: 16/9) { html { zoom: 1 !important; } }
+#sidebar-top .tocify { margin-bottom: 0 !important; }
+#toc.tocify { max-height: calc(100vh - 380px) !important; overflow-y: auto !important; }
+#sidebar-bottom .tocify-item a { font-size: 13px !important; padding-top: 3px !important; padding-bottom: 3px !important; line-height: 1.3 !important; }
+/* Ensure the active plot (and its Plotly tooltips) sit above fixed/positioned page elements
+   such as #scrollToNextBtn (z-index:99) and keyword popups (position:absolute).
+   z-index only takes effect on positioned elements, so we pair it with position:relative. */
+.htmlwidget_container:hover { position: relative; z-index: 100; }
+/* Plotly injects "overflow:hidden" on .svg-container and SVG elements, which clips the
+   treemap pathbar hover tooltip when it extends near the SVG edge. Override on hover so
+   the tooltip can paint outside the SVG clip rectangle (z-index:100 above keeps it on top). */
+.htmlwidget_container:hover .js-plotly-plot,
+.htmlwidget_container:hover .plot-container.plotly,
+.htmlwidget_container:hover .svg-container,
+.htmlwidget_container:hover .svg-container svg { overflow: visible !important; }
+</style>
 </head>
 
 <body style="background-color: white; padding-top: 20px; padding-bottom: 10px; height:95%;">
 
-<a href="https://github.com/idea-cergeei/studie-urednici" class="github-corner" aria-label="View source on GitHub"><svg width="65" height="65" viewBox="0 0 250 250" style="z-index:999; fill:#CCCCCC; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<a href="https://github.com/idea-cergeei/studie-urednici" class="github-corner" aria-label="View source on GitHub"><svg width="65" height="65" viewBox="0 0 250 250" style="z-index:1; fill:#CCCCCC; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
 <div class="modal fade" id="TitleModal">
   <div class="modal-dialog">
@@ -70,7 +89,8 @@
       <div class="modal-body" style="font-size:16px;">
       	<p>Autoři: Petr Bouchal a Daniel Münich</p>
       	<p>Technické řešení aplikace: Taras Hrendaš</p>
-        <p>Autor děkuje IDEA za podporu a Danielu Münichovi a Evě Peňázové za komentáře; Danielu Bartůškovi a Petru Janskému za spolupráci na předchozích publikacích k tématu. Miloši Benediktovi a jeho kolegům a kolegyním z Ministerstva financí děkujeme za potkytnutí dat ze Státního závěrečného účtu. Též děkujeme všem, kteří poskytli komentáře k dřívějším studiím, ze kterých vycházíme.</p><p>Tato studie reprezentuje pouze názor autora, a nikoli oficiální stanovisko Ekonomického ústavu AV ČR, v. v. i. či Centra pro ekonomický výzkum a doktorské studium UK (CERGE).</p><p>Studie byla realizována díky podpoře Akademie věd ČR a díky podpoře Pale Fire Capital. Veškeré případné nepřesnosti a chyby včetně vyjádřených názorů však jdou na vrub autorů.</p>
+        <p>Studie byla vydána s podporou Akademie věd ČR a IOCB TECH.</p>
+        <p>Autor děkuje IDEA za podporu a Danielu Münichovi a Evě Peňázové za komentáře. Miloši Benediktovi a jeho kolegům a kolegyním z Ministerstva financí děkujeme za poskytnutí dat ze Státního závěrečného účtu. Též děkujeme všem, kteří poskytli komentáře k dřívějším studiím, ze kterých vycházíme.</p><p>Tato studie reprezentuje pouze názor autora, a nikoli oficiální stanovisko Ekonomického ústavu AV ČR, v. v. i. či Centra pro ekonomický výzkum a doktorské studium UK (CERGE).</p><p>Veškeré případné nepřesnosti a chyby včetně vyjádřených názorů však jdou na vrub autorů.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-default dismiss" data-dismiss="modal" aria-hidden="true" style="font-size: 15px !important;">Zavřít</button>
@@ -98,16 +118,16 @@
 
 <div class="left">
 
-<div style="position:fixed;width:310px;max-width:310px;">
+<div id="sidebar-inner" style="position:fixed;width:310px;max-width:310px;height:calc(100vh - 20px);overflow:visible;">
 
-<a href="#infomodal" data-toggle="modal" data-target="#infomodal" style="color:#fff!important;text-decoration:none!important;">
-<div class="btn btn-light" style="text-decoration:none!important;display:flex;margin-left:auto;margin-right:auto;margin-bottom:20px; background-color: #c90239 !important; color: #fff !important; border-radius: 0px; font-size:20px;">
+<div id="sidebar-top" style="padding-bottom:20px;">
+<a href="./" style="color:#fff!important;text-decoration:none!important;">
+<div class="btn btn-light" style="text-decoration:none!important;display:flex;justify-content:flex-start;text-align:left;margin-left:auto;margin-right:auto;margin-bottom:20px; background-color: #c90239 !important; color: #fff !important; border-radius: 0px; font-size:20px;">
 <span>
 <!--
-<a href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" target="_blank" style="color:#fff!important;decoration:none!important;">Podrobnosti ve studii IDEA:<br>„Státní zaměstnanci a úředníci: kde pracují a za kolik?“</a>
+<a href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" target="_blank" style="color:#fff!important;decoration:none!important;">Podrobnosti ve studii IDEA:<br>„Státní zaměstnanci a úředníci: kde pracují a za kolik?"</a>
 -->
-<p style="color:#fff!important;display:inline;">Zaměstnanci státu a úředníci:<br>kde pracují a za kolik (2025)</p>
-<i class="fa-solid fa-circle-info"></i>
+<p style="color:#fff!important;display:inline;">Zaměstnanci státu<br>a jejich platy (2026)</p>
 </span>
 </div>
 </a>
@@ -115,44 +135,67 @@
 <div class="tocify" style="position:relative!important;width:100%!important;">
 
 <ul class="tocify-header nav nav-list" style="display: block;">
-  <li class="tocify-item" style="cursor: pointer;"><a href="#TitleModal" data-toggle="modal" data-target="#TitleModal">Titulní stránka</a></li>
-  <li class="tocify-item" style="cursor: pointer;"><a href="pdf/shrnuti.pdf" target="_blank">Shrnutí</a></li>
-
-  <li class="tocify-item" style="cursor: pointer;"><a href="pdf/zkratky.pdf"
-   onclick="window.open(this.href,'targetWindow',
-                                   `toolbar=no,
-                                    location=no,
-                                    status=no,
-                                    menubar=no,
-                                    scrollbars=yes,
-                                    resizable=yes,
-                                    width=800,
-                                    height=1000`);
-  return false;">Seznam zkratek</a></li>
-  <li class="tocify-item" style="cursor: pointer;"><a href="pdf/metodologie.pdf"
-   onclick="window.open(this.href,'targetWindow',
-                                   `toolbar=no,
-                                    location=no,
-                                    status=no,
-                                    menubar=no,
-                                    scrollbars=yes,
-                                    resizable=yes,
-                                    width=800,
-                                    height=1000`);
-  return false;">Data a metodologie</a></li>
-
-  <li class="tocify-item" style="cursor: pointer;"><a href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" target="_blank">Studie z roku 2022</a></li>
-  <li class="tocify-item" style="cursor: pointer;"><a href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2024/" target="_blank">Studie z roku 2024</a></li>
-  <li class="tocify-item" style="cursor: pointer;"><a href="files/Grafy.zip" target="_blank">Všechny grafy v ZIP</a></li>
+  <li class="tocify-item" style="cursor: pointer;"><a href="#TitleModal" data-toggle="modal" data-target="#TitleModal">Jak aplikaci použít</a></li>
+  <li class="tocify-item" style="cursor: pointer;"><a href="pdf/shrnuti.pdf"
+    onclick="window.open(this.href,'targetWindow',
+    `toolbar=no,
+    location=no,
+    status=no,
+    menubar=no,
+    scrollbars=yes,
+    resizable=yes,
+    width=800,
+    height=1000`);
+    return false;">Shrnutí hlavních poznatků</a></li>
 </ul>
 
 </div>
+</div><!-- #sidebar-top -->
 
 <div id="toc"></div>
 
+<div id="sidebar-bottom" style="position:absolute;bottom:0;width:100%;background:#fff;z-index:1;">
+<div class="tocify" style="position:relative!important;width:100%!important;margin-top:0;">
+  <ul class="tocify-header nav nav-list" style="display: block;">
+  <li class="tocify-item" style="cursor: pointer;"><a href="pdf/metodologie.pdf"
+    onclick="window.open(this.href,'targetWindow',
+    `toolbar=no,
+    location=no,
+    status=no,
+    menubar=no,
+    scrollbars=yes,
+    resizable=yes,
+    width=800,
+    height=1000`);
+    return false;">Data a metodologie</a></li>
+      <li class="tocify-item" style="cursor: pointer;"><a href="pdf/zkratky.pdf"
+       onclick="window.open(this.href,'targetWindow',
+                                       `toolbar=no,
+                                        location=no,
+                                        status=no,
+                                        menubar=no,
+                                        scrollbars=yes,
+                                        resizable=yes,
+                                        width=800,
+                                        height=1000`);
+      return false;">Seznam zkratek</a></li>
+  <li class="tocify-item" style="cursor: pointer;white-space: nowrap;"><a href="https://ideaapps.cerge-ei.cz/zamestnancistatu_2025/" target="_blank">Loňská verze aplikace</a></li>
+  <li class="tocify-item" style="cursor: pointer;white-space: nowrap;"><a href="https://idea.cerge-ei.cz/images/studie/2022/IDEA_Studie_2_2022_Statni_zamestnanci_a_urednici.pdf" target="_blank">Studie z roku 2022</a></li>
+  <!-- <li class="tocify-item" style="cursor: pointer;"><a href="files/Grafy.zip" target="_blank">Všechny grafy v ZIP</a></li> -->
+  <li class="tocify-item" style="cursor: pointer;"><a href="#infomodal" data-toggle="modal" data-target="#infomodal">Poděkování</a></li>
+</ul>
+</div>
+
 <div id="logos" style="margin-top: 0; text-align: center;">
 <a href="https://idea.cerge-ei.cz" target="_blank"><img src="img/IDEA_logo_CZ_RGB.png" align="center" style="max-width:180px; margin-bottom:15px"></a>
+<br>
+<span style="font-size: calc(1em - 2pt); margin-bottom: 0.8em; display: inline-block;">Děkujeme za podporu | Thanks for support</span>
+<br>
+<a href="https://www.avcr.cz" target="_blank"><img src="img/logo_avcr.svg" align="center" style="max-width:180px; margin-bottom:15px"></a>
+<br>
+<a href="https://www.iocbtech.cz/" target="_blank"><img src="img/iocb-tech.svg" align="center" style="max-width:180px; margin-bottom:15px"></a>
 </div>
+</div><!-- #sidebar-bottom -->
 
 </div>
 
@@ -187,15 +230,11 @@ legend_width = leg.find("rect").outerWidth();
 title = $("#" + id + " > div > div > div > svg.main-svg > g.infolayer > g > text.gtitle");
 
 if (title.length == 1){
-
 	if(id == "graf_6"){
-		title_tranform_y = -10;
+		title.css('transform','translate(0px,-10px)');
 	} else if(id == "graf_A17"){
-		title_tranform_y = 10;
-	} else {
-		title_tranform_y = 0;
+		title.css('transform','translate(0px,10px)');
 	}
-	title.css('transform','translate(0px,'+title_tranform_y+'px)');
 };
 
 if (leg.length == 1){
@@ -295,20 +334,97 @@ if (leg.length == 1){
 </script>
 
 <script>
-function adjustLogosPosition() {
-    var toc = document.getElementById('toc');
-    var logos = document.getElementById('logos');
-
-    // Get the height of the fixed element
-    var shift = toc.offsetHeight + 40;
-
-    // Set the margin-top of the dynamic element to the height of the fixed element
-   logos.style.marginTop = shift + 'px';
+var _rafId = null;
+function positionSidebarBottom() {
+    if (_rafId) return;
+    _rafId = requestAnimationFrame(function() {
+        _rafId = null;
+        var toc = document.getElementById('toc');
+        var bottom = document.getElementById('sidebar-bottom');
+        if (!toc || !bottom) return;
+        bottom.style.position = 'absolute';
+        bottom.style.top = (toc.offsetTop + toc.offsetHeight + 10) + 'px';
+        bottom.style.left = '0';
+        bottom.style.right = '0';
+        bottom.style.bottom = '';
+        toc.style.paddingBottom = '';
+    });
 }
+function adjustLogosPosition() { positionSidebarBottom(); }
 
-// Adjust on window resize
-window.addEventListener('resize', adjustLogosPosition);
-window.addEventListener('scroll', adjustLogosPosition);
+document.addEventListener('DOMContentLoaded', function() {
+    var toc = document.getElementById('toc');
+    if (toc) new MutationObserver(positionSidebarBottom).observe(toc, {
+        subtree: true, childList: true, attributes: true, attributeFilter: ['style']
+    });
+});
+
+(function () {
+  function adjustLayout() {
+    var vw      = window.innerWidth;
+    var left    = document.querySelector('div.left');
+    var sidebar = document.getElementById('sidebar-inner');
+    var toc     = document.getElementById('toc');
+    var right   = document.querySelector('div.right');
+    if (!left || !right) return;
+
+    // Critical: allow div.right to shrink below its content width in the flex layout
+    right.style.setProperty('min-width',   '0',      'important');
+    right.style.setProperty('overflow-x',  'hidden', 'important');
+
+    if (vw <= 800) {
+      left.style.setProperty('width',    '0',      'important');
+      left.style.setProperty('padding',  '0',      'important');
+      left.style.setProperty('overflow', 'hidden', 'important');
+      if (sidebar) sidebar.style.setProperty('display', 'none', 'important');
+      right.style.setProperty('padding-left', '12px', 'important');
+    } else if (vw <= 1100) {
+      left.style.setProperty('width', '250px', 'important');
+      left.style.removeProperty('padding');
+      left.style.removeProperty('overflow');
+      if (sidebar) {
+        sidebar.style.removeProperty('display');
+        sidebar.style.setProperty('width',     '230px', 'important');
+        sidebar.style.setProperty('max-width', '230px', 'important');
+      }
+      if (toc) {
+        toc.style.setProperty('width',     '230px', 'important');
+        toc.style.setProperty('max-width', '230px', 'important');
+      }
+      right.style.removeProperty('padding-left');
+    } else {
+      left.style.removeProperty('width');
+      left.style.removeProperty('padding');
+      left.style.removeProperty('overflow');
+      if (sidebar) {
+        sidebar.style.removeProperty('display');
+        sidebar.style.setProperty('width',     '310px', 'important');
+        sidebar.style.setProperty('max-width', '310px', 'important');
+      }
+      if (toc) {
+        toc.style.setProperty('width',     '310px', 'important');
+        toc.style.setProperty('max-width', '310px', 'important');
+      }
+      right.style.removeProperty('padding-left');
+    }
+
+    document.querySelectorAll('.plotly-graph-div').forEach(function (el) {
+      try { Plotly.Plots.resize(el); } catch (e) {}
+    });
+
+    adjustLogosPosition();
+  }
+
+  document.addEventListener('DOMContentLoaded', adjustLayout);
+  window.addEventListener('load', adjustLogosPosition);
+  window.addEventListener('scroll', adjustLogosPosition);
+
+  var _resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(adjustLayout, 150);
+  });
+})();
 
 </script>
 
@@ -361,6 +477,9 @@ $(document).ready(function() {
 })
 
 adjustLogosPosition();
+
+// Name this window so links in PDF popups can navigate back here via target="main"
+window.name = 'main';
 
 });
 </script>

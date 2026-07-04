@@ -16,7 +16,7 @@ infl <- czso::czso_get_table("010022", force_redownload = TRUE) # indexy spotř.
 
 zm <- czso::czso_get_table("110079", force_redownload = TRUE) # mzdy podle NACE
 count(zm, rok, ctvrtleti) |> arrange(desc(rok)) |> head()
-count(zm, rok, ctvrtleti) |> filter(rok == 2023)
+count(zm, rok, ctvrtleti) |> filter(rok == 2025)
 
 zm |> count(odvetvi_txt)
 zm |> count(odvetvi_kod)
@@ -44,7 +44,7 @@ make_nace_plot <- function(data, add_years = 5) {
   new_breaks <- make_date(seq(year(min(data$tm)), year(max(data$tm))))
   print(new_breaks)
 
-  fmt_pct_change <- scales::label_number(.1, 100, suffix = " %", decimal.mark = ",",
+  fmt_pct_change <- scales::label_number(0.1, 100, suffix = " %", decimal.mark = ",",
                                          style_positive = "plus", style_negative = "minus")
   fmt_pct_change_axis <- scales::label_number(1, 100, suffix = " %", decimal.mark = ",",
                                               style_positive = "plus", style_negative = "minus")
@@ -56,35 +56,35 @@ make_nace_plot <- function(data, add_years = 5) {
                        group = clr)) +
     geom_hline(yintercept = 0, colour = "grey10", linetype = "solid") +
     geom_point(aes(alpha = clr != "Ostatní"), fill = "white") +
-    scale_alpha_discrete(range = c(.6, 1), guide = "none") +
+    scale_alpha_discrete(range = c(0.6, 1), guide = "none") +
     geom_line(data = ~subset(., clr == "Celá ekonomika")) +
     geom_point(data = ~subset(., clr == "Celá ekonomika"), size = 2) +
     geom_point(data = ~subset(., clr == "Celá ekonomika"), colour = "white", size = 1.2) +
-    geom_line(data = ~subset(., public == TRUE)) +
-    geom_point(data = ~subset(., public == TRUE), size = 2) +
-    geom_point(data = ~subset(., public == TRUE), colour = "white", size = 1.2) +
-    geom_label(data = ~subset(., needs_label),
-               aes(label = paste(fmt_pct_change(realna_zmena), name_for_label), fill = clr),
-               label.padding = unit(0.2, "lines"),
-               hjust = 0, nudge_x = 40, color = "white", family = "Arial", size = 3, fontface = "bold") +
+    geom_line(data = ~subset(., public)) +
+    geom_point(data = ~subset(., public), size = 2) +
+    geom_point(data = ~subset(., public), colour = "white", size = 1.2) +
+    ggrepel::geom_label_repel(data = ~subset(., needs_label),
+               aes(label = paste(fmt_pct_change(realna_zmena), name_for_label), fill = clr,
+              segment.colour = clr),
+               label.padding = unit(0.2, "lines"), 
+               direction = "y", hjust = 0, color = "white", family = "Arial", size = 3, fontface = "bold",
+              nudge_x = 120) +
     scale_color_manual(values = c(Ostatní = "grey40", Profesní = "blue3",
                                   `Celá ekonomika` = "grey20",
-                                  `ICT` = "goldenrod", `Veřejná správa` = "red3")) +
-    scale_fill_manual(values = c(Ostatní = "grey40", Profesní = "blue3",
-                                 `Celá ekonomika` = "grey20",
-                                 `ICT` = "goldenrod", `Veřejná správa` = "red3")) +
+                                  `ICT` = "goldenrod", `Veřejná správa` = "red3"),
+                                aesthetics = c("color", "segment.color", "fill")) +
     scale_size_manual(values = c(1, 2), guide = "none") +
-    scale_x_date(date_breaks = "1 years",
+    scale_x_date(date_breaks = "2 years",
                  date_labels = "%Y",
                  breaks = new_breaks,
                  expand = expansion(add = c(0, 365 * add_years)),
-                 limits = c(as.Date("2000-09-01"), as.Date("2024-03-31")),
+                 limits = c(as.Date("2000-09-01"), as.Date("2026-03-31")),
     ) +
-    scale_y_continuous(expand = expansion(add = c(.02, 0.001)),
+    scale_y_continuous(expand = expansion(add = c(0.02, 0.001)),
                        # limits = c(-.2, .2),
                        labels = fmt_pct_change_axis,
-                       breaks = seq(-.3, .3, .05)) +
-    guides(colour = guide_legend(reverse = T, title = "Skupina NACE (odvětví)"), size = "none", fill = "none") +
+                       breaks = seq(-0.3, 0.3, 0.05)) +
+    guides(colour = guide_legend(reverse = TRUE, title = "Skupina NACE (odvětví)"), size = "none", fill = "none", segment.color = "none") +
     labs(title = "Meziroční změny průměrných reálných mezd (v odvětvích dle NACE), v %",
          x = "Rok", y = "Reálná meziroční změna (očištěno o inflaci)",
          caption = "Zdroj: vlastní výpočet z dat ČSÚ (sady 110079 Mzdy, náklady práce - časové řady a 010022 Indexy spotř. cen)") +
@@ -171,7 +171,7 @@ print(new_labels)
 new_breaks <- make_date(seq(year(min(data$tm)), year(max(data$tm))))
 print(new_breaks)
 
-fmt_pct_change <- scales::label_number(.1, 100, suffix = " %", decimal.mark = ",",
+fmt_pct_change <- scales::label_number(0.1, 100, suffix = " %", decimal.mark = ",",
                                        style_positive = "plus", style_negative = "minus")
 fmt_pct_change_axis <- scales::label_number(1, 100, suffix = " %", decimal.mark = ",",
                                             style_positive = "plus", style_negative = "minus")

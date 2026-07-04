@@ -16,21 +16,24 @@
   - [ ] `graphs_mod_long.r`: Update year in title/text
   - [ ] `www/template_long.html`: Update year references
 
+- **Manual step:** `text.csv` (and `annotations.csv` where needed) use `XXX` as placeholders for specific numbers; update them by hand with current values when you change the year.
+
 ## Output Updates
 
 - Update static PDF documents:
-  - use source word docx: `word-docs/urednici-shrnuti_YYYY.docx`, `word-docs/urednici-metodologie_YYYY.docx`
+  - use source word docx: `word-docs/urednici-shrnuti_YYYY.docx`, `word-docs/urednici-metodologie_YYYY.docx` (the two templates in word-templates only differ in that "general" has header also on first page)
   - [ ] `www/pdf/shrnuti.pdf`, will show up in `graphs_mod/pdf/shrnuti.pdf`
   - [ ] `www/pdf/metodologie.pdf` will show up in `graphs_mod/pdf/metodologie.pdf`
   - [ ] commit new docx files: `word-docs/urednici-shrnuti_YYYY.docx`, `word-docs/urednici-metodologie_YYYY.docx`
 - Update cover page
   - [ ] `www/index.html` with new year and data references
   - [ ] acknowledgments in (i) modal in `www/index.html`
-  - [ ] `www/img/title_v3.png` with new cover image (edit SVG as needed)
+  - [ ] `www/img/title_v3_paths.svg` with new cover image (edit `www/img/title_v3_source.svg` SVG as needed and export as paths, using e.g. [`svg-text2path`](https://github.com/Emasoft/svg-text2path))
     - update links to previous versions
     - update years and authors
     - update logos as needed
 - [ ] Update social image: export graph 5a into `www/img/opengraph.png`
+- [ ] update social teaser: `cover.html` (claude design) using `cover-base.png`, then export to `cover.png`
 
 ## Run the whole pipeline to generate the app and other outputs
 

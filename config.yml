@@ -1,2 +1,5 @@
 default:
-  rok: 2024
+  rok: 2025  # use this field for the target year; scripts fall back to 2024 if not supplied
+  # optional: full path or relative path to the Excel file for the current year
+  # if omitted the script will fall back to "./data-input/Data_<rok>.xlsx"
+  data_path: "./data-input/Data_2025.xlsx"

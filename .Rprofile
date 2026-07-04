@@ -3,7 +3,7 @@ options(
   renv.config.install.transactional = TRUE
 )
 
-options(repos = c(RSPM = "https://packagemanager.rstudio.com/all/latest"))
+options(repos = c(RSPM = "https://packagemanager.posit.co/cran/latest"))
 
 source("renv/activate.R")
 options(yaml.eval.expr = TRUE)

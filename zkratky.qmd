@@ -1,0 +1,27 @@
+---
+title: "Zkratky rozpočtových kapitol"
+format: 
+    docx:
+        warning: false
+        reference-doc: word-templates/general-template.docx
+        message: false
+        echo: false
+---
+
+```{r}
+library(readr)
+library(flextable)
+```
+
+U Poslanecké sněmovny a Senátu zkratky odpovídají tomu, že v datech o zaměstnancích jsoub zachyceny pouze aparáty (kanceláře) institucí, nikoli samotní zákonodárci nebo jejich asistenti.
+
+```{r}
+read_csv("zkratky.csv", show_col_types = FALSE) |>
+  flextable() |>
+  width(j = 1, width = 120, unit = "mm") |>
+  width(j = 2, width = 30, unit = "mm") |>
+  hrule(rule = "auto") |>
+  # height_all(height = 30, unit = "mm") |>
+  align(align = "left", part = "all")
+```
+
