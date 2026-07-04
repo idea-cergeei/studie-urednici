@@ -1361,7 +1361,7 @@ kaps_to_exclude <- dta %>%
 
 graf_A9 <- dta %>%filter(!is.na(kap_name)) %>%
   filter(kategorie_2014 %in% c("Ministerstva", "Neustredni st. sprava",
-                               "Ostatni ustredni", "Statni urednici")) %>%
+                               "Ostatni ustredni")) %>%
   filter(typ_rozpoctu != "SCHV") %>%
   filter(!kap_num %in% c(kaps_to_exclude, 312)) %>%
   select(rok, kategorie_2014_cz, typ_rozpoctu, kap_name, pocet_zamestnancu,
